@@ -1,16 +1,18 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.example.flexstats"
-    compileSdk = 33
+    namespace = "com.perfomax.flexstats"
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.example.flexstats"
-        minSdk = 24
-        targetSdk = 33
+        applicationId = "com.perfomax.flexstats"
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -27,21 +29,37 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
 dependencies {
+    implementation(project(":core:navigation"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:utils"))
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation(project(":data"))
+    implementation(project(":data_api"))
+    implementation(project(":domain_models"))
+
+    implementation(project(":features:home"))
+    implementation(project(":features:home_api"))
+    implementation(project(":features:accounts"))
+    implementation(project(":features:accounts_api"))
+
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.google.material)
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 }
