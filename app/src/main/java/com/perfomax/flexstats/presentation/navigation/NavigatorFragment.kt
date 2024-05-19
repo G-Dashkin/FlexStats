@@ -17,7 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.perfomax.flexstats.R
 import com.perfomax.flexstats.api.AccountsFeatureApi
+import com.perfomax.flexstats.api.AuthFeatureApi
 import com.perfomax.flexstats.api.HomeFeatureApi
+import com.perfomax.flexstats.api.ProjectsFeatureApi
+import com.perfomax.flexstats.api.StartFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.databinding.FragmentNavigatorBinding
 import com.perfomax.flexstats.di.DaggerProvider
@@ -32,7 +35,16 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     lateinit var router: Router
 
     @Inject
+    lateinit var startFeatureApi: StartFeatureApi
+
+    @Inject
+    lateinit var authFeatureApi: AuthFeatureApi
+
+    @Inject
     lateinit var homeFeatureApi: HomeFeatureApi
+
+    @Inject
+    lateinit var projectsFeatureApi: ProjectsFeatureApi
 
     @Inject
     lateinit var accountsFeatureApi: AccountsFeatureApi
@@ -53,7 +65,14 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when(menuItem.itemId){
+                    R.id.nav_start -> router.navigateTo(fragment = startFeatureApi.open())
+
+                    R.id.nav_login -> router.navigateTo(fragment = authFeatureApi.openLogin())
+                    R.id.nav_register -> router.navigateTo(fragment = authFeatureApi.openRegister())
+                    R.id.nav_reset -> router.navigateTo(fragment = authFeatureApi.openReset())
+
                     R.id.nav_home -> router.navigateTo(fragment = homeFeatureApi.open())
+                    R.id.nav_projects -> router.navigateTo(fragment = projectsFeatureApi.open())
                     R.id.nav_accounts -> router.navigateTo(fragment = accountsFeatureApi.open())
                 }
                 return true

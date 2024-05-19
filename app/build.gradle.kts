@@ -49,8 +49,14 @@ dependencies {
     implementation(project(":data_api"))
     implementation(project(":domain_models"))
 
+    implementation(project(":features:start"))
+    implementation(project(":features:start_api"))
+    implementation(project(":features:auth"))
+    implementation(project(":features:auth_api"))
     implementation(project(":features:home"))
     implementation(project(":features:home_api"))
+    implementation(project(":features:projects"))
+    implementation(project(":features:projects_api"))
     implementation(project(":features:accounts"))
     implementation(project(":features:accounts_api"))
 

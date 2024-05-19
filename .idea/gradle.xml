@@ -22,8 +22,14 @@
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/accounts" />
             <option value="$PROJECT_DIR$/features/accounts_api" />
+            <option value="$PROJECT_DIR$/features/auth" />
+            <option value="$PROJECT_DIR$/features/auth_api" />
             <option value="$PROJECT_DIR$/features/home" />
             <option value="$PROJECT_DIR$/features/home_api" />
+            <option value="$PROJECT_DIR$/features/projects" />
+            <option value="$PROJECT_DIR$/features/projects_api" />
+            <option value="$PROJECT_DIR$/features/start" />
+            <option value="$PROJECT_DIR$/features/start_api" />
           </set>
         </option>
       </GradleProjectSettings>
