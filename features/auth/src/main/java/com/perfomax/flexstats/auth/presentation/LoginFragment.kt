@@ -42,7 +42,9 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginBinding.bind(view)
         binding.apply {
-            loginButton.setOnClickListener { router.navigateTo(homeFeatureApi.open()) }
+            loginButton.setOnClickListener {
+                router.navigateTo(homeFeatureApi.open())
+            }
             registerText.setOnClickListener {
                 router.navigateTo(
                     fragment = authFeatureApi.openRegister(),
