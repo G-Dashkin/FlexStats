@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":domain_models"))
 
     implementation(project(":features:start_api"))
+    implementation(project(":features:auth_api"))
 
     implementation(libs.core.ktx)
     implementation(libs.androidx.constraintlayout)

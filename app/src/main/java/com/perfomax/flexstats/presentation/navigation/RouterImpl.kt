@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.presentation.navigation
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.perfomax.flexstats.R
@@ -18,6 +19,9 @@ class RouterImpl: Router, NavigatorLifecycle {
     }
 
     override fun navigateTo(fragment: Fragment, addToBackStack: Boolean) {
+        Log.d("MyLog", "fragment in navigateTo $fragment")
+        Log.d("MyLog", "navigatorHolder? $navigatorHolder")
+        Log.d("MyLog", "navigatorHolder?.manager() ${navigatorHolder?.manager()}")
         val manager = navigatorHolder?.manager() ?: throw IllegalArgumentException("NavigationHolder is null")
         when {
             addToBackStack -> manager.commit {

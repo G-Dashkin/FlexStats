@@ -2,10 +2,12 @@ package com.perfomax.flexstats.auth.presentation
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.perfomax.auth.R
 import com.perfomax.auth.databinding.FragmentLoginBinding
 import com.perfomax.auth.databinding.FragmentRegisterBinding
+import com.perfomax.flexstats.api.AuthFeatureApi
 import com.perfomax.flexstats.auth.di.AuthFeatureDepsProvider
 import com.perfomax.flexstats.auth.di.DaggerAuthComponent
 import com.perfomax.flexstats.core.navigation.Router
@@ -18,8 +20,12 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
     @Inject
     lateinit var router: Router
 
+    @Inject
+    lateinit var authFeatureApi: AuthFeatureApi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
 
         val homeComponent = DaggerAuthComponent
             .builder()
@@ -31,6 +37,18 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentRegisterBinding.bind(view)
+
+        binding.apply {
+            registerButton.setOnClickListener {
+
+            }
+            toLoginText.setOnClickListener {
+                router.navigateTo(
+                    fragment = authFeatureApi.openLogin(),
+                    addToBackStack = true
+                )
+            }
+        }
     }
 
     companion object {

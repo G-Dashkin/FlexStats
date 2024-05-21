@@ -53,7 +53,7 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
         super.onCreate(savedInstanceState)
         DaggerProvider.appComponent.inject(this)
         navigatorLifecycle.onCreate(this)
-        router.navigateTo(fragment = homeFeatureApi.open())
+        router.navigateTo(fragment = startFeatureApi.open())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,11 +65,11 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when(menuItem.itemId){
-                    R.id.nav_start -> router.navigateTo(fragment = startFeatureApi.open())
+//                    R.id.nav_start -> router.navigateTo(fragment = startFeatureApi.open())
 
-                    R.id.nav_login -> router.navigateTo(fragment = authFeatureApi.openLogin())
-                    R.id.nav_register -> router.navigateTo(fragment = authFeatureApi.openRegister())
-                    R.id.nav_reset -> router.navigateTo(fragment = authFeatureApi.openReset())
+//                    R.id.nav_login -> router.navigateTo(fragment = authFeatureApi.openLogin())
+//                    R.id.nav_register -> router.navigateTo(fragment = authFeatureApi.openRegister())
+//                    R.id.nav_reset -> router.navigateTo(fragment = authFeatureApi.openReset())
 
                     R.id.nav_home -> router.navigateTo(fragment = homeFeatureApi.open())
                     R.id.nav_projects -> router.navigateTo(fragment = projectsFeatureApi.open())

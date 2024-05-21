@@ -3,6 +3,7 @@ package com.perfomax.flexstats.home.presentation
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.home.di.DaggerHomeComponent
@@ -20,6 +21,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
 
         val homeComponent = DaggerHomeComponent
             .builder()

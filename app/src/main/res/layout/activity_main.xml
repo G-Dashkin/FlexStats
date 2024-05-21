@@ -5,3 +5,9 @@
     android:name="com.perfomax.flexstats.presentation.navigation.NavigatorFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
+<!--<androidx.fragment.app.FragmentContainerView-->
+<!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:id="@+id/fragment_navigator"-->
+<!--android:name="com.perfomax.flexstats.presentation.navigation.NavigatorFragment"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"/>-->

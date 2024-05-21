@@ -46,8 +46,10 @@ dependencies {
     implementation(project(":domain_models"))
 
     implementation(project(":features:auth_api"))
+    implementation(project(":features:home_api"))
 
     implementation(libs.core.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.google.material)
