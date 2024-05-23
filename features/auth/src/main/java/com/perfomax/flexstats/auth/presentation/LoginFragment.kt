@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.perfomax.auth.R
 import com.perfomax.auth.databinding.FragmentLoginBinding
 import com.perfomax.flexstats.api.AuthFeatureApi
@@ -18,6 +19,9 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
     private lateinit var binding: FragmentLoginBinding
 
     @Inject
+    lateinit var vmFactory: LoginViewModelFactory
+
+    @Inject
     lateinit var router: Router
 
     @Inject
@@ -25,6 +29,10 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
 
     @Inject
     lateinit var homeFeatureApi: HomeFeatureApi
+
+    private val loginViewModel by viewModels<LoginViewModel> {
+        vmFactory
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,16 +48,20 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding = FragmentLoginBinding.bind(view)
         binding.apply {
             loginButton.setOnClickListener {
                 router.navigateTo(homeFeatureApi.open())
             }
+//            registerText.setOnClickListener {
+//                router.navigateTo(
+//                    fragment = authFeatureApi.openRegister(),
+//                    addToBackStack = true
+//                )
+//            }
             registerText.setOnClickListener {
-                router.navigateTo(
-                    fragment = authFeatureApi.openRegister(),
-                    addToBackStack = true
-                )
+                loginViewModel.toRegisterClicked()
             }
             resetText.setOnClickListener {
                 router.navigateTo(
@@ -58,6 +70,29 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
                 )
             }
         }
+        setScreen()
+    }
+
+    private fun setScreen() {
+        loginViewModel.screen.observe(viewLifecycleOwner) {
+            when(it) {
+                is Screen.Login -> {
+
+                }
+                is Screen.Register -> showRegisterScreen()
+                is Screen.Reset -> {
+
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun showRegisterScreen() {
+        router.navigateTo(
+            fragment = authFeatureApi.openRegister(),
+            addToBackStack = true
+        )
     }
 
     companion object {

@@ -1,9 +1,13 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FlexStats" parent="Theme.MaterialComponents.Light">
-         Customize your light theme here.
-         <item name="colorPrimary">@color/white</item>
+<resources>
+    <style name="Theme.FlexStats" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/onPrimary</item>
+        <item name="backgroundColor">@color/background</item>
+        <item name="colorOnBackground">@color/onBackground</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/onSurface</item>
+        <item name="colorSurfaceVariant">@color/surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/onSurfaceVariant</item>
+        <item name="colorOutline">@color/outline</item>
     </style>
-
-    <style name="Theme.FlexStats" parent="Base.Theme.FlexStats" />
 </resources>

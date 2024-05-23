@@ -37,7 +37,7 @@ class StartFragment: Fragment(R.layout.fragment_start)  {
 
         Handler(Looper.getMainLooper()).postDelayed({
             router.navigateTo(fragment = authFeatureApi.openLogin())
-        }, 1000)
+        }, 3000)
 
     }
 
