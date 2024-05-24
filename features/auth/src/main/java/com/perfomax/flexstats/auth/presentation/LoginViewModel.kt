@@ -24,8 +24,16 @@ class LoginViewModel: ViewModel() {
     private val _screen = MutableLiveData<Screen>()
     val screen: LiveData<Screen> = _screen
 
+    fun onLoginClicked() {
+        _screen.value = Screen.Login
+    }
+
     fun toRegisterClicked() {
         _screen.value = Screen.Register
+    }
+
+    fun toResetClicked() {
+        _screen.value = Screen.Reset
     }
 
 }

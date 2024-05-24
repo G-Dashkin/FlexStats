@@ -16,6 +16,10 @@ import javax.inject.Inject
 
 class LoginFragment: Fragment(R.layout.fragment_login) {
 
+    companion object {
+        fun getInstance(): LoginFragment = LoginFragment()
+    }
+
     private lateinit var binding: FragmentLoginBinding
 
     @Inject
@@ -43,7 +47,6 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
             .addDeps(AuthFeatureDepsProvider.deps)
             .build()
         homeComponent.inject(this)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,40 +55,32 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
         binding = FragmentLoginBinding.bind(view)
         binding.apply {
             loginButton.setOnClickListener {
-                router.navigateTo(homeFeatureApi.open())
+                loginViewModel.onLoginClicked()
             }
-//            registerText.setOnClickListener {
-//                router.navigateTo(
-//                    fragment = authFeatureApi.openRegister(),
-//                    addToBackStack = true
-//                )
-//            }
             registerText.setOnClickListener {
                 loginViewModel.toRegisterClicked()
             }
             resetText.setOnClickListener {
-                router.navigateTo(
-                    fragment = authFeatureApi.openReset(),
-                    addToBackStack = true
-                )
+                loginViewModel.toResetClicked()
             }
         }
         setScreen()
     }
 
+    // navigation space-----------------------------------------------------------------------------
     private fun setScreen() {
         loginViewModel.screen.observe(viewLifecycleOwner) {
             when(it) {
-                is Screen.Login -> {
-
-                }
+                is Screen.Login -> onLogin()
                 is Screen.Register -> showRegisterScreen()
-                is Screen.Reset -> {
-
-                }
+                is Screen.Reset -> showResetScreen()
                 else -> {}
             }
         }
+    }
+
+    private fun onLogin() {
+        router.navigateTo(homeFeatureApi.open())
     }
 
     private fun showRegisterScreen() {
@@ -95,7 +90,29 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
         )
     }
 
-    companion object {
-        fun getInstance(): LoginFragment = LoginFragment()
+    private fun showResetScreen() {
+        router.navigateTo(
+            fragment = authFeatureApi.openReset(),
+            addToBackStack = true
+        )
     }
 }
+
+//логика работы навигации:
+
+//Уровень фрагмента
+//1) Во фрагменте вызывается метод из вьюМодели для перехода
+//
+//Уровень вьюМодели
+//2) Метод устанавливает во вьюМоделе значение экрана на который нужно перейти в переменную screen
+//-Переменная screen является лайфДатой sealed-класса содержащего все варианты экрнов для перехода
+//
+//Уровень фрагмента
+//3) У нас есть метод с навигацией фрагмента navigateTo(), который  меняет один фрагмент на другой.
+//-В принципе этот метод мы могли бы вызыватать напрямую, но гугл рекомендует, что в
+//MVVM моделе, нужно сначала менять значение во вьюМодели и затем вызывать нужный метод
+//навигации, поэтому получилась такая зацикленность.
+//
+//4) И для вызова этого метода навигации у нас используется та самая лайфДата из вью модели, которая
+//отслеживает изменения экранов в переменной screen. В зависимости от выбранного экрана у нас вызывается
+//один из методов для перехода/управления фрагментами
