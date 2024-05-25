@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.auth.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +15,7 @@ import com.perfomax.flexstats.auth.di.DaggerAuthComponent
 import com.perfomax.flexstats.core.navigation.Router
 import javax.inject.Inject
 
-class LoginFragment: Fragment(R.layout.fragment_login) {
+class LoginFragment(): Fragment(R.layout.fragment_login) {
 
     companion object {
         fun getInstance(): LoginFragment = LoginFragment()
@@ -51,36 +52,33 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentLoginBinding.bind(view)
         binding.apply {
-            loginButton.setOnClickListener {
-                loginViewModel.onLoginClicked()
-            }
-            registerText.setOnClickListener {
-                loginViewModel.toRegisterClicked()
-            }
-            resetText.setOnClickListener {
-                loginViewModel.toResetClicked()
-            }
+            loginButton.setOnClickListener { onLogin() }
+            registerText.setOnClickListener { loginViewModel.toRegisterClicked() }
+            resetText.setOnClickListener { loginViewModel.toResetClicked() }
         }
         setScreen()
     }
 
+    private fun onLogin() {
+        val user = binding.user.text.toString()
+        val password = binding.password.text.toString()
+        loginViewModel.onLoginClicked(user = user, password = password)
+//        router.navigateTo(homeFeatureApi.open())
+    }
+
     // navigation space-----------------------------------------------------------------------------
     private fun setScreen() {
-        loginViewModel.screen.observe(viewLifecycleOwner) {
+        loginViewModel.loginScreen.observe(viewLifecycleOwner) {
             when(it) {
-                is Screen.Login -> onLogin()
-                is Screen.Register -> showRegisterScreen()
-                is Screen.Reset -> showResetScreen()
+                is LoginScreen.Login -> onLogin()
+                is LoginScreen.Register -> showRegisterScreen()
+                is LoginScreen.Reset -> showResetScreen()
+                is LoginScreen.Back -> toBackFragment()
                 else -> {}
             }
         }
-    }
-
-    private fun onLogin() {
-        router.navigateTo(homeFeatureApi.open())
     }
 
     private fun showRegisterScreen() {
@@ -95,6 +93,10 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
             fragment = authFeatureApi.openReset(),
             addToBackStack = true
         )
+    }
+
+    private fun toBackFragment(){
+        router.back()
     }
 }
 

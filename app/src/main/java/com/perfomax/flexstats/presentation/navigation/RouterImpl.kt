@@ -19,9 +19,6 @@ class RouterImpl: Router, NavigatorLifecycle {
     }
 
     override fun navigateTo(fragment: Fragment, addToBackStack: Boolean) {
-        Log.d("MyLog", "fragment in navigateTo $fragment")
-        Log.d("MyLog", "navigatorHolder? $navigatorHolder")
-        Log.d("MyLog", "navigatorHolder?.manager() ${navigatorHolder?.manager()}")
         val manager = navigatorHolder?.manager() ?: throw IllegalArgumentException("NavigationHolder is null")
         when {
             addToBackStack -> manager.commit {

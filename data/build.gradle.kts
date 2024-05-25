@@ -34,6 +34,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:utils"))
+
     implementation(project(":data_api"))
     implementation(project(":domain_models"))
+
+    // datastore
+    implementation(libs.datastore.preferences)
+
+    // di
+    implementation(libs.javax.inject)
 }

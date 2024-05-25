@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.perfomax.auth.R
 import com.perfomax.auth.databinding.FragmentRegisterBinding
 import com.perfomax.auth.databinding.FragmentResetBinding
@@ -15,13 +16,24 @@ import javax.inject.Inject
 
 class ResetFragment: Fragment(R.layout.fragment_reset) {
 
+    companion object {
+        fun getInstance(): ResetFragment = ResetFragment()
+    }
+
     private lateinit var binding: FragmentResetBinding
+
+    @Inject
+    lateinit var vmFactory: ResetViewModelFactory
 
     @Inject
     lateinit var router: Router
 
     @Inject
     lateinit var authFeatureApi: AuthFeatureApi
+
+    private val resetViewModel by viewModels<ResetViewModel> {
+        vmFactory
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,22 +49,36 @@ class ResetFragment: Fragment(R.layout.fragment_reset) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentResetBinding.bind(view)
-
         binding.apply {
             resetButton.setOnClickListener {
 
             }
             toLoginText.setOnClickListener {
-                router.navigateTo(
-                    fragment = authFeatureApi.openLogin(),
-                    addToBackStack = true
-                )
+                resetViewModel.showLoginScreen()
+            }
+        }
+        setScreen()
+    }
+
+    // navigation space-----------------------------------------------------------------------------
+    private fun setScreen() {
+        resetViewModel.resetScreen.observe(viewLifecycleOwner) {
+            when(it) {
+                is ResetScreen.Login -> showLoginScreen()
+                is ResetScreen.Back -> toBackFragment()
+                else -> {}
             }
         }
     }
 
+    private fun showLoginScreen() {
+        router.navigateTo(
+            fragment = authFeatureApi.openLogin(),
+            addToBackStack = true
+        )
+    }
 
-    companion object {
-        fun getInstance(): ResetFragment = ResetFragment()
+    private fun toBackFragment(){
+        router.back()
     }
 }
