@@ -9,7 +9,7 @@ import javax.inject.Inject
 class AuthStorageImpl @Inject constructor(
     private val authDao: AuthDao
 ): AuthStorage {
-    override suspend fun add(user: String) {}
+    override suspend fun add(newUser: User) = authDao.insert(newUser.toDomain())
     override suspend fun getAllUsers(): List<User> = authDao.getAllUsers().map { it.toDomain() }
     override suspend fun setAuth(userName: String) {}
     override suspend fun getAuth(): String { return "" }

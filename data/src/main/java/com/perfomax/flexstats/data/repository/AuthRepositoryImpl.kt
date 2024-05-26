@@ -8,7 +8,7 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val authStorage: AuthStorage
 ): AuthRepository {
-    override suspend fun create(newUser: String) {
+    override suspend fun create(newUser: User) {
         authStorage.add(newUser)
     }
 

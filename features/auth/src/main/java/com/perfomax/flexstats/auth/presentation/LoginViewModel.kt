@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.auth.domain.usecases.GetUsersUseCase
+import com.perfomax.flexstats.auth.domain.usecases.RegisterUseCase
 import com.perfomax.flexstats.auth.domain.usecases.SetAuthUseCase
 import com.perfomax.flexstats.models.User
 import kotlinx.coroutines.launch
@@ -33,16 +34,15 @@ class LoginViewModel(
     private val _loginScreen = MutableLiveData<LoginScreen>()
     val loginScreen: LiveData<LoginScreen> = _loginScreen
 
-    init {
-        viewModelScope.launch {
-            Log.d("MyLog", getUsersUseCase.execute().toString())
-        }
-
-    }
-
     fun onLoginClicked(user: String, password: String) {
         Log.d("MyLog", "onLoginClicked()")
         Log.d("MyLog", "user: $user, password:$password")
+
+        viewModelScope.launch {
+            Log.d("MyLog", getUsersUseCase.execute().toString())
+
+//            registerUseCase.execute(User(user=user, ))
+        }
 //        _loginScreen.value = LoginScreen.Login
     }
 

@@ -68,7 +68,7 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
     private fun setScreen() {
         registerViewModel.registerScreen.observe(viewLifecycleOwner) {
             when(it) {
-                is RegisterScreen.Login -> onRegister()
+                is RegisterScreen.Login -> showLoginScreen()
                 is RegisterScreen.Back -> toBackFragment()
                 else -> {}
             }

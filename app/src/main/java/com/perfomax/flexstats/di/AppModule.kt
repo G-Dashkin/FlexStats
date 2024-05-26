@@ -2,6 +2,7 @@ package com.perfomax.flexstats.di
 
 import android.app.Application
 import android.content.Context
+import com.perfomax.flexstats.app.App
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
@@ -45,7 +46,7 @@ class AppModule(private val application: Application) {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(): AppDatabase = AppDatabase.createDatabase(context = application)
+    fun provideAppDatabase(): AppDatabase = AppDatabase.createDatabase(context = App.instance)
 
     // Auth provides--------------------------------------------------------------------------------
     @Provides

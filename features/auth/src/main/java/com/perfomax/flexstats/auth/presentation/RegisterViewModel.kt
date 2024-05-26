@@ -42,7 +42,7 @@ class RegisterViewModel(
         // Получаем список всех зарегистрированных пользователей
         viewModelScope.launch {
             val usersArray = getUsersUseCase.execute()
-
+            registerUseCase.execute(User(email = email, user = user, password = password))
         }
     }
 

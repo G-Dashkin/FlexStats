@@ -11,3 +11,12 @@ internal fun UserEntity.toDomain(): User {
         password = password
     )
 }
+
+internal fun User.toDomain(): UserEntity {
+    return UserEntity (
+        id = 0,
+        email = email,
+        user = user,
+        password = password
+    )
+}
