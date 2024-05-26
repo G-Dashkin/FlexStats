@@ -1,28 +1,16 @@
 package com.perfomax.flexstats.data.storage
 
-import com.perfomax.flexstats.core.utils.addElement
-import com.perfomax.flexstats.core.utils.parsToList
-import com.perfomax.flextats.data_api.datastore.AuthDataStore
+import com.perfomax.flexstats.data.database.dao.AuthDao
+import com.perfomax.flexstats.data.mappers.toDomain
+import com.perfomax.flexstats.models.User
 import com.perfomax.flextats.data_api.storage.AuthStorage
 import javax.inject.Inject
 
 class AuthStorageImpl @Inject constructor(
-    private val datastore: AuthDataStore
+    private val authDao: AuthDao
 ): AuthStorage {
-    override suspend fun add(user: String) {
-        datastore.setUser(user = datastore.getUsers().addElement(user))
-    }
-
-    override suspend fun getAll(): List<String> {
-        return datastore.getUsers().parsToList()
-    }
-
-    override suspend fun setAuth(userName: String) {
-        datastore.setAuth(userName = userName)
-    }
-
-    override suspend fun getAuth(): String {
-        return datastore.getAuth()
-    }
-
+    override suspend fun add(user: String) {}
+    override suspend fun getAllUsers(): List<User> = authDao.getAllUsers().map { it.toDomain() }
+    override suspend fun setAuth(userName: String) {}
+    override suspend fun getAuth(): String { return "" }
 }

@@ -68,4 +68,7 @@ dependencies {
     implementation(libs.google.material)
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
+
+    // room
+    implementation(libs.androidx.room.ktx)
 }

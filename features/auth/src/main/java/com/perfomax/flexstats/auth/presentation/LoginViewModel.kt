@@ -23,8 +23,8 @@ sealed class LoginScreen {
 }
 class LoginViewModel(
     private val context: Context,
-    getUsersUseCase: GetUsersUseCase,
-    setAuthUseCase: SetAuthUseCase
+    private val getUsersUseCase: GetUsersUseCase,
+    private val setAuthUseCase: SetAuthUseCase
 ): ViewModel() {
 
     private val _user = MutableLiveData<List<User>>()

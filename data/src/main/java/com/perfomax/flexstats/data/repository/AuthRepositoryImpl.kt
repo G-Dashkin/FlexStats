@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.data.repository
 
-import com.perfomax.flexstats.data.mappers.toDomainUser
 import com.perfomax.flexstats.models.User
 import com.perfomax.flextats.data_api.repository.AuthRepository
 import com.perfomax.flextats.data_api.storage.AuthStorage
@@ -14,13 +13,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAll(): List<User> {
-        val usersList = mutableListOf<User>()
-        if (authStorage.getAll().size > 1) {
-            authStorage.getAll().forEach {
-                usersList.add(it.toDomainUser())
-            }
-        }
-        return usersList
+        return authStorage.getAllUsers()
     }
 
     override suspend fun setAuth(userName: String) {

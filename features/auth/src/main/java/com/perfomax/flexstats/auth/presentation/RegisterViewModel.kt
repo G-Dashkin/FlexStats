@@ -6,11 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.auth.domain.usecases.GetUsersUseCase
 import com.perfomax.flexstats.auth.domain.usecases.RegisterUseCase
 import com.perfomax.flexstats.auth.domain.usecases.SetAuthUseCase
 import com.perfomax.flexstats.models.User
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class RegisterScreen {
@@ -21,8 +23,8 @@ sealed class RegisterScreen {
 
 class RegisterViewModel(
     private val context: Context,
-    getUsersUseCase: GetUsersUseCase,
-    registerUseCase: RegisterUseCase
+    private val getUsersUseCase: GetUsersUseCase,
+    private val registerUseCase: RegisterUseCase
 ): ViewModel() {
 
     private val _user = MutableLiveData<List<User>>()
@@ -35,6 +37,13 @@ class RegisterViewModel(
         Log.d("MyLog", "onRegisterClicked()")
         Log.d("MyLog", "email: $email, user: $user, password:$password")
 //        _registerScreen.value = RegisterScreen.Login
+
+
+        // Получаем список всех зарегистрированных пользователей
+        viewModelScope.launch {
+            val usersArray = getUsersUseCase.execute()
+
+        }
     }
 
     fun showLoginScreen() {
