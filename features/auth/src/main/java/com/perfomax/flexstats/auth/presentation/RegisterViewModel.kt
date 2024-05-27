@@ -36,13 +36,12 @@ class RegisterViewModel(
     fun onRegisterClicked(email: String, user: String, password: String) {
         Log.d("MyLog", "onRegisterClicked()")
         Log.d("MyLog", "email: $email, user: $user, password:$password")
-//        _registerScreen.value = RegisterScreen.Login
-
-
         // Получаем список всех зарегистрированных пользователей
         viewModelScope.launch {
             val usersArray = getUsersUseCase.execute()
-            registerUseCase.execute(User(email = email, user = user, password = password))
+            Log.d("MyLog", usersArray.toString())
+//            registerUseCase.execute(User(email = email, user = user, password = password))
+            _registerScreen.value = RegisterScreen.Login
         }
     }
 

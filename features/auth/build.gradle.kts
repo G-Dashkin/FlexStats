@@ -45,8 +45,8 @@ dependencies {
     implementation(project(":data_api"))
     implementation(project(":domain_models"))
 
-    implementation(project(":features:auth_api"))
     implementation(project(":features:home_api"))
+    implementation(project(":features:auth_api"))
 
     implementation(libs.core.ktx)
     implementation(libs.androidx.appcompat)
