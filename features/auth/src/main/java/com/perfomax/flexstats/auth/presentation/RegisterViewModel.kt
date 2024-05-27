@@ -1,7 +1,6 @@
 package com.perfomax.flexstats.auth.presentation
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.auth.domain.usecases.GetUsersUseCase
 import com.perfomax.flexstats.auth.domain.usecases.RegisterUseCase
-import com.perfomax.flexstats.auth.domain.usecases.SetAuthUseCase
 import com.perfomax.flexstats.models.User
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +16,9 @@ import javax.inject.Inject
 sealed class RegisterScreen {
     data object Login : RegisterScreen()
     data object Back : RegisterScreen()
+    data object EmailExists : RegisterScreen()
+    data object EmailNotCorrect : RegisterScreen()
+    data object EmptyFields : RegisterScreen()
     data object Nothing : RegisterScreen()
 }
 
@@ -34,14 +35,18 @@ class RegisterViewModel(
     val registerScreen: LiveData<RegisterScreen> = _registerScreen
 
     fun onRegisterClicked(email: String, user: String, password: String) {
-        Log.d("MyLog", "onRegisterClicked()")
-        Log.d("MyLog", "email: $email, user: $user, password:$password")
-        // Получаем список всех зарегистрированных пользователей
         viewModelScope.launch {
             val usersArray = getUsersUseCase.execute()
-            Log.d("MyLog", usersArray.toString())
-//            registerUseCase.execute(User(email = email, user = user, password = password))
-            _registerScreen.value = RegisterScreen.Login
+            if (email.isEmpty() || user.isEmpty() || password.isEmpty()) {
+                _registerScreen.value = RegisterScreen.EmptyFields
+            } else if (!email.contains("@") || !email.contains(".")){
+                _registerScreen.value = RegisterScreen.EmailNotCorrect
+            } else if (usersArray.any {it.email == email}) {
+                _registerScreen.value = RegisterScreen.EmailExists
+            } else {
+                registerUseCase.execute(User(email = email, user = user, password = password))
+                _registerScreen.value = RegisterScreen.Login
+            }
         }
     }
 

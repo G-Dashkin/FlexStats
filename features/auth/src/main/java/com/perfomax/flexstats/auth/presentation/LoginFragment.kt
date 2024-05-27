@@ -62,7 +62,7 @@ class LoginFragment(): Fragment(R.layout.fragment_login) {
     }
 
     private fun onLogin() {
-        val user = binding.user.text.toString()
+        val user = binding.email.text.toString()
         val password = binding.password.text.toString()
         loginViewModel.onLoginClicked(user = user, password = password)
 //        router.navigateTo(homeFeatureApi.open())

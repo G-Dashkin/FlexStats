@@ -2,11 +2,11 @@ package com.perfomax.flexstats.auth.presentation
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.perfomax.auth.R
-import com.perfomax.auth.databinding.FragmentLoginBinding
 import com.perfomax.auth.databinding.FragmentRegisterBinding
 import com.perfomax.flexstats.api.AuthFeatureApi
 import com.perfomax.flexstats.auth.di.AuthFeatureDepsProvider
@@ -61,7 +61,6 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
         val user = binding.user.text.toString()
         val password = binding.password.text.toString()
         registerViewModel.onRegisterClicked(email = email, user = user, password = password)
-//        router.navigateTo(homeFeatureApi.open())
     }
 
     // navigation space-----------------------------------------------------------------------------
@@ -70,6 +69,9 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
             when(it) {
                 is RegisterScreen.Login -> showLoginScreen()
                 is RegisterScreen.Back -> toBackFragment()
+                is RegisterScreen.EmailExists -> emailExists()
+                is RegisterScreen.EmailNotCorrect -> emailNotCorrect()
+                is RegisterScreen.EmptyFields -> emptyFields()
                 else -> {}
             }
         }
@@ -84,5 +86,16 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
 
     private fun toBackFragment(){
         router.back()
+    }
+
+    // Toast space-----------------------------------------------------------------------------
+    private fun emailExists(){
+        Toast.makeText(activity, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show()
+    }
+    private fun emailNotCorrect(){
+        Toast.makeText(activity, "Укажите корректный email", Toast.LENGTH_LONG).show()
+    }
+    private fun emptyFields(){
+        Toast.makeText(activity, "Все поля дожны быть заполнены", Toast.LENGTH_LONG).show()
     }
 }

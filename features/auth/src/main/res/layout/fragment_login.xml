@@ -32,13 +32,13 @@
                 android:textStyle="bold"
                 android:textColor="@color/primary"/>
             <EditText
-                android:id="@+id/user"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/custom_edittext"
                 android:drawableLeft="@drawable/ic_user"
                 android:drawablePadding="8dp"
-                android:hint="User"
+                android:hint="Email"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background"
