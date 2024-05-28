@@ -7,4 +7,7 @@ interface AuthStorage {
     suspend fun getAllUsers(): List<User>
     suspend fun setAuth()
     suspend fun getAuth(): Boolean
+    suspend fun logout()
+    suspend fun setAuthUser(authUser: User)
+    suspend fun getAuthUser(): User
 }

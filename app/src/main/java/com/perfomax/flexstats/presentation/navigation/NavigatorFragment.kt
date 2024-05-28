@@ -11,10 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import com.perfomax.flexstats.R
 import com.perfomax.flexstats.api.AccountsFeatureApi
 import com.perfomax.flexstats.api.AuthFeatureApi
@@ -24,6 +26,12 @@ import com.perfomax.flexstats.api.StartFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.databinding.FragmentNavigatorBinding
 import com.perfomax.flexstats.di.DaggerProvider
+import com.perfomax.flexstats.domain.usecases.GetAuthUserUseCase
+import com.perfomax.flexstats.domain.usecases.LogoutUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder {
@@ -49,6 +57,12 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     @Inject
     lateinit var accountsFeatureApi: AccountsFeatureApi
 
+    @Inject
+    lateinit var logoutUseCase: LogoutUseCase
+
+    @Inject
+    lateinit var getAuthUserUseCase: GetAuthUserUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerProvider.appComponent.inject(this)
@@ -62,18 +76,22 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.nav_menu, menu)
+
+                lifecycleScope.launch {
+                    val authUser = getAuthUserUseCase.execute()
+//                    menu.add(authUser.user).titleCondensed
+                    (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Пользователь: ${authUser.user}"
+                }
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when(menuItem.itemId){
-//                    R.id.nav_start -> router.navigateTo(fragment = startFeatureApi.open())
-
-//                    R.id.nav_login -> router.navigateTo(fragment = authFeatureApi.openLogin())
-//                    R.id.nav_register -> router.navigateTo(fragment = authFeatureApi.openRegister())
-//                    R.id.nav_reset -> router.navigateTo(fragment = authFeatureApi.openReset())
-
                     R.id.nav_home -> router.navigateTo(fragment = homeFeatureApi.open())
                     R.id.nav_projects -> router.navigateTo(fragment = projectsFeatureApi.open())
                     R.id.nav_accounts -> router.navigateTo(fragment = accountsFeatureApi.open())
+                    R.id.nav_logout -> {
+                        lifecycleScope.launch{ logoutUseCase.execute() }
+                        router.navigateTo(fragment = authFeatureApi.openLogin())
+                    }
                 }
                 return true
             }
@@ -89,6 +107,8 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
                 }
             }
         )
+
+
     }
 
     override fun onDestroy() {

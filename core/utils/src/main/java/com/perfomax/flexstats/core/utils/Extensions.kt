@@ -11,8 +11,8 @@ fun User.parsUserToString(): String {
 }
 
 fun String.parsStringToUser(): User {
-    return User(id = this.split("|")[0].toInt(),
-                user = this.split("|")[1],
-                email = this.split("|")[2],
-                password = this.split("|")[3])
+    return User(id = this.split("|")[0].split(":")[1].toInt(),
+                user = this.split("|")[1].split(":")[1],
+                email = this.split("|")[2].split(":")[1],
+                password = this.split("|")[3].split(":")[1])
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.auth.domain.usecases.GetUsersUseCase
 import com.perfomax.flexstats.auth.domain.usecases.SetAuthUseCase
+import com.perfomax.flexstats.auth.domain.usecases.SetAuthUserUseCase
 import com.perfomax.flexstats.models.User
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +26,8 @@ sealed class LoginScreen {
 }
 class LoginViewModel(
     private val getUsersUseCase: GetUsersUseCase,
-    private val setAuthUseCase: SetAuthUseCase
+    private val setAuthUseCase: SetAuthUseCase,
+    private val setAuthUserUseCase: SetAuthUserUseCase
 ): ViewModel() {
 
     private val _user = MutableLiveData<List<User>>()
@@ -45,6 +47,7 @@ class LoginViewModel(
             else if (user.password != password) _loginScreen.value = LoginScreen.PasswordNotCorrect
             else {
                 setAuthUseCase.execute()
+                setAuthUserUseCase.execute(user)
                 _loginScreen.value = LoginScreen.Login
             }
         }
@@ -67,7 +70,8 @@ class LoginViewModel(
 
 class LoginViewModelFactory @Inject constructor(
     private val getUsersUseCase: GetUsersUseCase,
-    private val setAuthUseCase: SetAuthUseCase
+    private val setAuthUseCase: SetAuthUseCase,
+    private val setAuthUserUseCase: SetAuthUserUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -76,7 +80,8 @@ class LoginViewModelFactory @Inject constructor(
     ): T {
         return LoginViewModel(
             getUsersUseCase = getUsersUseCase,
-            setAuthUseCase = setAuthUseCase
+            setAuthUseCase = setAuthUseCase,
+            setAuthUserUseCase = setAuthUserUseCase
         ) as T
     }
 }
