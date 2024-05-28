@@ -1,7 +1,6 @@
 package com.perfomax.flexstats.auth.presentation
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.auth.domain.usecases.GetUsersUseCase
-import com.perfomax.flexstats.auth.domain.usecases.RegisterUseCase
 import com.perfomax.flexstats.auth.domain.usecases.SetAuthUseCase
 import com.perfomax.flexstats.models.User
 import kotlinx.coroutines.launch
@@ -19,6 +17,9 @@ sealed class LoginScreen {
     data object Login : LoginScreen()
     data object Register : LoginScreen()
     data object Reset : LoginScreen()
+    data object EmailNotExists : LoginScreen()
+    data object PasswordNotCorrect : LoginScreen()
+    data object EmptyFields : LoginScreen()
     data object Back : LoginScreen()
     data object Nothing : LoginScreen()
 }
@@ -34,16 +35,17 @@ class LoginViewModel(
     private val _loginScreen = MutableLiveData<LoginScreen>()
     val loginScreen: LiveData<LoginScreen> = _loginScreen
 
-    fun onLoginClicked(user: String, password: String) {
-        Log.d("MyLog", "onLoginClicked()")
-        Log.d("MyLog", "user: $user, password:$password")
-
+    fun onLoginClicked(email: String, password: String) {
         viewModelScope.launch {
-            Log.d("MyLog", getUsersUseCase.execute().toString())
 
-//            registerUseCase.execute(User(user=user, ))
+            val usersArray = getUsersUseCase.execute()
+            val user = usersArray.find { it.email == email }
+
+            if (email.isEmpty() || email.isEmpty()) _loginScreen.value = LoginScreen.EmptyFields
+            else if (user == null) _loginScreen.value = LoginScreen.EmailNotExists
+            else if (user.password != password) _loginScreen.value = LoginScreen.PasswordNotCorrect
+            else _loginScreen.value = LoginScreen.Login
         }
-//        _loginScreen.value = LoginScreen.Login
     }
 
     fun toRegisterClicked() {

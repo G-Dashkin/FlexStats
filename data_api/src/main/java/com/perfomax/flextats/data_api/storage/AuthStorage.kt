@@ -5,6 +5,6 @@ import com.perfomax.flexstats.models.User
 interface AuthStorage {
     suspend fun add(user: User)
     suspend fun getAllUsers(): List<User>
-    suspend fun setAuth(userName: String)
-    suspend fun getAuth(): String
+    suspend fun setAuth(userName: User)
+    suspend fun getAuth(): User
 }

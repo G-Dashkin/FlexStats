@@ -3,6 +3,7 @@ package com.perfomax.flexstats.auth.presentation
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -62,23 +63,32 @@ class LoginFragment(): Fragment(R.layout.fragment_login) {
     }
 
     private fun onLogin() {
-        val user = binding.email.text.toString()
+        val email = binding.email.text.toString()
         val password = binding.password.text.toString()
-        loginViewModel.onLoginClicked(user = user, password = password)
-//        router.navigateTo(homeFeatureApi.open())
+        loginViewModel.onLoginClicked(email = email, password = password)
     }
 
     // navigation space-----------------------------------------------------------------------------
     private fun setScreen() {
         loginViewModel.loginScreen.observe(viewLifecycleOwner) {
             when(it) {
-                is LoginScreen.Login -> onLogin()
+                is LoginScreen.Login -> showHomeScreen()
                 is LoginScreen.Register -> showRegisterScreen()
                 is LoginScreen.Reset -> showResetScreen()
+                is LoginScreen.EmailNotExists -> emailNotExists()
+                is LoginScreen.PasswordNotCorrect -> passwordNotCorrect()
+                is LoginScreen.EmptyFields -> emptyFields()
                 is LoginScreen.Back -> toBackFragment()
                 else -> {}
             }
         }
+    }
+
+    private fun showHomeScreen() {
+        router.navigateTo(
+            fragment = homeFeatureApi.open(),
+            addToBackStack = false
+        )
     }
 
     private fun showRegisterScreen() {
@@ -98,23 +108,15 @@ class LoginFragment(): Fragment(R.layout.fragment_login) {
     private fun toBackFragment(){
         router.back()
     }
+
+    // Toast space-----------------------------------------------------------------------------
+    private fun emailNotExists(){
+        Toast.makeText(activity, "Пользователя с таким email не существует", Toast.LENGTH_LONG).show()
+    }
+    private fun passwordNotCorrect(){
+        Toast.makeText(activity, "Пароль неверный", Toast.LENGTH_LONG).show()
+    }
+    private fun emptyFields(){
+        Toast.makeText(activity, "Все поля дожны быть заполнены", Toast.LENGTH_LONG).show()
+    }
 }
-
-//логика работы навигации:
-
-//Уровень фрагмента
-//1) Во фрагменте вызывается метод из вьюМодели для перехода
-//
-//Уровень вьюМодели
-//2) Метод устанавливает во вьюМоделе значение экрана на который нужно перейти в переменную screen
-//-Переменная screen является лайфДатой sealed-класса содержащего все варианты экрнов для перехода
-//
-//Уровень фрагмента
-//3) У нас есть метод с навигацией фрагмента navigateTo(), который  меняет один фрагмент на другой.
-//-В принципе этот метод мы могли бы вызыватать напрямую, но гугл рекомендует, что в
-//MVVM моделе, нужно сначала менять значение во вьюМодели и затем вызывать нужный метод
-//навигации, поэтому получилась такая зацикленность.
-//
-//4) И для вызова этого метода навигации у нас используется та самая лайфДата из вью модели, которая
-//отслеживает изменения экранов в переменной screen. В зависимости от выбранного экрана у нас вызывается
-//один из методов для перехода/управления фрагментами

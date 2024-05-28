@@ -11,6 +11,6 @@ class AuthStorageImpl @Inject constructor(
 ): AuthStorage {
     override suspend fun add(newUser: User) = authDao.insert(newUser.toDomain())
     override suspend fun getAllUsers(): List<User> = authDao.getAllUsers().map { it.toDomain() }
-    override suspend fun setAuth(userName: String) {}
-    override suspend fun getAuth(): String { return "" }
+    override suspend fun setAuth(userName: User) {}
+    override suspend fun getAuth(): User { return User(0,"", "","") }
 }

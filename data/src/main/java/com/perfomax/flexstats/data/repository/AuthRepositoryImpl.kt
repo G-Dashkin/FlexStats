@@ -16,11 +16,11 @@ class AuthRepositoryImpl @Inject constructor(
         return authStorage.getAllUsers()
     }
 
-    override suspend fun setAuth(userName: String) {
+    override suspend fun setAuth(userName: User) {
         authStorage.setAuth(userName = userName)
     }
 
-    override suspend fun getAuth(): String {
+    override suspend fun getAuth(): User {
         return authStorage.getAuth()
     }
 }
