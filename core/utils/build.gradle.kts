@@ -34,5 +34,6 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain_models"))
     implementation(libs.javax.inject)
 }

@@ -24,7 +24,6 @@ sealed class LoginScreen {
     data object Nothing : LoginScreen()
 }
 class LoginViewModel(
-    private val context: Context,
     private val getUsersUseCase: GetUsersUseCase,
     private val setAuthUseCase: SetAuthUseCase
 ): ViewModel() {
@@ -44,7 +43,10 @@ class LoginViewModel(
             if (email.isEmpty() || email.isEmpty()) _loginScreen.value = LoginScreen.EmptyFields
             else if (user == null) _loginScreen.value = LoginScreen.EmailNotExists
             else if (user.password != password) _loginScreen.value = LoginScreen.PasswordNotCorrect
-            else _loginScreen.value = LoginScreen.Login
+            else {
+                setAuthUseCase.execute(user)
+                _loginScreen.value = LoginScreen.Login
+            }
         }
     }
 
@@ -64,7 +66,6 @@ class LoginViewModel(
 }
 
 class LoginViewModelFactory @Inject constructor(
-    private val context: Context,
     private val getUsersUseCase: GetUsersUseCase,
     private val setAuthUseCase: SetAuthUseCase
 ):  ViewModelProvider.Factory {
@@ -74,7 +75,6 @@ class LoginViewModelFactory @Inject constructor(
         extras: CreationExtras,
     ): T {
         return LoginViewModel(
-            context = context,
             getUsersUseCase = getUsersUseCase,
             setAuthUseCase = setAuthUseCase
         ) as T

@@ -6,10 +6,12 @@ import com.perfomax.flexstats.app.App
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
+import com.perfomax.flexstats.data.datastore.AuthDataStoreImpl
 import com.perfomax.flexstats.data.repository.AuthRepositoryImpl
 import com.perfomax.flexstats.data.storage.AuthStorageImpl
 import com.perfomax.flexstats.presentation.navigation.NavigatorLifecycle
 import com.perfomax.flexstats.presentation.navigation.RouterImpl
+import com.perfomax.flextats.data_api.datastore.AuthDataStore
 import com.perfomax.flextats.data_api.repository.AuthRepository
 import com.perfomax.flextats.data_api.storage.AuthStorage
 import dagger.Module
@@ -51,9 +53,12 @@ class AppModule(private val application: Application) {
     // Auth provides--------------------------------------------------------------------------------
     @Provides
     @Singleton
-    fun provideAuthDao(
-        db: AppDatabase
+    fun provideAuthDao(db: AppDatabase
     ): AuthDao = db.authDao()
+
+    @Provides
+    @Singleton
+    fun provideAuthDataStore(): AuthDataStore = AuthDataStoreImpl(context = App.instance)
 
     @Singleton
     @Provides
@@ -64,7 +69,8 @@ class AppModule(private val application: Application) {
     @Singleton
     @Provides
     fun provideAuthStorage(
-        authDao: AuthDao
-    ): AuthStorage = AuthStorageImpl(authDao)
+        authDao: AuthDao,
+        authDataStore: AuthDataStore
+    ): AuthStorage = AuthStorageImpl(authDao = authDao, authDataStore = authDataStore)
 
 }

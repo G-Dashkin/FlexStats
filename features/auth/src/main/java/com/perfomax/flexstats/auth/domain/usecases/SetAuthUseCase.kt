@@ -8,7 +8,7 @@ import javax.inject.Inject
 class SetAuthUseCase @Inject constructor(
     private val repository: AuthRepository
 ): UseCaseWithParams<Unit, User> {
-    override suspend fun execute(userName: User) {
-        repository.setAuth(userName = userName)
+    override suspend fun execute(authUser: User) {
+        repository.setAuth(authUser = authUser)
     }
 }

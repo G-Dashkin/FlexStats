@@ -16,8 +16,8 @@ class AuthRepositoryImpl @Inject constructor(
         return authStorage.getAllUsers()
     }
 
-    override suspend fun setAuth(userName: User) {
-        authStorage.setAuth(userName = userName)
+    override suspend fun setAuth(authUser: User) {
+        authStorage.setAuth(authUser = authUser)
     }
 
     override suspend fun getAuth(): User {

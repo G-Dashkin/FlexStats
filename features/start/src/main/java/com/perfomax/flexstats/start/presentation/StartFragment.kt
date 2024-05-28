@@ -7,7 +7,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.perfomax.flexstats.api.AuthFeatureApi
+import com.perfomax.flexstats.auth.presentation.LoginViewModel
+import com.perfomax.flexstats.auth.presentation.LoginViewModelFactory
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.start.di.DaggerStartComponent
 import com.perfomax.flexstats.start.di.StartFeatureDepsProvider
@@ -20,10 +23,17 @@ class StartFragment: Fragment(R.layout.fragment_start)  {
     private lateinit var binding: FragmentStartBinding
 
     @Inject
+    lateinit var vmFactory: StartViewModelFactory
+
+    @Inject
     lateinit var router: Router
 
     @Inject
     lateinit var authFeatureApi: AuthFeatureApi
+
+    private val startViewModel by viewModels<StartViewModel> {
+        vmFactory
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
