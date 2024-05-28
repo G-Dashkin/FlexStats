@@ -11,9 +11,9 @@ import com.perfomax.flexstats.data.repository.AuthRepositoryImpl
 import com.perfomax.flexstats.data.storage.AuthStorageImpl
 import com.perfomax.flexstats.presentation.navigation.NavigatorLifecycle
 import com.perfomax.flexstats.presentation.navigation.RouterImpl
-import com.perfomax.flextats.data_api.datastore.AuthDataStore
-import com.perfomax.flextats.data_api.repository.AuthRepository
-import com.perfomax.flextats.data_api.storage.AuthStorage
+import com.perfomax.flexstats.data_api.datastore.AuthDataStore
+import com.perfomax.flexstats.data_api.repository.AuthRepository
+import com.perfomax.flexstats.data_api.storage.AuthStorage
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

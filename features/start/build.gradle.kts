@@ -48,6 +48,7 @@ dependencies {
 
     implementation(project(":features:start_api"))
     implementation(project(":features:auth_api"))
+    implementation(project(":features:home_api"))
 
     implementation(libs.core.ktx)
     implementation(libs.androidx.constraintlayout)

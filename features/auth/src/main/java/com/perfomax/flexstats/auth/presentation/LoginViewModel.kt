@@ -44,7 +44,7 @@ class LoginViewModel(
             else if (user == null) _loginScreen.value = LoginScreen.EmailNotExists
             else if (user.password != password) _loginScreen.value = LoginScreen.PasswordNotCorrect
             else {
-                setAuthUseCase.execute(user)
+                setAuthUseCase.execute()
                 _loginScreen.value = LoginScreen.Login
             }
         }

@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.perfomax.flexstats.auth.domain.usecases.GetAuthUseCase
-import com.perfomax.flexstats.auth.presentation.LoginScreen
+import com.perfomax.flexstats.start.domain.usecases.GetAuthUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,8 +25,9 @@ class StartViewModel(
 
     init {
         viewModelScope.launch {
-            Log.d("MyLog", "StartViewModel")
-            Log.d("MyLog", getAuthUseCase.execute().toString())
+            val isUserLogin = getAuthUseCase.execute()
+            if (isUserLogin) _startScreen.value = StartScreen.Home
+            else _startScreen.value = StartScreen.Login
         }
     }
 }

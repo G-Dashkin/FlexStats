@@ -4,8 +4,8 @@ import android.util.Log
 import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.models.User
-import com.perfomax.flextats.data_api.datastore.AuthDataStore
-import com.perfomax.flextats.data_api.storage.AuthStorage
+import com.perfomax.flexstats.data_api.datastore.AuthDataStore
+import com.perfomax.flexstats.data_api.storage.AuthStorage
 import javax.inject.Inject
 
 class AuthStorageImpl @Inject constructor(
@@ -14,12 +14,10 @@ class AuthStorageImpl @Inject constructor(
 ): AuthStorage {
     override suspend fun add(newUser: User) = authDao.insert(newUser.toDomain())
     override suspend fun getAllUsers(): List<User> = authDao.getAllUsers().map { it.toDomain() }
-    override suspend fun setAuth(authUser: User) {
-        Log.d("MyLog", "setAuth() $authUser" )
-        authDataStore.setAuth(authUser)
+    override suspend fun setAuth() {
+        authDataStore.setAuth()
     }
-    override suspend fun getAuth(): User {
-        Log.d("MyLog", "getAuth() ${authDataStore.getAuth() }" )
+    override suspend fun getAuth(): Boolean {
         return authDataStore.getAuth()
     }
 }

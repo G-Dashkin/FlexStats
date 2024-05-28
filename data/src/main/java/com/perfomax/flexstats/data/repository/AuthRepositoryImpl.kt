@@ -1,8 +1,8 @@
 package com.perfomax.flexstats.data.repository
 
 import com.perfomax.flexstats.models.User
-import com.perfomax.flextats.data_api.repository.AuthRepository
-import com.perfomax.flextats.data_api.storage.AuthStorage
+import com.perfomax.flexstats.data_api.repository.AuthRepository
+import com.perfomax.flexstats.data_api.storage.AuthStorage
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -16,11 +16,11 @@ class AuthRepositoryImpl @Inject constructor(
         return authStorage.getAllUsers()
     }
 
-    override suspend fun setAuth(authUser: User) {
-        authStorage.setAuth(authUser = authUser)
+    override suspend fun setAuth() {
+        authStorage.setAuth()
     }
 
-    override suspend fun getAuth(): User {
+    override suspend fun getAuth(): Boolean {
         return authStorage.getAuth()
     }
 }

@@ -9,8 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.perfomax.flexstats.api.AuthFeatureApi
-import com.perfomax.flexstats.auth.presentation.LoginViewModel
-import com.perfomax.flexstats.auth.presentation.LoginViewModelFactory
+import com.perfomax.flexstats.api.HomeFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.start.di.DaggerStartComponent
 import com.perfomax.flexstats.start.di.StartFeatureDepsProvider
@@ -19,6 +18,10 @@ import com.perfomax.start.databinding.FragmentStartBinding
 import javax.inject.Inject
 
 class StartFragment: Fragment(R.layout.fragment_start)  {
+
+    companion object {
+        fun getInstance(): StartFragment = StartFragment()
+    }
 
     private lateinit var binding: FragmentStartBinding
 
@@ -30,6 +33,9 @@ class StartFragment: Fragment(R.layout.fragment_start)  {
 
     @Inject
     lateinit var authFeatureApi: AuthFeatureApi
+
+    @Inject
+    lateinit var homeFeatureApi: HomeFeatureApi
 
     private val startViewModel by viewModels<StartViewModel> {
         vmFactory
@@ -44,19 +50,32 @@ class StartFragment: Fragment(R.layout.fragment_start)  {
             .addDeps(StartFeatureDepsProvider.deps)
             .build()
         startComponent.inject(this)
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            router.navigateTo(fragment = authFeatureApi.openLogin())
-        }, 3000)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentStartBinding.bind(view)
+        Handler(Looper.getMainLooper()).postDelayed({
+            setScreen()
+        }, 3000)
     }
 
-    companion object {
-        fun getInstance(): StartFragment = StartFragment()
+    // navigation space-----------------------------------------------------------------------------
+    private fun setScreen() {
+        startViewModel.startScreen.observe(viewLifecycleOwner) {
+            when(it) {
+                is StartScreen.Login -> showLoginScreen()
+                is StartScreen.Home -> showHomeScreen()
+            }
+        }
     }
+
+    private fun showHomeScreen() {
+        router.navigateTo(fragment = homeFeatureApi.open())
+    }
+
+    private fun showLoginScreen() {
+        router.navigateTo(fragment = authFeatureApi.openLogin())
+    }
+
 }

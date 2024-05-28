@@ -4,7 +4,7 @@ import android.content.Context
 import com.perfomax.flexstats.api.AuthFeatureApi
 import com.perfomax.flexstats.api.HomeFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
-import com.perfomax.flextats.data_api.repository.AuthRepository
+import com.perfomax.flexstats.data_api.repository.AuthRepository
 
 interface AuthFeatureDeps {
     val context: Context
