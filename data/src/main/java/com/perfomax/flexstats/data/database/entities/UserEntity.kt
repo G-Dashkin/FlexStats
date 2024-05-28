@@ -20,8 +20,8 @@ data class UserEntity(
     companion object {
         const val TABLE_NAME = "users"
         const val ID = "id"
-        const val USER = "user"
-        const val EMAIL = "email"
-        const val PASSWORD = "password"
+        const val USER_NAME = "user_name"
+        const val USER_EMAIL = "user_email"
+        const val USER_PASSWORD = "user_password"
     }
 }

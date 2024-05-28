@@ -7,26 +7,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/btnCreateProject"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Projects"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:background="@color/primary"
+        android:text="Создать новый проект"
+        android:textStyle="bold"
         android:textColor="#000000"
-        android:textSize="48sp" />
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnHome"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:background="#0C82C1"
-        android:text="Home"
+        android:id="@+id/btnGetProjects"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:background="@color/primary"
+        android:text="Получить список проектов"
         android:textColor="#000000"
-        android:textSize="34sp"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCreateProject" />
+
+    <Button
+        android:id="@+id/btnCreate"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="96dp"
+        android:background="@color/primary"
+        android:text="Создать проект"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnCreateProject" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

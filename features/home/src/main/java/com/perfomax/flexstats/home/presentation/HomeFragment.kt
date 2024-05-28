@@ -39,3 +39,4 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         fun getInstance(): HomeFragment = HomeFragment()
     }
 }
+
