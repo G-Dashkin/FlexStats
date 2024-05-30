@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetAuthUserUseCase @Inject constructor(
     private val repository: AuthRepository
 ): UseCaseWithoutParams<User> {
-    override suspend fun execute():User {
+    override suspend fun execute(): User {
         return repository.getAuthUser()
     }
 }

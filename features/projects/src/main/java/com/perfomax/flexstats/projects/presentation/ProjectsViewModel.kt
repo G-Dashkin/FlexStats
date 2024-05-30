@@ -12,11 +12,13 @@ import com.perfomax.flexstats.projects.domain.usecases.CreateProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetAuthUserUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
+import com.perfomax.flexstats.projects.domain.usecases.SelectProjectUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class ProjectsScreen {
     data object AddNewProject : ProjectsScreen()
+    data class SelectProject(val projectId: Int) : ProjectsScreen()
     data class DeleteProject(val projectId: Int) : ProjectsScreen()
     data class EditProject(val projectId: Int) : ProjectsScreen()
     data object Nothing : ProjectsScreen()
@@ -24,6 +26,7 @@ sealed class ProjectsScreen {
 class ProjectsViewModel(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
+    private val selectProjectUseCase: SelectProjectUseCase,
     private val getSelectedProjectUseCase: GetSelectedProjectUseCase
 ): ViewModel()  {
 
@@ -55,9 +58,9 @@ class ProjectsViewModel(
     }
 
 
-    fun projectClicked(projectId: Int) {
-
-
+    fun selectProject(projectId: Int) {
+        Log.d("MyLog", "selectProject id: $projectId")
+        viewModelScope.launch { selectProjectUseCase.execute(projectId) }
     }
 
     fun editProject(projectId: Int){
@@ -74,6 +77,7 @@ class ProjectsViewModel(
 class ProjectsViewModelFactory @Inject constructor(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
+    private val selectProjectUseCase: SelectProjectUseCase,
     private val getSelectedProjectUseCase: GetSelectedProjectUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -84,6 +88,7 @@ class ProjectsViewModelFactory @Inject constructor(
         return ProjectsViewModel(
             getProjectsUseCase = getProjectsUseCase,
             createProjectUseCase = createProjectUseCase,
+            selectProjectUseCase = selectProjectUseCase,
             getSelectedProjectUseCase = getSelectedProjectUseCase
         ) as T
     }

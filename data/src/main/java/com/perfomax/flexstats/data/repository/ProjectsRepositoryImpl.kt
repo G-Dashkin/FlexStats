@@ -17,7 +17,15 @@ class ProjectsRepositoryImpl @Inject constructor(
 
     override suspend fun remove(project: Project) = projectsStorage.remove(project)
 
-    override suspend fun getSelected(): Project = projectsStorage.getSelectedProject()
+    override suspend fun select(projectId: Int) {
+        val authedUserId = authStorage.getAuthedUser().id
+        projectsStorage.selectProject(projectId = projectId, userId = authedUserId?:0)
+    }
+
+    override suspend fun getSelected(): Project {
+        val authedUserId = authStorage.getAuthedUser().id
+        return projectsStorage.getSelectedProject(userId = authedUserId?:0)
+    }
 
     override suspend fun getAll(): List<Project> = projectsStorage.getAllProjects()
 }

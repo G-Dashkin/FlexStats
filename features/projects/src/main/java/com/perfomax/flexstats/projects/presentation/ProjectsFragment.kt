@@ -62,6 +62,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
 
     private fun setAdapter() {
         val adapter = ProjectsAdapter(
+            itemProjectClick = { projectsViewModel.selectProject(it) },
             editProjectClick = { projectsViewModel.editProject(it) },
             deleteProjectClick = { projectsViewModel.deleteProject(it) }
         )
@@ -78,6 +79,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         projectsViewModel.projectsScreen.observe(viewLifecycleOwner) {
             when(it) {
                 is ProjectsScreen.AddNewProject -> {}
+                is ProjectsScreen.SelectProject -> {}
                 is ProjectsScreen.EditProject -> showEditProjectDialog(it.projectId)
                 is ProjectsScreen.DeleteProject -> showDeleteProjectDialog(it.projectId)
                 is ProjectsScreen.Nothing -> {}

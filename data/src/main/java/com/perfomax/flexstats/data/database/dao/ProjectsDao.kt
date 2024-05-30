@@ -17,6 +17,11 @@ interface ProjectsDao {
     @Delete
     suspend fun delete(project: ProjectEntity)
 
+    @Query("UPDATE projects SET selected_project = " +
+           "CASE WHEN projects.id = :projectId THEN 1 ELSE 0 END "  +
+           "WHERE projects.user_id = :userId")
+    suspend fun selectProject(userId: String, projectId: String)
+
     @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} " +
             "WHERE ${ProjectEntity.TABLE_NAME}.${ProjectEntity.USER_ID} = :userId " +
             "AND ${ProjectEntity.TABLE_NAME}.${ProjectEntity.SELECTED_PROJECT} = '1'"
