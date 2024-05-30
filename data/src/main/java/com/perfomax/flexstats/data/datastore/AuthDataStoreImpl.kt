@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.perfomax.flexstats.core.utils.parsStringToUser
 import com.perfomax.flexstats.core.utils.parsUserToString
+import com.perfomax.flexstats.data.datastore.AuthDataStoreImpl.Companion.USER
 import com.perfomax.flexstats.models.User
 import com.perfomax.flexstats.data_api.datastore.AuthDataStore
 import kotlinx.coroutines.flow.first
@@ -29,7 +30,7 @@ class AuthDataStoreImpl @Inject constructor(
 
     override suspend fun getAuthUser(): User {
         val preference = context.dataStore.data.first()
-        return preference[USER]!!.parsStringToUser()
+        return preference[USER]?.parsStringToUser()?: User(-1, "","","")
     }
 
     override suspend fun setAuthUser(authUser: User) {

@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.perfomax.flexstats.models.Project
 import com.perfomax.projects.databinding.ItemProjectBinding
 
-class ProjectsAdapter(private val itemClick: (Int) -> Unit):
+class ProjectsAdapter(
+    private val editProjectClick: (Int) -> Unit,
+    private val deleteProjectClick: (Int) -> Unit
+):
     ListAdapter<Project, RecyclerView.ViewHolder>(ProjectsDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -24,9 +27,8 @@ class ProjectsAdapter(private val itemClick: (Int) -> Unit):
     inner class ProjectHolder(private val binding: ItemProjectBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(project: Project) {
             binding.projectName.text = project.name
-            binding.root.setOnClickListener {
-                itemClick.invoke(project.id!!)
-            }
+            binding.btnEdit.setOnClickListener { editProjectClick.invoke(project.id!!) }
+            binding.btnDelete.setOnClickListener { deleteProjectClick.invoke(project.id!!) }
         }
     }
 

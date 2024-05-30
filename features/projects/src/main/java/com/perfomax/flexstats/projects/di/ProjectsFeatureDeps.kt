@@ -8,6 +8,5 @@ import com.perfomax.flexstats.data_api.repository.ProjectsRepository
 interface ProjectsFeatureDeps {
     val projectsFeatureApi: ProjectsFeatureApi
     val projectsRepository: ProjectsRepository
-    val authRepository: AuthRepository
     val router: Router
 }

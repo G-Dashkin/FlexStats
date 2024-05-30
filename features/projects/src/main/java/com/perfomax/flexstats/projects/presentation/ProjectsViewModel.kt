@@ -14,21 +14,22 @@ import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class LoginScreen {
-    data object AddNewProject : LoginScreen()
-    data object DeleteProject : LoginScreen()
-    data object EditProject : LoginScreen()
-    data object Back : LoginScreen()
-    data object Nothing : LoginScreen()
+sealed class ProjectsScreen {
+    data object AddNewProject : ProjectsScreen()
+    data class DeleteProject(val projectId: Int) : ProjectsScreen()
+    data class EditProject(val projectId: Int) : ProjectsScreen()
+    data object Nothing : ProjectsScreen()
 }
 class ProjectsViewModel(
     private val getProjectsUseCase: GetProjectsUseCase,
-    private val createProjectUseCase: CreateProjectUseCase,
-    private val getAuthUserUseCase: GetAuthUserUseCase
+    private val createProjectUseCase: CreateProjectUseCase
 ): ViewModel()  {
 
     private val _projectsList = MutableLiveData<List<Project>>()
     val projectsList: LiveData<List<Project>> = _projectsList
+
+    private val _projectsScreen = MutableLiveData<ProjectsScreen>()
+    val projectsScreen: LiveData<ProjectsScreen> = _projectsScreen
 
     init {
         load()
@@ -41,24 +42,32 @@ class ProjectsViewModel(
         }
     }
 
-    fun addNewProject(){
+    fun addNewProject(projectName: String){
         viewModelScope.launch {
-            val user = getAuthUserUseCase.execute()
-            createProjectUseCase.execute(Project(name = "test Project", userId = user.id?:-1))
+            createProjectUseCase.execute(Project(name = projectName))
         }
     }
 
 
-    fun projectClicked(studentId: Int) {
+    fun projectClicked(projectId: Int) {
 
+
+    }
+
+    fun editProject(projectId: Int){
+        Log.d("MyLog", "editProject id: $projectId")
+        _projectsScreen.value = ProjectsScreen.EditProject(projectId)
+    }
+    fun deleteProject(projectId: Int){
+        Log.d("MyLog", "deleteProject id: $projectId")
+        _projectsScreen.value = ProjectsScreen.DeleteProject(projectId)
     }
 
 }
 
 class ProjectsViewModelFactory @Inject constructor(
     private val getProjectsUseCase: GetProjectsUseCase,
-    private val createProjectUseCase: CreateProjectUseCase,
-    private val getAuthUserUseCase: GetAuthUserUseCase
+    private val createProjectUseCase: CreateProjectUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -67,8 +76,7 @@ class ProjectsViewModelFactory @Inject constructor(
     ): T {
         return ProjectsViewModel(
             getProjectsUseCase = getProjectsUseCase,
-            createProjectUseCase = createProjectUseCase,
-            getAuthUserUseCase = getAuthUserUseCase
+            createProjectUseCase = createProjectUseCase
         ) as T
     }
 }

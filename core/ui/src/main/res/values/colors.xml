@@ -5,6 +5,8 @@
 
     <color name="primary">#8692f7</color>
     <color name="onPrimary">#FFFFFF</color>
+    <color name="secondary">#015698</color>
+    <color name="onSecondary">#FFFFFF</color>
     <color name="background">#F4FBF8</color>
     <color name="onBackground">#161D1B</color>
     <color name="surface">#E4F6F5</color>
@@ -15,6 +17,8 @@
 
     <color name="primaryDark">#2D378E</color>
     <color name="onPrimaryDark">#E8FFFC</color>
+    <color name="secondaryDark">#015698</color>
+    <color name="onSecondaryDark">#FFFFFF</color>
     <color name="backgroundDark">#0E1513</color>
     <color name="onBackgroundDark">#DDE4E1</color>
     <color name="surfaceDark">#0E1514</color>

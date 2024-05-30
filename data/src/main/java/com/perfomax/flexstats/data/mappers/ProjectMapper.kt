@@ -15,8 +15,8 @@ internal fun ProjectEntity.toDomain(): Project {
 
 internal fun Project.toDomain(): ProjectEntity {
     return ProjectEntity (
-        id = 0,
+        id = id?:0,
         project = name,
-        userId = userId
+        userId = userId?:0
     )
 }
