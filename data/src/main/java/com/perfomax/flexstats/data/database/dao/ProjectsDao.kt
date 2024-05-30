@@ -17,6 +17,12 @@ interface ProjectsDao {
     @Delete
     suspend fun delete(project: ProjectEntity)
 
-    @Query("SELECT * from ${ProjectEntity.TABLE_NAME} ORDER BY ${ProjectEntity.ID} ASC")
+    @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} " +
+            "WHERE ${ProjectEntity.TABLE_NAME}.${ProjectEntity.USER_ID} = :userId " +
+            "AND ${ProjectEntity.TABLE_NAME}.${ProjectEntity.SELECTED_PROJECT} = '1'"
+    )
+    suspend fun getSelectedProject(userId: String): ProjectEntity
+
+    @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} ORDER BY ${ProjectEntity.ID} ASC")
     suspend fun getAllProjects(): List<ProjectEntity>
 }

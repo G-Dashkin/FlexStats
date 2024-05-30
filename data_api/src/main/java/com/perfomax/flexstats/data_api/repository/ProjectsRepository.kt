@@ -5,5 +5,6 @@ import com.perfomax.flexstats.models.Project
 interface ProjectsRepository {
     suspend fun create(newProject: Project)
     suspend fun remove(project: Project)
+    suspend fun getSelected(): Project
     suspend fun getAll(): List<Project>
 }

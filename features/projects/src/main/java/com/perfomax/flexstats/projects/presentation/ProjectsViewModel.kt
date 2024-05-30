@@ -11,6 +11,7 @@ import com.perfomax.flexstats.models.Project
 import com.perfomax.flexstats.projects.domain.usecases.CreateProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetAuthUserUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
+import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +23,8 @@ sealed class ProjectsScreen {
 }
 class ProjectsViewModel(
     private val getProjectsUseCase: GetProjectsUseCase,
-    private val createProjectUseCase: CreateProjectUseCase
+    private val createProjectUseCase: CreateProjectUseCase,
+    private val getSelectedProjectUseCase: GetSelectedProjectUseCase
 ): ViewModel()  {
 
     private val _projectsList = MutableLiveData<List<Project>>()
@@ -33,6 +35,10 @@ class ProjectsViewModel(
 
     init {
         load()
+        viewModelScope.launch {
+            val selectedProject = getSelectedProjectUseCase.execute()
+            Log.d("MyLog", "selectedProject: $selectedProject")
+        }
     }
 
     private fun load() {
@@ -67,7 +73,8 @@ class ProjectsViewModel(
 
 class ProjectsViewModelFactory @Inject constructor(
     private val getProjectsUseCase: GetProjectsUseCase,
-    private val createProjectUseCase: CreateProjectUseCase
+    private val createProjectUseCase: CreateProjectUseCase,
+    private val getSelectedProjectUseCase: GetSelectedProjectUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -76,7 +83,8 @@ class ProjectsViewModelFactory @Inject constructor(
     ): T {
         return ProjectsViewModel(
             getProjectsUseCase = getProjectsUseCase,
-            createProjectUseCase = createProjectUseCase
+            createProjectUseCase = createProjectUseCase,
+            getSelectedProjectUseCase = getSelectedProjectUseCase
         ) as T
     }
 }

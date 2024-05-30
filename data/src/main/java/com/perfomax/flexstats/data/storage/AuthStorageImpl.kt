@@ -18,5 +18,5 @@ class AuthStorageImpl @Inject constructor(
     override suspend fun getAuth(): Boolean = authDataStore.getAuth()
     override suspend fun logout() = authDataStore.logout()
     override suspend fun setAuthUser(authUser: User) = authDataStore.setAuthUser(authUser)
-    override suspend fun getAuthUser(): User = authDataStore.getAuthUser()
+    override suspend fun getAuthedUser(): User = authDataStore.getAuthUser()
 }

@@ -13,5 +13,6 @@ class ProjectsStorageImpl @Inject constructor(
 ): ProjectsStorage {
     override suspend fun add(project: Project) = projectsDao.insert(project.toDomain())
     override suspend fun remove(project: Project) = projectsDao.delete(project.toDomain())
+    override suspend fun getSelectedProject(): Project = projectsDao.getSelectedProject("1").toDomain()
     override suspend fun getAllProjects(): List<Project> = projectsDao.getAllProjects().map { it.toDomain() }
 }

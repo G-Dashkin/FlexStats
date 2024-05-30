@@ -12,6 +12,8 @@ data class ProjectEntity(
     val id: Int,
     @ColumnInfo(name = "project_name")
     val project: String,
+    @ColumnInfo(name = "selected_project")
+    val isSelected: Int,
     @ColumnInfo(name = "user_id")
     val userId: Int
 ) {
@@ -19,6 +21,7 @@ data class ProjectEntity(
         const val TABLE_NAME = "projects"
         const val ID = "id"
         const val PROJECT_NAME = "project_name"
+        const val SELECTED_PROJECT = "selected_project"
         const val USER_ID = "user_id"
     }
 }
