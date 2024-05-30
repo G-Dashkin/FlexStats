@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.projects.di.DaggerProjectsComponent
 import com.perfomax.flexstats.projects.di.ProjectsFeatureDepsProvider
@@ -42,12 +43,21 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentProjectsBinding.bind(view)
-
-        binding.btnGetProjects.setOnClickListener {
-            projectsViewModel.testGetProjectUserCase()
+        binding.btnAddProjects.setOnClickListener {
+            projectsViewModel.addNewProject()
         }
-        binding.btnCreate.setOnClickListener {
-            projectsViewModel.testCreateProjectUseCase()
+        setAdapter()
+    }
+
+    private fun setAdapter() {
+        val adapter = ProjectsAdapter {
+            projectsViewModel.projectClicked(it)
+        }
+        binding.projectsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.projectsRecyclerView.adapter = adapter
+
+        projectsViewModel.projectsList.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 

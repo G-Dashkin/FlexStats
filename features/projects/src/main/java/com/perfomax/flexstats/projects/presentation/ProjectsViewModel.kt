@@ -1,6 +1,8 @@
 package com.perfomax.flexstats.projects.presentation
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -12,24 +14,43 @@ import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+sealed class LoginScreen {
+    data object AddNewProject : LoginScreen()
+    data object DeleteProject : LoginScreen()
+    data object EditProject : LoginScreen()
+    data object Back : LoginScreen()
+    data object Nothing : LoginScreen()
+}
 class ProjectsViewModel(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
     private val getAuthUserUseCase: GetAuthUserUseCase
 ): ViewModel()  {
 
+    private val _projectsList = MutableLiveData<List<Project>>()
+    val projectsList: LiveData<List<Project>> = _projectsList
 
-    fun testGetProjectUserCase(){
+    init {
+        load()
+    }
+
+    private fun load() {
         viewModelScope.launch {
-            Log.d("MyLog", getProjectsUseCase.execute().toString())
+            val student = getProjectsUseCase.execute()
+            _projectsList.postValue(student)
         }
     }
 
-    fun testCreateProjectUseCase(){
+    fun addNewProject(){
         viewModelScope.launch {
             val user = getAuthUserUseCase.execute()
             createProjectUseCase.execute(Project(name = "test Project", userId = user.id?:-1))
         }
+    }
+
+
+    fun projectClicked(studentId: Int) {
+
     }
 
 }

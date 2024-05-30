@@ -7,45 +7,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnCreateProject"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:background="@color/primary"
-        android:text="Создать новый проект"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:textSize="18sp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/projects_recycler_view"
+        android:layout_width="@dimen/zeroDp"
+        android:layout_height="@dimen/zeroDp"
+        android:layout_margin="@dimen/margin24"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".presentation.main.MainActivity" />
 
-    <Button
-        android:id="@+id/btnGetProjects"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:background="@color/primary"
-        android:text="Получить список проектов"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCreateProject" />
-
-    <Button
-        android:id="@+id/btnCreate"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_margin="20dp"
-        android:layout_marginTop="96dp"
-        android:background="@color/primary"
-        android:text="Создать проект"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCreateProject" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAddProjects"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin16"
+        android:contentDescription="@string/app_project"
+        android:backgroundTint="@color/primary"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/onPrimary"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
