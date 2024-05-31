@@ -12,12 +12,16 @@ class ProjectsStorageImpl @Inject constructor(
     private val projectsDao: ProjectsDao
 ): ProjectsStorage {
     override suspend fun add(project: Project) = projectsDao.insert(project.toDomain())
-    override suspend fun remove(project: Project) = projectsDao.delete(project.toDomain())
+    override suspend fun rename(projectId: Int, userId: Int) {
+        projectsDao.rename(projectId = projectId.toString())
+    }
+
+    override suspend fun delete(projectId: Int, userId: Int) {
+        projectsDao.delete(projectId = projectId.toString())
+    }
+
     override suspend fun selectProject(projectId: Int, userId: Int) {
-        projectsDao.selectProject(
-            userId = userId.toString(),
-            projectId = projectId.toString()
-        )
+        projectsDao.selectProject(userId = userId.toString(), projectId = projectId.toString())
     }
 
     override suspend fun getSelectedProject(userId: Int): Project {

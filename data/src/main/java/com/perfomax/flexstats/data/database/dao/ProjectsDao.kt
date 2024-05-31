@@ -14,8 +14,11 @@ interface ProjectsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(newProject: ProjectEntity)
 
-    @Delete
-    suspend fun delete(project: ProjectEntity)
+    @Query("DELETE FROM projects WHERE projects.id = :projectId")
+    suspend fun delete(projectId: String)
+
+    @Query("DELETE FROM projects WHERE projects.id = :projectId")
+    suspend fun rename(projectId: String)
 
     @Query("UPDATE projects SET selected_project = " +
            "CASE WHEN projects.id = :projectId THEN 1 ELSE 0 END "  +

@@ -3,16 +3,12 @@ package com.perfomax.flexstats.projects.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewbinding.ViewBinding
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.projects.di.DaggerProjectsComponent
 import com.perfomax.flexstats.projects.di.ProjectsFeatureDepsProvider
@@ -64,7 +60,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         val adapter = ProjectsAdapter(
             itemProjectClick = { projectsViewModel.selectProject(it) },
             editProjectClick = { projectsViewModel.editProject(it) },
-            deleteProjectClick = { projectsViewModel.deleteProject(it) }
+            deleteProjectClick = { projectsViewModel.showDeleteProjectDialog(it) }
         )
         binding.projectsRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.projectsRecyclerView.adapter = adapter
@@ -107,7 +103,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         addProjectDialogBinding = AddProjectDialogBinding.inflate(inflater)
         dialog.setContentView(addProjectDialogBinding.root)
         dialog.show()
-        addProjectDialogBinding.projectNameText.text = "Id проекта $id"
+        addProjectDialogBinding.projectNameText.text = "Id проекта $projectId"
         addProjectDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         addProjectDialogBinding.btnConfirm.setOnClickListener { dialog.dismiss() }
     }
@@ -120,7 +116,10 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         dialog.show()
         bindingCustomDialog.text2.text = bindingCustomDialog.toString()
         bindingCustomDialog.btnCancel.setOnClickListener { dialog.dismiss() }
-        bindingCustomDialog.btnConfirm.setOnClickListener { dialog.dismiss() }
+        bindingCustomDialog.btnConfirm.setOnClickListener {
+            projectsViewModel.deleteProjectClicked(projectId)
+            dialog.dismiss()
+        }
     }
 
     private fun settingsDialog(): Dialog {

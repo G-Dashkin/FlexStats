@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.models.Project
 import com.perfomax.flexstats.projects.domain.usecases.CreateProjectUseCase
-import com.perfomax.flexstats.projects.domain.usecases.GetAuthUserUseCase
+import com.perfomax.flexstats.projects.domain.usecases.DeleteProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.SelectProjectUseCase
@@ -27,7 +27,8 @@ class ProjectsViewModel(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
     private val selectProjectUseCase: SelectProjectUseCase,
-    private val getSelectedProjectUseCase: GetSelectedProjectUseCase
+    private val getSelectedProjectUseCase: GetSelectedProjectUseCase,
+    private val deleteProjectUseCase: DeleteProjectUseCase
 ): ViewModel()  {
 
     private val _projectsList = MutableLiveData<List<Project>>()
@@ -38,10 +39,6 @@ class ProjectsViewModel(
 
     init {
         load()
-        viewModelScope.launch {
-            val selectedProject = getSelectedProjectUseCase.execute()
-            Log.d("MyLog", "selectedProject: $selectedProject")
-        }
     }
 
     private fun load() {
@@ -54,31 +51,39 @@ class ProjectsViewModel(
     fun addNewProject(projectName: String){
         viewModelScope.launch {
             createProjectUseCase.execute(Project(name = projectName))
+            load()
         }
     }
 
 
     fun selectProject(projectId: Int) {
-        Log.d("MyLog", "selectProject id: $projectId")
-        viewModelScope.launch { selectProjectUseCase.execute(projectId) }
+        viewModelScope.launch {
+            selectProjectUseCase.execute(projectId)
+            load()
+        }
     }
 
     fun editProject(projectId: Int){
-        Log.d("MyLog", "editProject id: $projectId")
         _projectsScreen.value = ProjectsScreen.EditProject(projectId)
     }
-    fun deleteProject(projectId: Int){
-        Log.d("MyLog", "deleteProject id: $projectId")
+    fun showDeleteProjectDialog(projectId: Int){
         _projectsScreen.value = ProjectsScreen.DeleteProject(projectId)
     }
 
+    fun deleteProjectClicked(projectId: Int){
+        viewModelScope.launch {
+            deleteProjectUseCase.execute(projectId)
+            load()
+        }
+    }
 }
 
 class ProjectsViewModelFactory @Inject constructor(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
     private val selectProjectUseCase: SelectProjectUseCase,
-    private val getSelectedProjectUseCase: GetSelectedProjectUseCase
+    private val getSelectedProjectUseCase: GetSelectedProjectUseCase,
+    private val deleteProjectUseCase: DeleteProjectUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -89,7 +94,8 @@ class ProjectsViewModelFactory @Inject constructor(
             getProjectsUseCase = getProjectsUseCase,
             createProjectUseCase = createProjectUseCase,
             selectProjectUseCase = selectProjectUseCase,
-            getSelectedProjectUseCase = getSelectedProjectUseCase
+            getSelectedProjectUseCase = getSelectedProjectUseCase,
+            deleteProjectUseCase = deleteProjectUseCase
         ) as T
     }
 }
