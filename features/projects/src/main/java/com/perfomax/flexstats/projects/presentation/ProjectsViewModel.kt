@@ -62,7 +62,7 @@ class ProjectsViewModel(
         }
     }
 
-    fun editProject(projectId: Int){
+    fun showEditProjectDialog(projectId: Int){
         _projectsScreen.value = ProjectsScreen.EditProject(projectId)
     }
     fun showDeleteProjectDialog(projectId: Int, projectName: String){

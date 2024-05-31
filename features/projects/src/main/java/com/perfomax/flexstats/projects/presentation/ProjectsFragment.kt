@@ -51,7 +51,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentProjectsBinding.bind(view)
-        binding.btnAddProjects.setOnClickListener { showAddProjectDialog() }
+        binding.btnAddProjects.setOnClickListener { showProjectDialog() }
         setAdapter()
         setScreen()
     }
@@ -59,7 +59,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     private fun setAdapter() {
         val adapter = ProjectsAdapter(
             itemProjectClick = { projectsViewModel.selectProject(it) },
-            editProjectClick = { projectsViewModel.editProject(it) },
+            editProjectClick = { projectsViewModel.showEditProjectDialog(it) },
             deleteProjectClick = { projectId, projectName ->
                 projectsViewModel.showDeleteProjectDialog(projectId = projectId, projectName = projectName)
             }
@@ -87,7 +87,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         }
     }
 
-    private fun showAddProjectDialog() {
+    private fun showProjectDialog() {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         addProjectDialogBinding = AddProjectDialogBinding.inflate(inflater)
