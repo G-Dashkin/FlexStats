@@ -27,7 +27,6 @@ class ProjectsViewModel(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
     private val selectProjectUseCase: SelectProjectUseCase,
-    private val getSelectedProjectUseCase: GetSelectedProjectUseCase,
     private val deleteProjectUseCase: DeleteProjectUseCase
 ): ViewModel()  {
 
@@ -82,7 +81,6 @@ class ProjectsViewModelFactory @Inject constructor(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
     private val selectProjectUseCase: SelectProjectUseCase,
-    private val getSelectedProjectUseCase: GetSelectedProjectUseCase,
     private val deleteProjectUseCase: DeleteProjectUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -94,7 +92,6 @@ class ProjectsViewModelFactory @Inject constructor(
             getProjectsUseCase = getProjectsUseCase,
             createProjectUseCase = createProjectUseCase,
             selectProjectUseCase = selectProjectUseCase,
-            getSelectedProjectUseCase = getSelectedProjectUseCase,
             deleteProjectUseCase = deleteProjectUseCase
         ) as T
     }

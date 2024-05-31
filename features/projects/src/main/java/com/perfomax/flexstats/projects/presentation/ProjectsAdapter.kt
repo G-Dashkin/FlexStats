@@ -31,6 +31,7 @@ class ProjectsAdapter(
         fun bind(project: Project) {
             binding.projectName.text = project.name
             if (project.isSelected == true) binding.rootElement.setBackgroundColor(Color.GRAY)
+            else binding.rootElement.setBackgroundColor(Color.WHITE)
             binding.root.setOnClickListener { itemProjectClick.invoke(project.id!!) }
             binding.btnEdit.setOnClickListener { editProjectClick.invoke(project.id!!) }
             binding.btnDelete.setOnClickListener { deleteProjectClick.invoke(project.id!!, project.name) }

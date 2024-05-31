@@ -20,8 +20,7 @@ class ProjectsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun select(projectId: Int) {
-        val authedUserId = authStorage.getAuthedUser().id
-        projectsStorage.selectProject(projectId = projectId, userId = authedUserId?:0)
+        projectsStorage.selectProject(projectId = projectId)
     }
 
     override suspend fun getSelected(): Project {

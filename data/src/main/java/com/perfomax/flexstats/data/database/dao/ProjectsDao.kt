@@ -22,14 +22,12 @@ interface ProjectsDao {
     suspend fun rename(projectId: String)
 
     @Query("UPDATE projects SET selected_project = " +
-           "CASE WHEN projects.id = :projectId THEN 1 ELSE 0 END "  +
-           "WHERE projects.user_id = :userId")
-    suspend fun selectProject(userId: String, projectId: String)
+           "CASE WHEN projects.id = :projectId THEN 1 ELSE 0 END")
+    suspend fun selectProject(projectId: String)
 
     @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} " +
             "WHERE ${ProjectEntity.TABLE_NAME}.${ProjectEntity.USER_ID} = :userId " +
-            "AND ${ProjectEntity.TABLE_NAME}.${ProjectEntity.SELECTED_PROJECT} = '1'"
-    )
+            "AND ${ProjectEntity.TABLE_NAME}.${ProjectEntity.SELECTED_PROJECT} = '1'")
     suspend fun getSelectedProject(userId: String): ProjectEntity
 
     @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} ORDER BY ${ProjectEntity.ID} ASC")

@@ -79,10 +79,9 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                 is ProjectsScreen.AddNewProject -> {}
                 is ProjectsScreen.SelectProject -> {}
                 is ProjectsScreen.EditProject -> showEditProjectDialog(it.projectId)
-                is ProjectsScreen.DeleteProject -> showDeleteProjectDialog(
-                    projectId = it.projectId,
-                    projectName = it.projectName
-                    )
+                is ProjectsScreen.DeleteProject -> {
+                    showDeleteProjectDialog(projectId = it.projectId, projectName = it.projectName)
+                }
                 is ProjectsScreen.Nothing -> {}
             }
         }
