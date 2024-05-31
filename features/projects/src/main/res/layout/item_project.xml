@@ -22,7 +22,7 @@ android:padding="10dp" >
 
     <Button
         android:id="@+id/btn_edit"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
         android:background="@color/primary"

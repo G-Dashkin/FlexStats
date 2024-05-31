@@ -35,7 +35,7 @@ abstract class AppDatabase: RoomDatabase() {
                     name = DATABASE_NAME
                 )
                     .createFromAsset("database/$DATABASE_NAME")
-//                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration()
                     .build()
             }
         }

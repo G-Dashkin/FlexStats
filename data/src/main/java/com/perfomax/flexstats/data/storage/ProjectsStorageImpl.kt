@@ -16,7 +16,7 @@ class ProjectsStorageImpl @Inject constructor(
         projectsDao.rename(projectId = projectId.toString())
     }
 
-    override suspend fun delete(projectId: Int, userId: Int) {
+    override suspend fun delete(projectId: Int) {
         projectsDao.delete(projectId = projectId.toString())
     }
 

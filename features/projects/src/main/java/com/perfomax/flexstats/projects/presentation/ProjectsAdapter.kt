@@ -13,7 +13,7 @@ import com.perfomax.projects.databinding.ItemProjectBinding
 class ProjectsAdapter(
     private val itemProjectClick: (Int) -> Unit,
     private val editProjectClick: (Int) -> Unit,
-    private val deleteProjectClick: (Int) -> Unit
+    private val deleteProjectClick: (Int, String) -> Unit
 ):
     ListAdapter<Project, RecyclerView.ViewHolder>(ProjectsDiffCallback()){
 
@@ -33,7 +33,7 @@ class ProjectsAdapter(
             if (project.isSelected == true) binding.rootElement.setBackgroundColor(Color.GRAY)
             binding.root.setOnClickListener { itemProjectClick.invoke(project.id!!) }
             binding.btnEdit.setOnClickListener { editProjectClick.invoke(project.id!!) }
-            binding.btnDelete.setOnClickListener { deleteProjectClick.invoke(project.id!!) }
+            binding.btnDelete.setOnClickListener { deleteProjectClick.invoke(project.id!!, project.name) }
         }
     }
 

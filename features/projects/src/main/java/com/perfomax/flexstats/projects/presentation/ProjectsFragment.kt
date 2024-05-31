@@ -60,7 +60,9 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         val adapter = ProjectsAdapter(
             itemProjectClick = { projectsViewModel.selectProject(it) },
             editProjectClick = { projectsViewModel.editProject(it) },
-            deleteProjectClick = { projectsViewModel.showDeleteProjectDialog(it) }
+            deleteProjectClick = { projectId, projectName ->
+                projectsViewModel.showDeleteProjectDialog(projectId = projectId, projectName = projectName)
+            }
         )
         binding.projectsRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.projectsRecyclerView.adapter = adapter
@@ -77,7 +79,10 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                 is ProjectsScreen.AddNewProject -> {}
                 is ProjectsScreen.SelectProject -> {}
                 is ProjectsScreen.EditProject -> showEditProjectDialog(it.projectId)
-                is ProjectsScreen.DeleteProject -> showDeleteProjectDialog(it.projectId)
+                is ProjectsScreen.DeleteProject -> showDeleteProjectDialog(
+                    projectId = it.projectId,
+                    projectName = it.projectName
+                    )
                 is ProjectsScreen.Nothing -> {}
             }
         }
@@ -108,13 +113,13 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         addProjectDialogBinding.btnConfirm.setOnClickListener { dialog.dismiss() }
     }
 
-    private fun showDeleteProjectDialog(projectId: Int) {
+    private fun showDeleteProjectDialog(projectId: Int, projectName: String) {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         bindingCustomDialog = CustomDialogBinding.inflate(inflater)
         dialog.setContentView(bindingCustomDialog.root)
         dialog.show()
-        bindingCustomDialog.text2.text = bindingCustomDialog.toString()
+        bindingCustomDialog.text2.text = projectName
         bindingCustomDialog.btnCancel.setOnClickListener { dialog.dismiss() }
         bindingCustomDialog.btnConfirm.setOnClickListener {
             projectsViewModel.deleteProjectClicked(projectId)

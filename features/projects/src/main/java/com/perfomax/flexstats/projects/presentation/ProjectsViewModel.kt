@@ -19,7 +19,7 @@ import javax.inject.Inject
 sealed class ProjectsScreen {
     data object AddNewProject : ProjectsScreen()
     data class SelectProject(val projectId: Int) : ProjectsScreen()
-    data class DeleteProject(val projectId: Int) : ProjectsScreen()
+    data class DeleteProject(val projectId: Int, val projectName: String) : ProjectsScreen()
     data class EditProject(val projectId: Int) : ProjectsScreen()
     data object Nothing : ProjectsScreen()
 }
@@ -66,8 +66,8 @@ class ProjectsViewModel(
     fun editProject(projectId: Int){
         _projectsScreen.value = ProjectsScreen.EditProject(projectId)
     }
-    fun showDeleteProjectDialog(projectId: Int){
-        _projectsScreen.value = ProjectsScreen.DeleteProject(projectId)
+    fun showDeleteProjectDialog(projectId: Int, projectName: String){
+        _projectsScreen.value = ProjectsScreen.DeleteProject(projectId = projectId, projectName = projectName)
     }
 
     fun deleteProjectClicked(projectId: Int){
