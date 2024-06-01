@@ -1,8 +1,6 @@
 package com.perfomax.flexstats.data.storage
 
-import android.util.Log
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
-import com.perfomax.flexstats.data.database.entities.ProjectEntity
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.data_api.storage.ProjectsStorage
 import com.perfomax.flexstats.models.Project
