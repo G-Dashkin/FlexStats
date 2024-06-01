@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.models.Project
 import com.perfomax.flexstats.projects.domain.usecases.CreateProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.DeleteProjectUseCase
+import com.perfomax.flexstats.projects.domain.usecases.EditProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.SelectProjectUseCase
@@ -20,12 +21,13 @@ sealed class ProjectsScreen {
     data object AddNewProject : ProjectsScreen()
     data class SelectProject(val projectId: Int) : ProjectsScreen()
     data class DeleteProject(val projectId: Int, val projectName: String) : ProjectsScreen()
-    data class EditProject(val projectId: Int) : ProjectsScreen()
+    data class EditProject(val projectId: Int, val currentName: String) : ProjectsScreen()
     data object Nothing : ProjectsScreen()
 }
 class ProjectsViewModel(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
+    private val editProjectUseCase: EditProjectUseCase,
     private val selectProjectUseCase: SelectProjectUseCase,
     private val deleteProjectUseCase: DeleteProjectUseCase
 ): ViewModel()  {
@@ -54,6 +56,13 @@ class ProjectsViewModel(
         }
     }
 
+    fun editProject(projectId: Int, editName: String){
+        viewModelScope.launch {
+            editProjectUseCase.execute(Project(id = projectId, name = editName))
+            load()
+        }
+    }
+
 
     fun selectProject(projectId: Int) {
         viewModelScope.launch {
@@ -62,8 +71,12 @@ class ProjectsViewModel(
         }
     }
 
-    fun showEditProjectDialog(projectId: Int){
-        _projectsScreen.value = ProjectsScreen.EditProject(projectId)
+    fun showAddProjectDialog(){
+        _projectsScreen.value = ProjectsScreen.AddNewProject
+    }
+
+    fun showEditProjectDialog(projectId: Int, currentName: String){
+        _projectsScreen.value = ProjectsScreen.EditProject(projectId = projectId, currentName = currentName)
     }
     fun showDeleteProjectDialog(projectId: Int, projectName: String){
         _projectsScreen.value = ProjectsScreen.DeleteProject(projectId = projectId, projectName = projectName)
@@ -80,6 +93,7 @@ class ProjectsViewModel(
 class ProjectsViewModelFactory @Inject constructor(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
+    private val editProjectUseCase: EditProjectUseCase,
     private val selectProjectUseCase: SelectProjectUseCase,
     private val deleteProjectUseCase: DeleteProjectUseCase
 ):  ViewModelProvider.Factory {
@@ -91,6 +105,7 @@ class ProjectsViewModelFactory @Inject constructor(
         return ProjectsViewModel(
             getProjectsUseCase = getProjectsUseCase,
             createProjectUseCase = createProjectUseCase,
+            editProjectUseCase= editProjectUseCase,
             selectProjectUseCase = selectProjectUseCase,
             deleteProjectUseCase = deleteProjectUseCase
         ) as T

@@ -1,5 +1,7 @@
 package com.perfomax.flexstats.data.database.dao
 
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -18,16 +20,19 @@ interface ProjectsDao {
            "WHERE ${ProjectEntity.TABLE_NAME}.${ProjectEntity.ID} = :projectId")
     suspend fun delete(projectId: String)
 
-    @Query("DELETE FROM projects WHERE projects.id = :projectId")
-    suspend fun rename(projectId: String)
+    @Query("UPDATE projects SET ${ProjectEntity.PROJECT_NAME} = :editName " +
+           "WHERE ${ProjectEntity.ID} = :projectId")
+    suspend fun edit(projectId: String, editName: String)
 
-    @Query("UPDATE projects SET selected_project = " +
-           "CASE WHEN projects.id = :projectId THEN 1 ELSE 0 END")
+
+    @Query("UPDATE ${ProjectEntity.TABLE_NAME} SET ${ProjectEntity.SELECTED_PROJECT} = " +
+           "CASE WHEN ${ProjectEntity.ID} = :projectId THEN 1 ELSE 0 END")
     suspend fun selectProject(projectId: String)
 
+
     @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} " +
-            "WHERE ${ProjectEntity.TABLE_NAME}.${ProjectEntity.USER_ID} = :userId " +
-            "AND ${ProjectEntity.TABLE_NAME}.${ProjectEntity.SELECTED_PROJECT} = '1'")
+            "WHERE ${ProjectEntity.USER_ID} = :userId " +
+            "AND ${ProjectEntity.SELECTED_PROJECT} = '1'")
     suspend fun getSelectedProject(userId: String): ProjectEntity
 
     @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} ORDER BY ${ProjectEntity.ID} ASC")

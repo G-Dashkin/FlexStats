@@ -30,7 +30,7 @@ class AuthDataStoreImpl @Inject constructor(
 
     override suspend fun getAuthUser(): User {
         val preference = context.dataStore.data.first()
-        return preference[USER]?.parsStringToUser()?: User(-1, "","","")
+        return preference[USER]?.parsStringToUser()?: User(-1, "","","", false)
     }
 
     override suspend fun setAuthUser(authUser: User) {

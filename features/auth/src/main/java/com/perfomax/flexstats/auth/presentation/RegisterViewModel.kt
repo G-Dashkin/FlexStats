@@ -44,7 +44,7 @@ class RegisterViewModel(
             } else if (usersArray.any {it.email == email}) {
                 _registerScreen.value = RegisterScreen.EmailExists
             } else {
-                registerUseCase.execute(User(email = email, user = user, password = password))
+                registerUseCase.execute(User(email = email, user = user, password = password, isLogin = false))
                 _registerScreen.value = RegisterScreen.Login
             }
         }

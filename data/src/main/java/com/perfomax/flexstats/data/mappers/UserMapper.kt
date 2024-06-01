@@ -8,7 +8,8 @@ internal fun UserEntity.toDomain(): User {
         id = id,
         email = email,
         user = user,
-        password = password
+        password = password,
+        isLogin = isLogin
     )
 }
 
@@ -17,6 +18,7 @@ internal fun User.toDomain(): UserEntity {
         id = 0,
         email = email,
         user = user,
-        password = password
+        password = password,
+        isLogin = isLogin
     )
 }

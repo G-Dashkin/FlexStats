@@ -28,6 +28,7 @@ import com.perfomax.flexstats.databinding.FragmentNavigatorBinding
 import com.perfomax.flexstats.di.DaggerProvider
 import com.perfomax.flexstats.domain.usecases.GetAuthUserUseCase
 import com.perfomax.flexstats.domain.usecases.LogoutUseCase
+import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
@@ -67,6 +68,9 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     @Inject
     lateinit var getSelectedProjectUseCase: GetSelectedProjectUseCase
 
+    @Inject
+    lateinit var getProjectsUseCase: GetProjectsUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerProvider.appComponent.inject(this)
@@ -82,10 +86,13 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
                 menuInflater.inflate(R.menu.nav_menu, menu)
 
                 lifecycleScope.launch {
-                    val authUser = getAuthUserUseCase.execute()
-                    val selectedProject = getSelectedProjectUseCase.execute()
-//                    menu.add(authUser.user).titleCondensed
-                    (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Юзер: ${authUser.user} | Проект: ${selectedProject.name}"
+                    val allProjects = getProjectsUseCase.execute()
+                    if (allProjects.isNotEmpty()) {
+                        val authUser = getAuthUserUseCase.execute()
+                        val selectedProject = getSelectedProjectUseCase.execute()
+                        menu.add(authUser.user).titleCondensed
+                        (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Юзер: ${authUser.user} | Проект: ${selectedProject.name}"
+                    }
                 }
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

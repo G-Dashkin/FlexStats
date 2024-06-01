@@ -15,6 +15,10 @@ class ProjectsRepositoryImpl @Inject constructor(
         projectsStorage.add(Project(name = project.name, userId = authedUserId))
     }
 
+    override suspend fun edit(projectId: Int, editName: String) {
+        projectsStorage.edit(projectId = projectId, editName = editName)
+    }
+
     override suspend fun delete(projectId: Int) {
         projectsStorage.delete(projectId = projectId)
     }

@@ -15,7 +15,9 @@ data class UserEntity(
     @ColumnInfo(name = "user_email")
     val email: String,
     @ColumnInfo(name = "user_password")
-    val password: String
+    val password: String,
+    @ColumnInfo(name = "user_is_login")
+    val isLogin: Boolean
 ) {
     companion object {
         const val TABLE_NAME = "users"
@@ -23,5 +25,6 @@ data class UserEntity(
         const val USER_NAME = "user_name"
         const val USER_EMAIL = "user_email"
         const val USER_PASSWORD = "user_password"
+        const val USER_IS_LOGIN = "user_is_login"
     }
 }

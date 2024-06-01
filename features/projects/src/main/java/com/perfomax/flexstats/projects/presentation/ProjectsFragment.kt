@@ -13,9 +13,9 @@ import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.projects.di.DaggerProjectsComponent
 import com.perfomax.flexstats.projects.di.ProjectsFeatureDepsProvider
 import com.perfomax.projects.R
-import com.perfomax.projects.databinding.AddProjectDialogBinding
 import com.perfomax.projects.databinding.CustomDialogBinding
 import com.perfomax.projects.databinding.FragmentProjectsBinding
+import com.perfomax.projects.databinding.ProjectDialogBinding
 import javax.inject.Inject
 
 class ProjectsFragment: Fragment(R.layout.fragment_projects) {
@@ -26,7 +26,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
 
     private lateinit var binding: FragmentProjectsBinding
     private lateinit var bindingCustomDialog: CustomDialogBinding
-    private lateinit var addProjectDialogBinding: AddProjectDialogBinding
+    private lateinit var projectDialogBinding: ProjectDialogBinding
 
     @Inject
     lateinit var vmFactory: ProjectsViewModelFactory
@@ -51,7 +51,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentProjectsBinding.bind(view)
-        binding.btnAddProjects.setOnClickListener { showProjectDialog() }
+        binding.btnAddProjects.setOnClickListener { projectsViewModel.showAddProjectDialog() }
         setAdapter()
         setScreen()
     }
@@ -59,7 +59,9 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     private fun setAdapter() {
         val adapter = ProjectsAdapter(
             itemProjectClick = { projectsViewModel.selectProject(it) },
-            editProjectClick = { projectsViewModel.showEditProjectDialog(it) },
+            editProjectClick = { projectId, currentName ->
+                projectsViewModel.showEditProjectDialog(projectId = projectId, currentName = currentName)
+            },
             deleteProjectClick = { projectId, projectName ->
                 projectsViewModel.showDeleteProjectDialog(projectId = projectId, projectName = projectName)
             }
@@ -76,9 +78,11 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     private fun setScreen() {
         projectsViewModel.projectsScreen.observe(viewLifecycleOwner) {
             when(it) {
-                is ProjectsScreen.AddNewProject -> {}
+                is ProjectsScreen.AddNewProject -> showProjectDialog()
                 is ProjectsScreen.SelectProject -> {}
-                is ProjectsScreen.EditProject -> showEditProjectDialog(it.projectId)
+                is ProjectsScreen.EditProject -> {
+                    showProjectDialog(projectId = it.projectId, currentName = it.currentName)
+                }
                 is ProjectsScreen.DeleteProject -> {
                     showDeleteProjectDialog(projectId = it.projectId, projectName = it.projectName)
                 }
@@ -87,29 +91,21 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         }
     }
 
-    private fun showProjectDialog() {
+    private fun showProjectDialog(projectId: Int? = null, currentName: String? = null) {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        addProjectDialogBinding = AddProjectDialogBinding.inflate(inflater)
-        dialog.setContentView(addProjectDialogBinding.root)
+        projectDialogBinding = ProjectDialogBinding.inflate(inflater)
+        dialog.setContentView(projectDialogBinding.root)
         dialog.show()
-        addProjectDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
-        addProjectDialogBinding.btnConfirm.setOnClickListener {
-            val projectName = addProjectDialogBinding.projectNameForm.text
-            projectsViewModel.addNewProject(projectName = projectName.toString())
+
+        if (projectId != null) projectDialogBinding.projectNameForm.hint = currentName
+        projectDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
+        projectDialogBinding.btnConfirm.setOnClickListener {
+            val projectName = projectDialogBinding.projectNameForm.text
+            if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName.toString())
+            else projectsViewModel.addNewProject(projectName = projectName.toString())
             dialog.dismiss()
         }
-    }
-
-    private fun showEditProjectDialog(projectId: Int) {
-        val dialog = settingsDialog()
-        val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        addProjectDialogBinding = AddProjectDialogBinding.inflate(inflater)
-        dialog.setContentView(addProjectDialogBinding.root)
-        dialog.show()
-        addProjectDialogBinding.projectNameText.text = "Id проекта $projectId"
-        addProjectDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
-        addProjectDialogBinding.btnConfirm.setOnClickListener { dialog.dismiss() }
     }
 
     private fun showDeleteProjectDialog(projectId: Int, projectName: String) {
