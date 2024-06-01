@@ -1,20 +1,20 @@
 package com.perfomax.flexstats.data.database.dao
 
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.perfomax.flexstats.data.database.entities.ProjectEntity
-import com.perfomax.flexstats.data.database.entities.UserEntity
 
 @Dao
 interface ProjectsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(newProject: ProjectEntity)
+
+    @Query("UPDATE ${ProjectEntity.TABLE_NAME} SET ${ProjectEntity.SELECTED_PROJECT} = 0 " +
+           "WHERE ${ProjectEntity.USER_ID} = :userId")
+    suspend fun resectSelectedProjects(userId: String)
 
     @Query("DELETE FROM ${ProjectEntity.TABLE_NAME} " +
            "WHERE ${ProjectEntity.TABLE_NAME}.${ProjectEntity.ID} = :projectId")
@@ -35,6 +35,8 @@ interface ProjectsDao {
             "AND ${ProjectEntity.SELECTED_PROJECT} = '1'")
     suspend fun getSelectedProject(userId: String): ProjectEntity
 
-    @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} ORDER BY ${ProjectEntity.ID} ASC")
-    suspend fun getAllProjects(): List<ProjectEntity>
+    @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} " +
+            "WHERE ${ProjectEntity.USER_ID} = :userId " +
+            "ORDER BY ${ProjectEntity.ID} ASC")
+    suspend fun getAllUserProjects(userId: String): List<ProjectEntity>
 }

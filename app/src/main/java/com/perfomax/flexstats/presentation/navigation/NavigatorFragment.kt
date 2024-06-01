@@ -3,16 +3,12 @@ package com.perfomax.flexstats.presentation.navigation
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -23,16 +19,13 @@ import com.perfomax.flexstats.api.AuthFeatureApi
 import com.perfomax.flexstats.api.HomeFeatureApi
 import com.perfomax.flexstats.api.ProjectsFeatureApi
 import com.perfomax.flexstats.api.StartFeatureApi
+import com.perfomax.flexstats.auth.domain.usecases.GetAllUsersUseCase
 import com.perfomax.flexstats.core.navigation.Router
-import com.perfomax.flexstats.databinding.FragmentNavigatorBinding
 import com.perfomax.flexstats.di.DaggerProvider
 import com.perfomax.flexstats.domain.usecases.GetAuthUserUseCase
 import com.perfomax.flexstats.domain.usecases.LogoutUseCase
-import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
+import com.perfomax.flexstats.projects.domain.usecases.GetUserProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -69,7 +62,10 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     lateinit var getSelectedProjectUseCase: GetSelectedProjectUseCase
 
     @Inject
-    lateinit var getProjectsUseCase: GetProjectsUseCase
+    lateinit var getUserProjectsUseCase: GetUserProjectsUseCase
+
+    @Inject
+    lateinit var getAllUsersUseCase: GetAllUsersUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,18 +76,25 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.nav_menu, menu)
-
                 lifecycleScope.launch {
-                    val allProjects = getProjectsUseCase.execute()
+
+                    val arrayUser = getAllUsersUseCase.execute()
+                    val allProjects = getUserProjectsUseCase.execute()
+
+                    Log.d("MyLog", "Users------------------------------------------------")
+                    arrayUser.forEach { Log.d("MyLog", it.toString()) }
+                    Log.d("MyLog", "Projects---------------------------------------------")
+                    allProjects.forEach { Log.d("MyLog", it.toString()) }
+
                     if (allProjects.isNotEmpty()) {
                         val authUser = getAuthUserUseCase.execute()
                         val selectedProject = getSelectedProjectUseCase.execute()
                         menu.add(authUser.user).titleCondensed
-                        (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Юзер: ${authUser.user} | Проект: ${selectedProject.name}"
+//                        (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Юзер: ${authUser.user} | Проект: ${selectedProject.name}"
+                        (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Проект: ${selectedProject.name}"
                     }
                 }
             }

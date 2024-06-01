@@ -8,5 +8,5 @@ interface ProjectsRepository {
     suspend fun delete(project: Int)
     suspend fun select(project: Int)
     suspend fun getSelected(): Project
-    suspend fun getAll(): List<Project>
+    suspend fun getUserAll(): List<Project>
 }

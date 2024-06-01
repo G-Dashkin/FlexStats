@@ -32,5 +32,8 @@ class ProjectsRepositoryImpl @Inject constructor(
         return projectsStorage.getSelectedProject(userId = authedUserId?:0)
     }
 
-    override suspend fun getAll(): List<Project> = projectsStorage.getAllProjects()
+    override suspend fun getUserAll(): List<Project> {
+        val authedUserId = authStorage.getAuthUser().id
+        return projectsStorage.getAllUserProjects(userId = authedUserId?:0)
+    }
 }

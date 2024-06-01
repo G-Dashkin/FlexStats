@@ -10,12 +10,16 @@ import javax.inject.Inject
 class ProjectsStorageImpl @Inject constructor(
     private val projectsDao: ProjectsDao
 ): ProjectsStorage {
-    override suspend fun add(project: Project) = projectsDao.insert(project.toDomain())
+    override suspend fun add(project: Project) {
+        projectsDao.resectSelectedProjects(userId = project.userId.toString())
+        projectsDao.insert(project.toDomain())
+    }
     override suspend fun edit(projectId: Int, editName: String) {
         projectsDao.edit(projectId = projectId.toString(), editName = editName)
     }
     override suspend fun delete(projectId: Int) {
         projectsDao.delete(projectId = projectId.toString())
+        projectsDao.selectProject(projectId = (projectId-1).toString())
     }
 
     override suspend fun selectProject(projectId: Int) {
@@ -30,7 +34,7 @@ class ProjectsStorageImpl @Inject constructor(
             Project(0,"",true,0)
         }
     }
-    override suspend fun getAllProjects(): List<Project> {
-        return projectsDao.getAllProjects().map { it.toDomain() }
+    override suspend fun getAllUserProjects(userId: Int): List<Project> {
+        return projectsDao.getAllUserProjects(userId.toString()).map { it.toDomain() }
     }
 }

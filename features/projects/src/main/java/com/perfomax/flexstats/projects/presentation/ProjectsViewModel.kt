@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.projects.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,8 +10,7 @@ import com.perfomax.flexstats.models.Project
 import com.perfomax.flexstats.projects.domain.usecases.CreateProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.DeleteProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.EditProjectUseCase
-import com.perfomax.flexstats.projects.domain.usecases.GetProjectsUseCase
-import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
+import com.perfomax.flexstats.projects.domain.usecases.GetUserProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.SelectProjectUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +23,7 @@ sealed class ProjectsScreen {
     data object Nothing : ProjectsScreen()
 }
 class ProjectsViewModel(
-    private val getProjectsUseCase: GetProjectsUseCase,
+    private val getUserProjectsUseCase: GetUserProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
     private val editProjectUseCase: EditProjectUseCase,
     private val selectProjectUseCase: SelectProjectUseCase,
@@ -44,7 +42,7 @@ class ProjectsViewModel(
 
     private fun load() {
         viewModelScope.launch {
-            val student = getProjectsUseCase.execute()
+            val student = getUserProjectsUseCase.execute()
             _projectsList.postValue(student)
         }
     }
@@ -91,7 +89,7 @@ class ProjectsViewModel(
 }
 
 class ProjectsViewModelFactory @Inject constructor(
-    private val getProjectsUseCase: GetProjectsUseCase,
+    private val getUserProjectsUseCase: GetUserProjectsUseCase,
     private val createProjectUseCase: CreateProjectUseCase,
     private val editProjectUseCase: EditProjectUseCase,
     private val selectProjectUseCase: SelectProjectUseCase,
@@ -103,7 +101,7 @@ class ProjectsViewModelFactory @Inject constructor(
         extras: CreationExtras,
     ): T {
         return ProjectsViewModel(
-            getProjectsUseCase = getProjectsUseCase,
+            getUserProjectsUseCase = getUserProjectsUseCase,
             createProjectUseCase = createProjectUseCase,
             editProjectUseCase= editProjectUseCase,
             selectProjectUseCase = selectProjectUseCase,

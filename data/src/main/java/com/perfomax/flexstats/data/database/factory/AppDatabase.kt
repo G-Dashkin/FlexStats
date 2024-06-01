@@ -9,7 +9,7 @@ import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.database.entities.ProjectEntity
 import com.perfomax.flexstats.data.database.entities.UserEntity
 
-private const val DATABASE_VERSION = 1
+private const val DATABASE_VERSION = 2
 private const val DATABASE_NAME = "flexstats.db"
 
 @Database(

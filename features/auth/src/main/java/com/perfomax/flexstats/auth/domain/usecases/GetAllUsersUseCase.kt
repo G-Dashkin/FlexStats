@@ -5,7 +5,7 @@ import com.perfomax.flexstats.models.User
 import com.perfomax.flexstats.data_api.repository.AuthRepository
 import javax.inject.Inject
 
-class GetUsersUseCase @Inject constructor(
+class GetAllUsersUseCase @Inject constructor(
     private val repository: AuthRepository
 ): UseCaseWithoutParams<List<User>> {
     override suspend fun execute(): List<User> {

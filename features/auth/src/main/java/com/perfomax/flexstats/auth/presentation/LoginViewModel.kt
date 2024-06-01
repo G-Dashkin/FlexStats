@@ -1,13 +1,12 @@
 package com.perfomax.flexstats.auth.presentation
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.perfomax.flexstats.auth.domain.usecases.GetUsersUseCase
+import com.perfomax.flexstats.auth.domain.usecases.GetAllUsersUseCase
 import com.perfomax.flexstats.auth.domain.usecases.SetAuthUseCase
 import com.perfomax.flexstats.auth.domain.usecases.SetAuthUserUseCase
 import com.perfomax.flexstats.models.User
@@ -25,7 +24,7 @@ sealed class LoginScreen {
     data object Nothing : LoginScreen()
 }
 class LoginViewModel(
-    private val getUsersUseCase: GetUsersUseCase,
+    private val getAllUsersUseCase: GetAllUsersUseCase,
     private val setAuthUseCase: SetAuthUseCase,
     private val setAuthUserUseCase: SetAuthUserUseCase
 ): ViewModel() {
@@ -39,7 +38,7 @@ class LoginViewModel(
     fun onLoginClicked(email: String, password: String) {
         viewModelScope.launch {
 
-            val usersArray = getUsersUseCase.execute()
+            val usersArray = getAllUsersUseCase.execute()
             val user = usersArray.find { it.email == email }
 
             if (email.isEmpty() || email.isEmpty()) _loginScreen.value = LoginScreen.EmptyFields
@@ -69,7 +68,7 @@ class LoginViewModel(
 }
 
 class LoginViewModelFactory @Inject constructor(
-    private val getUsersUseCase: GetUsersUseCase,
+    private val getAllUsersUseCase: GetAllUsersUseCase,
     private val setAuthUseCase: SetAuthUseCase,
     private val setAuthUserUseCase: SetAuthUserUseCase
 ):  ViewModelProvider.Factory {
@@ -79,7 +78,7 @@ class LoginViewModelFactory @Inject constructor(
         extras: CreationExtras,
     ): T {
         return LoginViewModel(
-            getUsersUseCase = getUsersUseCase,
+            getAllUsersUseCase = getAllUsersUseCase,
             setAuthUseCase = setAuthUseCase,
             setAuthUserUseCase = setAuthUserUseCase
         ) as T

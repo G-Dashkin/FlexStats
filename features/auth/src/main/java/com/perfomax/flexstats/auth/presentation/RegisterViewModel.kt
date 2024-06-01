@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.perfomax.flexstats.auth.domain.usecases.GetUsersUseCase
+import com.perfomax.flexstats.auth.domain.usecases.GetAllUsersUseCase
 import com.perfomax.flexstats.auth.domain.usecases.RegisterUseCase
 import com.perfomax.flexstats.models.User
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ sealed class RegisterScreen {
 
 class RegisterViewModel(
     private val context: Context,
-    private val getUsersUseCase: GetUsersUseCase,
+    private val getAllUsersUseCase: GetAllUsersUseCase,
     private val registerUseCase: RegisterUseCase
 ): ViewModel() {
 
@@ -36,7 +36,7 @@ class RegisterViewModel(
 
     fun onRegisterClicked(email: String, user: String, password: String) {
         viewModelScope.launch {
-            val usersArray = getUsersUseCase.execute()
+            val usersArray = getAllUsersUseCase.execute()
             if (email.isEmpty() || user.isEmpty() || password.isEmpty()) {
                 _registerScreen.value = RegisterScreen.EmptyFields
             } else if (!email.contains("@") || !email.contains(".")){
@@ -62,7 +62,7 @@ class RegisterViewModel(
 
 class RegisterViewModelFactory @Inject constructor(
     private val context: Context,
-    private val getUsersUseCase: GetUsersUseCase,
+    private val getAllUsersUseCase: GetAllUsersUseCase,
     private val registerUseCase: RegisterUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -72,7 +72,7 @@ class RegisterViewModelFactory @Inject constructor(
     ): T {
         return RegisterViewModel(
             context = context,
-            getUsersUseCase = getUsersUseCase,
+            getAllUsersUseCase = getAllUsersUseCase,
             registerUseCase = registerUseCase
         ) as T
     }
