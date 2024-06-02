@@ -14,8 +14,7 @@ class ProjectsAdapter(
     private val itemProjectClick: (Int) -> Unit,
     private val editProjectClick: (Int, String) -> Unit,
     private val deleteProjectClick: (Int, String) -> Unit
-):
-    ListAdapter<Project, RecyclerView.ViewHolder>(ProjectsDiffCallback()){
+): ListAdapter<Project, RecyclerView.ViewHolder>(ProjectsDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return  ProjectHolder(binding = ItemProjectBinding.inflate(LayoutInflater.from(parent.context), parent, false))

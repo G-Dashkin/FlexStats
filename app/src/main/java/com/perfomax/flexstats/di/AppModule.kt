@@ -4,19 +4,24 @@ import android.app.Application
 import android.content.Context
 import com.perfomax.flexstats.app.App
 import com.perfomax.flexstats.core.navigation.Router
+import com.perfomax.flexstats.data.database.dao.AccountsDao
 import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
 import com.perfomax.flexstats.data.datastore.SettingsDataStoreImpl
+import com.perfomax.flexstats.data.repository.AccountsRepositoryImpl
 import com.perfomax.flexstats.data.repository.AuthRepositoryImpl
 import com.perfomax.flexstats.data.repository.ProjectsRepositoryImpl
+import com.perfomax.flexstats.data.storage.AccountsStorageImpl
 import com.perfomax.flexstats.data.storage.AuthStorageImpl
 import com.perfomax.flexstats.data.storage.ProjectsStorageImpl
 import com.perfomax.flexstats.data_api.datastore.SettingsDataStore
+import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.presentation.navigation.NavigatorLifecycle
 import com.perfomax.flexstats.presentation.navigation.RouterImpl
 import com.perfomax.flexstats.data_api.repository.AuthRepository
 import com.perfomax.flexstats.data_api.repository.ProjectsRepository
+import com.perfomax.flexstats.data_api.storage.AccountsStorage
 import com.perfomax.flexstats.data_api.storage.AuthStorage
 import com.perfomax.flexstats.data_api.storage.ProjectsStorage
 import dagger.Module
@@ -93,4 +98,28 @@ class AppModule(private val application: Application) {
         projectsStorage: ProjectsStorage,
         authStorage: AuthStorage
     ): ProjectsRepository = ProjectsRepositoryImpl(projectsStorage = projectsStorage, authStorage = authStorage)
+
+    // Projects provides----------------------------------------------------------------------------
+    @Provides
+    @Singleton
+    fun provideAccountsDao(db: AppDatabase): AccountsDao = db.accountsDao()
+
+    @Provides
+    @Singleton
+    fun provideAccountsStorage(
+        accountsDao: AccountsDao
+    ): AccountsStorage = AccountsStorageImpl(accountsDao =  accountsDao)
+
+    @Singleton
+    @Provides
+    fun provideAccountsRepository(
+        projectsStorage: ProjectsStorage,
+        accountsStorage: AccountsStorage,
+        authStorage: AuthStorage
+    ): AccountsRepository = AccountsRepositoryImpl(
+        projectsStorage =  projectsStorage,
+        accountsStorage = accountsStorage,
+        authStorage = authStorage
+    )
+
 }

@@ -38,5 +38,5 @@ interface ProjectsDao {
     @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} " +
             "WHERE ${ProjectEntity.USER_ID} = :userId " +
             "ORDER BY ${ProjectEntity.ID} ASC")
-    suspend fun getAllUserProjects(userId: String): List<ProjectEntity>
+    suspend fun getAllProjectsOfUser(userId: String): List<ProjectEntity>
 }

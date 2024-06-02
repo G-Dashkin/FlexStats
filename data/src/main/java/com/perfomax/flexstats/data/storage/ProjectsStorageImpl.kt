@@ -35,6 +35,6 @@ class ProjectsStorageImpl @Inject constructor(
         }
     }
     override suspend fun getAllUserProjects(userId: Int): List<Project> {
-        return projectsDao.getAllUserProjects(userId.toString()).map { it.toDomain() }
+        return projectsDao.getAllProjectsOfUser(userId.toString()).map { it.toDomain() }
     }
 }

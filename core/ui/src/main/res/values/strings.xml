@@ -6,4 +6,5 @@
     <string name="home">Home</string>
     <string name="accounts">Accounts</string>
     <string name="app_project">Add project</string>
+    <string name="add_account">Add account</string>
 </resources>

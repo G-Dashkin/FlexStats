@@ -69,9 +69,6 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     @Inject
     lateinit var getUserProjectsUseCase: GetUserProjectsUseCase
 
-    @Inject
-    lateinit var getAllUsersUseCase: GetAllUsersUseCase
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerProvider.appComponent.inject(this)
