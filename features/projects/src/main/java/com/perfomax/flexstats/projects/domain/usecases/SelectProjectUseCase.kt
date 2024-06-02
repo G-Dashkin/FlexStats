@@ -9,6 +9,6 @@ class SelectProjectUseCase @Inject constructor(
     private val repository: ProjectsRepository
 ): UseCaseWithParams<Unit, Int> {
     override suspend fun execute(projectId: Int) {
-        repository.select(project = projectId)
+        repository.select(projectId = projectId)
     }
 }

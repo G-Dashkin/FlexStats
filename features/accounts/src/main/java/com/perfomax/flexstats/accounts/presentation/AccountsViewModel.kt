@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.accounts.domain.CreateAccountUseCase
+import com.perfomax.flexstats.accounts.domain.DeleteAccountUseCase
 import com.perfomax.flexstats.accounts.domain.GeAccountsByProjectUseCase
 import com.perfomax.flexstats.models.Account
+import com.perfomax.flexstats.models.Project
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +21,7 @@ sealed class AccountsScreen {
 }
 class AccountsViewModel(
     private val createAccountUseCase: CreateAccountUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
     private val geAccountsByProjectUseCase: GeAccountsByProjectUseCase
 ): ViewModel()  {
 
@@ -40,16 +43,32 @@ class AccountsViewModel(
     }
 
     fun showAddAccountDialog(){
-//        _projectsScreen.value = ProjectsScreen.AddNewProject
+        _accountsScreen.value = AccountsScreen.AddNewAccount
+    }
+
+    fun addNewAccount(accountName: String, accountPassword: String,){
+        viewModelScope.launch {
+
+            // Здесь будет передача логина и пароля аккауна яндекс директ и дальшейшая логика
+            // авторизации
+            val login = accountName
+            val password = accountPassword
+
+            createAccountUseCase.execute(Account(name = accountName, token = "здесь должен ьыть токен"))
+            load()
+        }
     }
 
     fun showDeleteAccountDialog(accountId: Int, accountName: String){
-//        _projectsScreen.value = ProjectsScreen.DeleteProject(projectId = projectId, projectName = projectName)
+        _accountsScreen.value = AccountsScreen.DeleteAccount(
+            accountId = accountId,
+            accountName = accountName
+        )
     }
 
     fun deleteAccountClicked(projectId: Int){
         viewModelScope.launch {
-//            deleteProjectUseCase.execute(projectId)
+            deleteAccountUseCase.execute(projectId)
             load()
         }
     }
@@ -59,6 +78,7 @@ class AccountsViewModel(
 
 class AccountsViewModelFactory @Inject constructor(
     private val createAccountUseCase: CreateAccountUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
     private val geAccountsByProjectUseCase: GeAccountsByProjectUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
@@ -68,6 +88,7 @@ class AccountsViewModelFactory @Inject constructor(
     ): T {
         return AccountsViewModel(
             createAccountUseCase = createAccountUseCase,
+            deleteAccountUseCase = deleteAccountUseCase,
             geAccountsByProjectUseCase = geAccountsByProjectUseCase
         ) as T
     }

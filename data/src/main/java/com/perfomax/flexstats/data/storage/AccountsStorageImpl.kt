@@ -10,11 +10,15 @@ import javax.inject.Inject
 class AccountsStorageImpl @Inject constructor(
     private val accountsDao: AccountsDao
 ): AccountsStorage {
-    override suspend fun add(project: Account) {
-        accountsDao.insert(project.toDomain())
+    override suspend fun add(account: Account) {
+        accountsDao.insert(newAccount = account.toDomain())
+    }
+
+    override suspend fun delete(accountId: Int) {
+        accountsDao.delete(accountId = accountId.toString())
     }
 
     override suspend fun getAllAccountsOfUser(projectId: Int): List<Account> {
-        return accountsDao.getAllAccountOfUser(projectId.toString()).map { it.toDomain() }
+        return accountsDao.getAllAccountOfUser(projectId = projectId.toString()).map { it.toDomain() }
     }
 }

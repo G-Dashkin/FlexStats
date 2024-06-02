@@ -19,6 +19,10 @@ class AccountsRepositoryImpl @Inject constructor(
         accountsStorage.add(Account(name = account.name, projectId = selectedProject.id, token = account.token))
     }
 
+    override suspend fun delete(accountId: Int) {
+        accountsStorage.delete(accountId = accountId)
+    }
+
     override suspend fun getUserAll(): List<Account> {
         val authedUserId = authStorage.getAuthUser().id
         val selectedProject = projectsStorage.getSelectedProject(userId = authedUserId?:0)

@@ -8,6 +8,6 @@ class DeleteProjectUseCase @Inject constructor(
     private val repository: ProjectsRepository
 ): UseCaseWithParams<Unit, Int> {
     override suspend fun execute(projectId: Int) {
-        repository.delete(project = projectId)
+        repository.delete(projectId = projectId)
     }
 }
