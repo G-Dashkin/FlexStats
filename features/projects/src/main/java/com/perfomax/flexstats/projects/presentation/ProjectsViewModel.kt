@@ -12,6 +12,7 @@ import com.perfomax.flexstats.projects.domain.usecases.DeleteProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.EditProjectUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetUserProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.SelectProjectUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

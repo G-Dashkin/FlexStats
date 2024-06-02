@@ -9,10 +9,15 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.perfomax.flexstats.R
 import com.perfomax.flexstats.api.AccountsFeatureApi
 import com.perfomax.flexstats.api.AuthFeatureApi
@@ -76,26 +81,13 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.nav_menu, menu)
-                lifecycleScope.launch {
-
-                    val arrayUser = getAllUsersUseCase.execute()
-                    val allProjects = getUserProjectsUseCase.execute()
-
-                    Log.d("MyLog", "Users------------------------------------------------")
-                    arrayUser.forEach { Log.d("MyLog", it.toString()) }
-                    Log.d("MyLog", "Projects---------------------------------------------")
-                    allProjects.forEach { Log.d("MyLog", it.toString()) }
-
-                    if (allProjects.isNotEmpty()) {
-                        val authUser = getAuthUserUseCase.execute()
-                        val selectedProject = getSelectedProjectUseCase.execute()
-                        menu.add(authUser.user).titleCondensed
-//                        (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Юзер: ${authUser.user} | Проект: ${selectedProject.name}"
-                        (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Проект: ${selectedProject.name}"
-                    }
+                setActionBarSettings(menu)
+                childFragmentManager.setFragmentResultListener("callMenuListener", viewLifecycleOwner){ _, _ ->
+                    setActionBarSettings(menu)
                 }
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -122,8 +114,22 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
                 }
             }
         )
+    }
 
-
+    private fun setActionBarSettings(menu: Menu){
+        lifecycleScope.launch {
+            val allProjects = getUserProjectsUseCase.execute()
+            if (allProjects.isNotEmpty()) {
+                val authUser = getAuthUserUseCase.execute()
+                val selectedProject = getSelectedProjectUseCase.execute()
+                if (menu.getItem(menu.size()-1).toString() != authUser.user){
+                    menu.add(authUser.user).titleCondensed
+                }
+                (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Проект: ${selectedProject.name}"
+            } else {
+                (activity as AppCompatActivity?)!!.supportActionBar!!.title = ""
+            }
+        }
     }
 
     override fun onDestroy() {

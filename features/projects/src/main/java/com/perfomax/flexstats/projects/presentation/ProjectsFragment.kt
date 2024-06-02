@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.projects.di.DaggerProjectsComponent
@@ -16,6 +18,8 @@ import com.perfomax.projects.R
 import com.perfomax.projects.databinding.CustomDialogBinding
 import com.perfomax.projects.databinding.FragmentProjectsBinding
 import com.perfomax.projects.databinding.ProjectDialogBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProjectsFragment: Fragment(R.layout.fragment_projects) {
@@ -58,7 +62,13 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
 
     private fun setAdapter() {
         val adapter = ProjectsAdapter(
-            itemProjectClick = { projectsViewModel.selectProject(it) },
+            itemProjectClick = {
+                lifecycleScope.launch {
+                    projectsViewModel.selectProject(it)
+                    delay(100)
+                    parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                }
+            },
             editProjectClick = { projectId, currentName ->
                 projectsViewModel.showEditProjectDialog(projectId = projectId, currentName = currentName)
             },
@@ -81,7 +91,11 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                 is ProjectsScreen.AddNewProject -> showProjectDialog()
                 is ProjectsScreen.SelectProject -> {}
                 is ProjectsScreen.EditProject -> {
-                    showProjectDialog(projectId = it.projectId, currentName = it.currentName)
+                    lifecycleScope.launch {
+                        showProjectDialog(projectId = it.projectId, currentName = it.currentName)
+                        delay(100)
+                        parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                    }
                 }
                 is ProjectsScreen.DeleteProject -> {
                     showDeleteProjectDialog(projectId = it.projectId, projectName = it.projectName)
@@ -101,10 +115,14 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         if (projectId != null) projectDialogBinding.projectNameForm.hint = currentName
         projectDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         projectDialogBinding.btnConfirm.setOnClickListener {
-            val projectName = projectDialogBinding.projectNameForm.text
-            if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName.toString())
-            else projectsViewModel.addNewProject(projectName = projectName.toString())
-            dialog.dismiss()
+            lifecycleScope.launch {
+                val projectName = projectDialogBinding.projectNameForm.text
+                if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName.toString())
+                else projectsViewModel.addNewProject(projectName = projectName.toString())
+                delay(100)
+                parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                dialog.dismiss()
+            }
         }
     }
 
@@ -117,8 +135,12 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         bindingCustomDialog.text2.text = projectName
         bindingCustomDialog.btnCancel.setOnClickListener { dialog.dismiss() }
         bindingCustomDialog.btnConfirm.setOnClickListener {
-            projectsViewModel.deleteProjectClicked(projectId)
-            dialog.dismiss()
+            lifecycleScope.launch {
+                projectsViewModel.deleteProjectClicked(projectId)
+                delay(100)
+                parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                dialog.dismiss()
+            }
         }
     }
 

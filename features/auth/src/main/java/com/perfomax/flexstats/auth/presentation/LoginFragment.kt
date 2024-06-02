@@ -2,10 +2,13 @@ package com.perfomax.flexstats.auth.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.perfomax.auth.R
 import com.perfomax.auth.databinding.FragmentLoginBinding
@@ -85,6 +88,7 @@ class LoginFragment(): Fragment(R.layout.fragment_login) {
     }
 
     private fun showHomeScreen() {
+        parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
         router.navigateTo(
             fragment = homeFeatureApi.open(),
             addToBackStack = false
