@@ -57,7 +57,7 @@ class StartFragment: Fragment(R.layout.fragment_start)  {
         binding = FragmentStartBinding.bind(view)
         Handler(Looper.getMainLooper()).postDelayed({
             setScreen()
-        }, 3000)
+        }, 100)
     }
 
     // navigation space-----------------------------------------------------------------------------
