@@ -37,7 +37,6 @@ class ResetFragment: Fragment(R.layout.fragment_reset) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
 
         val homeComponent = DaggerAuthComponent
             .builder()

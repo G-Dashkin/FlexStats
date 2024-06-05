@@ -37,7 +37,6 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
 
         val homeComponent = DaggerAuthComponent
             .builder()

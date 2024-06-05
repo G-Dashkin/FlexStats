@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isNotEmpty
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +26,7 @@ import com.perfomax.flexstats.domain.usecases.GetAuthUserUseCase
 import com.perfomax.flexstats.domain.usecases.LogoutUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetUserProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
+import com.perfomax.flexstats.start.domain.usecases.GetAuthUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -57,6 +60,9 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     lateinit var getAuthUserUseCase: GetAuthUserUseCase
 
     @Inject
+    lateinit var getAuthUseCase: GetAuthUseCase
+
+    @Inject
     lateinit var getSelectedProjectUseCase: GetSelectedProjectUseCase
 
     @Inject
@@ -85,23 +91,25 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
 
         toggle = ActionBarDrawerToggle((activity as AppCompatActivity?),
             binding.drawerLayout,
+            binding.materialToolbar,
             com.perfomax.ui.R.string.open,
             com.perfomax.ui.R.string.close)
-
         binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity?)!!.supportActionBar!!.setHomeButtonEnabled(true)
 
         binding.navView.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.nav_home -> router.navigateTo(fragment = homeFeatureApi.open())
+                R.id.nav_home -> {
+                    router.navigateTo(fragment = homeFeatureApi.open())
+//                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+//                    binding.linearLayout3.visibility = View.VISIBLE
+                }
                 R.id.nav_projects -> router.navigateTo(fragment = projectsFeatureApi.open())
                 R.id.nav_accounts -> router.navigateTo(fragment = accountsFeatureApi.open())
                 R.id.nav_logout -> {
                     lifecycleScope.launch { logoutUseCase.execute() }
                     router.navigateTo(fragment = authFeatureApi.openLogin())
+                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                    binding.materialToolbar.visibility = View.GONE
                 }
             }
             binding.drawerLayout.closeDrawers()
@@ -128,14 +136,23 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     private fun setActionBarSettings(){
         lifecycleScope.launch {
 
-
+            val userIsAuth = getAuthUseCase.execute()
             val allProjects = getUserProjectsUseCase.execute()
+
+            if (userIsAuth) {
+                binding.materialToolbar.visibility = View.VISIBLE
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            } else {
+                binding.materialToolbar.visibility = View.GONE
+//                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
+
             if (allProjects.isNotEmpty()) {
                 val authUser = getAuthUserUseCase.execute()
                 val selectedProject = getSelectedProjectUseCase.execute()
-                (activity as AppCompatActivity?)!!.supportActionBar!!.title = "Проект: ${selectedProject.name}"
+                binding.materialToolbar.title = "Проект: ${selectedProject.name}"
             } else {
-                (activity as AppCompatActivity?)!!.supportActionBar!!.title = ""
+                binding.materialToolbar.title = ""
             }
         }
     }

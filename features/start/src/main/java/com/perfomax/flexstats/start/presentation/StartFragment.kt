@@ -43,8 +43,6 @@ class StartFragment: Fragment(R.layout.fragment_start)  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
-
         val startComponent = DaggerStartComponent
             .builder()
             .addDeps(StartFeatureDepsProvider.deps)
