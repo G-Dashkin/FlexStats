@@ -2,6 +2,7 @@ package com.perfomax.flexstats.presentation.navigation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,8 +69,8 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     @Inject
     lateinit var getUserProjectsUseCase: GetUserProjectsUseCase
 
-    lateinit var toggle: ActionBarDrawerToggle
-    lateinit var binding: FragmentNavigatorBinding
+    private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var binding: FragmentNavigatorBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerProvider.appComponent.inject(this)
@@ -89,7 +90,7 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toggle = ActionBarDrawerToggle((activity as AppCompatActivity?),
+        toggle = ActionBarDrawerToggle(requireActivity(),
             binding.drawerLayout,
             binding.materialToolbar,
             com.perfomax.ui.R.string.open,
@@ -98,18 +99,15 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
 
         binding.navView.setNavigationItemSelectedListener {
             when(it.itemId) {
-                R.id.nav_home -> {
-                    router.navigateTo(fragment = homeFeatureApi.open())
-//                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-//                    binding.linearLayout3.visibility = View.VISIBLE
-                }
+                R.id.nav_home -> router.navigateTo(fragment = homeFeatureApi.open())
                 R.id.nav_projects -> router.navigateTo(fragment = projectsFeatureApi.open())
                 R.id.nav_accounts -> router.navigateTo(fragment = accountsFeatureApi.open())
                 R.id.nav_logout -> {
-                    lifecycleScope.launch { logoutUseCase.execute() }
                     router.navigateTo(fragment = authFeatureApi.openLogin())
-                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                    binding.materialToolbar.visibility = View.GONE
+                    lifecycleScope.launch {
+                        logoutUseCase.execute()
+                        setActionBarSettings()
+                    }
                 }
             }
             binding.drawerLayout.closeDrawers()
@@ -134,8 +132,8 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     }
 
     private fun setActionBarSettings(){
-        lifecycleScope.launch {
 
+        lifecycleScope.launch {
             val userIsAuth = getAuthUseCase.execute()
             val allProjects = getUserProjectsUseCase.execute()
 
@@ -144,7 +142,7 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
                 binding.materialToolbar.visibility = View.GONE
-//                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
 
             if (allProjects.isNotEmpty()) {
