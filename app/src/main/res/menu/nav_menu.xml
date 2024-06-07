@@ -10,6 +10,7 @@
 
     <item
         android:id="@+id/nav_projects"
+        android:icon="@drawable/ic_projects"
         android:title="Проекты"/>
 
     <item
@@ -17,9 +18,16 @@
         android:icon="@drawable/ic_accounts"
         android:title="Аккаунты"/>
 
-    <item
-        android:id="@+id/nav_logout"
-        android:icon="@drawable/ic_accounts"
-        android:title="Выйти"/>
+    <group android:id="@+id/group_settings">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Настройки"/>
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Выход"/>
+    </group>
 
 </menu>

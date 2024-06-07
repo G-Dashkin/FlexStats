@@ -4,29 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="16dp"
-    android:layout_marginStart="16dp"
+    android:padding="15dp"
     android:background="@color/white">
 
     <TextView
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
         android:textSize="20dp"
-        android:text="Robin Singla"
-        android:textColor="@color/black"
+        android:text="User Name"
+        android:textColor="@color/onBackground"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16dp"
-        android:text="siodo@mail.ru"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="30dp"/>
-
+        android:textColor="@color/onBackground"
+        android:text="user@mail.ru"/>
 </LinearLayout>

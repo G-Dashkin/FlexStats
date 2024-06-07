@@ -2,14 +2,12 @@ package com.perfomax.flexstats.presentation.navigation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isNotEmpty
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -136,6 +134,9 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
         lifecycleScope.launch {
             val userIsAuth = getAuthUseCase.execute()
             val allProjects = getUserProjectsUseCase.execute()
+            val authUser = getAuthUserUseCase.execute()
+            binding.navView.getHeaderView(0).findViewById<TextView>(R.id.user_name).text = authUser.user
+            binding.navView.getHeaderView(0).findViewById<TextView>(R.id.user_email).text = authUser.email
 
             if (userIsAuth) {
                 binding.materialToolbar.visibility = View.VISIBLE
@@ -146,7 +147,6 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
             }
 
             if (allProjects.isNotEmpty()) {
-                val authUser = getAuthUserUseCase.execute()
                 val selectedProject = getSelectedProjectUseCase.execute()
                 binding.materialToolbar.title = "Проект: ${selectedProject.name}"
             } else {

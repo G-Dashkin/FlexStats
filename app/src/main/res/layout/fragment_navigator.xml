@@ -21,7 +21,8 @@
                 android:id="@+id/materialToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#3652ED"
+                android:background="@color/secondary"
+                app:titleTextColor="@color/background"
                 app:navigationIcon="@drawable/ic_menu" />
         </LinearLayout>
 
