@@ -3,21 +3,27 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import androidx.core.os.bundleOf
+import android.webkit.WebViewClient
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.perfomax.accounts.R
 import com.perfomax.accounts.databinding.AccountDialogBinding
 import com.perfomax.accounts.databinding.CustomDialogBinding
 import com.perfomax.accounts.databinding.FragmentAccountsBinding
+import com.perfomax.accounts.databinding.WebViewDialogBinding
 import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
 import com.perfomax.flexstats.accounts.di.DaggerAccountsComponent
 import com.perfomax.flexstats.core.navigation.Router
+import com.perfomax.flexstats.core.utils.EMPTY
+import com.perfomax.flexstats.core.utils.TOKEN_URL_OAUTH
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,6 +37,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     private lateinit var binding: FragmentAccountsBinding
     private lateinit var bindingCustomDialog: CustomDialogBinding
     private lateinit var accountDialogBinding: AccountDialogBinding
+    private lateinit var webViewDialogBinding: WebViewDialogBinding
 
     @Inject
     lateinit var vmFactory: AccountsViewModelFactory
@@ -41,6 +48,8 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     private val accountsViewModel by viewModels<AccountsViewModel> {
         vmFactory
     }
+
+    var tokenCode = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,9 +106,9 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         accountDialogBinding.btnConfirm.setOnClickListener {
             val login = accountDialogBinding.accountForm.text.toString()
-            val password = accountDialogBinding.passwordForm.text.toString()
-            accountsViewModel.addNewAccount(accountName = login, accountPassword = password )
             dialog.dismiss()
+            val tokenCode = showWebViewDialog(login)
+//            Log.d("MyLog", tokenCode)
         }
     }
 
@@ -116,6 +125,38 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         bindingCustomDialog.btnConfirm.setOnClickListener {
             accountsViewModel.deleteAccountClicked(accountId)
             dialog.dismiss()
+        }
+    }
+
+    private fun showWebViewDialog(login: String) {
+        val dialog = settingsDialog()
+        val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        webViewDialogBinding = WebViewDialogBinding.inflate(inflater)
+        dialog.setContentView(webViewDialogBinding.root)
+        dialog.show()
+
+//        val url = "https://oauth.yandex.ru/authorize?response_type=code&client_id=4f078917869842f2932a9d30fa5d0bb5&redirect_uri=http://flexstats.ru/yandex_direct_oauth.html&login_hint=imedia-citilink-xiaomi-v"
+        webViewDialogBinding.webView.visibility = View.VISIBLE
+//        webViewDialogBinding.webView.loadUrl(url)
+        webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH+login)
+        webViewDialogBinding.webView.settings.javaScriptEnabled = true
+        webViewDialogBinding.webView.webViewClient = WebViewClient()
+        webViewDialogBinding.webView.settings.setSupportZoom(true)
+
+        var webViewUrl = EMPTY
+        lifecycleScope.launch {
+            while (!webViewUrl.contains("&cid=")){
+                webViewUrl = webViewDialogBinding.webView.url.toString()
+                delay(100)
+            }
+            tokenCode = webViewUrl.split("=")[1].split("&")[0]
+            dialog.dismiss()
+            accountsViewModel.addNewAccount(accountName = login, tokenCode = tokenCode)
+        }
+
+        webViewDialogBinding.closeWebViewButton.setOnClickListener {
+            dialog.dismiss()
+            webViewUrl = "&cid="
         }
     }
 

@@ -7,7 +7,7 @@ internal fun AccountEntity.toDomain(): Account {
     return Account (
         id = id,
         name = name,
-        token = token,
+        accountToken = token,
         projectId = projectId
     )
 }
@@ -16,7 +16,7 @@ internal fun Account.toDomain(): AccountEntity {
     return AccountEntity (
         id = id?:0,
         name = name,
-        token = token,
+        token = accountToken?:"",
         projectId = projectId?:0
     )
 }

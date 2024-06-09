@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.accounts.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.accounts.domain.CreateAccountUseCase
+import com.perfomax.flexstats.accounts.domain.CreateTokenUseCase
 import com.perfomax.flexstats.accounts.domain.DeleteAccountUseCase
 import com.perfomax.flexstats.accounts.domain.GeAccountsByProjectUseCase
 import com.perfomax.flexstats.models.Account
@@ -21,6 +23,7 @@ sealed class AccountsScreen {
 }
 class AccountsViewModel(
     private val createAccountUseCase: CreateAccountUseCase,
+    private val createTokenUseCase: CreateTokenUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
     private val geAccountsByProjectUseCase: GeAccountsByProjectUseCase
 ): ViewModel()  {
@@ -46,15 +49,10 @@ class AccountsViewModel(
         _accountsScreen.value = AccountsScreen.AddNewAccount
     }
 
-    fun addNewAccount(accountName: String, accountPassword: String,){
+    fun addNewAccount(accountName: String, tokenCode: String){
         viewModelScope.launch {
-
-            // Здесь будет передача логина и пароля аккауна яндекс директ и дальшейшая логика
-            // авторизации
-            val login = accountName
-            val password = accountPassword
-
-            createAccountUseCase.execute(Account(name = accountName, token = "здесь должен ьыть токен"))
+            val accountToken = createTokenUseCase.execute(tokenCode)
+            createAccountUseCase.execute(Account(name = accountName, accountToken = accountToken))
             load()
         }
     }
@@ -78,6 +76,7 @@ class AccountsViewModel(
 
 class AccountsViewModelFactory @Inject constructor(
     private val createAccountUseCase: CreateAccountUseCase,
+    private val createTokenUseCase: CreateTokenUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
     private val geAccountsByProjectUseCase: GeAccountsByProjectUseCase
 ):  ViewModelProvider.Factory {
@@ -88,6 +87,7 @@ class AccountsViewModelFactory @Inject constructor(
     ): T {
         return AccountsViewModel(
             createAccountUseCase = createAccountUseCase,
+            createTokenUseCase = createTokenUseCase,
             deleteAccountUseCase = deleteAccountUseCase,
             geAccountsByProjectUseCase = geAccountsByProjectUseCase
         ) as T

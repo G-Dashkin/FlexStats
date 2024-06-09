@@ -9,6 +9,7 @@ import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
 import com.perfomax.flexstats.data.datastore.SettingsDataStoreImpl
+import com.perfomax.flexstats.data.network.TokenNetworkImpl
 import com.perfomax.flexstats.data.repository.AccountsRepositoryImpl
 import com.perfomax.flexstats.data.repository.AuthRepositoryImpl
 import com.perfomax.flexstats.data.repository.ProjectsRepositoryImpl
@@ -16,6 +17,7 @@ import com.perfomax.flexstats.data.storage.AccountsStorageImpl
 import com.perfomax.flexstats.data.storage.AuthStorageImpl
 import com.perfomax.flexstats.data.storage.ProjectsStorageImpl
 import com.perfomax.flexstats.data_api.datastore.SettingsDataStore
+import com.perfomax.flexstats.data_api.network.TokenNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.presentation.navigation.NavigatorLifecycle
 import com.perfomax.flexstats.presentation.navigation.RouterImpl
@@ -99,7 +101,7 @@ class AppModule(private val application: Application) {
         authStorage: AuthStorage
     ): ProjectsRepository = ProjectsRepositoryImpl(projectsStorage = projectsStorage, authStorage = authStorage)
 
-    // Projects provides----------------------------------------------------------------------------
+    // Accounts provides----------------------------------------------------------------------------
     @Provides
     @Singleton
     fun provideAccountsDao(db: AppDatabase): AccountsDao = db.accountsDao()
@@ -115,11 +117,18 @@ class AppModule(private val application: Application) {
     fun provideAccountsRepository(
         projectsStorage: ProjectsStorage,
         accountsStorage: AccountsStorage,
-        authStorage: AuthStorage
+        authStorage: AuthStorage,
+        tokenNetwork: TokenNetwork
     ): AccountsRepository = AccountsRepositoryImpl(
         projectsStorage =  projectsStorage,
         accountsStorage = accountsStorage,
-        authStorage = authStorage
+        authStorage = authStorage,
+        tokenNetwork = tokenNetwork
     )
+
+    // Network provides----------------------------------------------------------------------------
+    @Singleton
+    @Provides
+    fun provideNetworkStorage(): TokenNetwork = TokenNetworkImpl()
 
 }

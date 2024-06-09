@@ -34,32 +34,7 @@
 
         <EditText
             android:id="@+id/account_form"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/onBackground" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/password_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/onBackground"
-            android:text="Пароль: "
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-
-        <EditText
-            android:id="@+id/password_form"
-            android:layout_width="150dp"
+            android:layout_width="250dp"
             android:layout_height="40dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
