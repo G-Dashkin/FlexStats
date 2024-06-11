@@ -8,6 +8,8 @@ internal fun AccountEntity.toDomain(): Account {
         id = id,
         name = name,
         accountToken = token,
+        accountType = type,
+        metrikaCounter = metrikaCounter,
         projectId = projectId
     )
 }
@@ -17,24 +19,8 @@ internal fun Account.toDomain(): AccountEntity {
         id = id?:0,
         name = name,
         token = accountToken?:"",
-        projectId = projectId?:0
+        type = accountType?:"",
+        metrikaCounter = metrikaCounter?:"",
+        projectId = projectId?:0,
     )
 }
-
-//internal fun ProjectEntity.toDomain(): Project {
-//    return Project (
-//        id = id,
-//        name = project,
-//        isSelected = isSelected != 0,
-//        userId = userId
-//    )
-//}
-//
-//internal fun Project.toDomain(): ProjectEntity {
-//    return ProjectEntity (
-//        id = id?:0,
-//        project = name,
-//        isSelected = if (isSelected == false) 0 else 1,
-//        userId = userId?:0
-//    )
-//}

@@ -4,6 +4,8 @@ data class Account(
     val id: Int? = 0,
     val name: String,
     val accountToken: String? = null,
+    val accountType: String? = null,
+    val metrikaCounter: String? = null,
     val password: String? = null,
     val projectId: Int? = 0
 )

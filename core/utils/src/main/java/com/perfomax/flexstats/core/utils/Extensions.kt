@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.core.utils
 
+import com.perfomax.flexstats.models.Account
 import com.perfomax.flexstats.models.User
 
 fun String.addElement(newElement: String): String {
@@ -16,4 +17,12 @@ fun String.parsStringToUser(): User {
                 email = this.split("|")[2].split(":")[1],
                 password = this.split("|")[3].split(":")[1],
                 isLogin = false)
+}
+
+fun  List<Account>.yandexDirectFilter(): List<Account> {
+    return this.filter { it.accountType == "yandex_direct" }
+}
+
+fun  List<Account>.yandexMetrikaFilter(): List<Account> {
+    return this.filter { it.accountType == "yandex_metrika" }
 }

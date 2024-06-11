@@ -18,7 +18,15 @@ class AccountsRepositoryImpl @Inject constructor(
     override suspend fun create(account: Account) {
         val authedUserId = authStorage.getAuthUser().id
         val selectedProject = projectsStorage.getSelectedProject(userId = authedUserId?:0)
-        accountsStorage.add(Account(name = account.name, projectId = selectedProject.id, accountToken = account.accountToken))
+        accountsStorage.add(
+            Account(
+                name = account.name,
+                projectId = selectedProject.id,
+                accountToken = account.accountToken,
+                accountType = account.accountType,
+                metrikaCounter = account.metrikaCounter
+            )
+        )
     }
 
     override suspend fun createToken(tokenCode: String): String {

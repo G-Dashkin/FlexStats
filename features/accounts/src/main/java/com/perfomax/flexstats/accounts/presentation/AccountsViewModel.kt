@@ -13,6 +13,7 @@ import com.perfomax.flexstats.accounts.domain.DeleteAccountUseCase
 import com.perfomax.flexstats.accounts.domain.GeAccountsByProjectUseCase
 import com.perfomax.flexstats.models.Account
 import com.perfomax.flexstats.models.Project
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,8 +41,12 @@ class AccountsViewModel(
 
     private fun load() {
         viewModelScope.launch {
-            val student = geAccountsByProjectUseCase.execute()
-            _accountsList.postValue(student)
+            val accounts = geAccountsByProjectUseCase.execute()
+            Log.d("MyLog","load() in ViewModel")
+            Log.d("MyLog","accounts:")
+            accounts.forEach { Log.d("MyLog", it.toString() ) }
+            Log.d("MyLog","---------------------------------------------------------------")
+            _accountsList.postValue(accounts)
         }
     }
 
@@ -49,10 +54,17 @@ class AccountsViewModel(
         _accountsScreen.value = AccountsScreen.AddNewAccount
     }
 
-    fun addNewAccount(accountName: String, tokenCode: String){
+    fun addNewAccount(accountName: String, tokenCode: String, accountType: String, metrikaCounter: String){
         viewModelScope.launch {
             val accountToken = createTokenUseCase.execute(tokenCode)
-            createAccountUseCase.execute(Account(name = accountName, accountToken = accountToken))
+            createAccountUseCase.execute(
+                Account(
+                    name = accountName,
+                    accountToken = accountToken,
+                    accountType = accountType,
+                    metrikaCounter = metrikaCounter
+                )
+            )
             load()
         }
     }

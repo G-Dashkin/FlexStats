@@ -8,12 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.webkit.WebViewClient
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TableLayout
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.perfomax.accounts.R
 import com.perfomax.accounts.databinding.AccountDialogBinding
 import com.perfomax.accounts.databinding.CustomDialogBinding
@@ -35,9 +42,21 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     }
 
     private lateinit var binding: FragmentAccountsBinding
-    private lateinit var bindingCustomDialog: CustomDialogBinding
+    private lateinit var adapter: FragmentStateAdapter
+    private lateinit var arrayAdapter: ArrayAdapter<String>
+
     private lateinit var accountDialogBinding: AccountDialogBinding
     private lateinit var webViewDialogBinding: WebViewDialogBinding
+
+    private val fragmentList = listOf(
+        YandexDirectListFragment.newInstance(),
+        YandexMetrikaListFragment.newInstance()
+    )
+
+    private val accountTypeMap = listOf(
+        Pair("yandex_direct", "Яндекс директ"),
+        Pair("yandex_metrika", "Яндекс метрика")
+    )
 
     @Inject
     lateinit var vmFactory: AccountsViewModelFactory
@@ -48,8 +67,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     private val accountsViewModel by viewModels<AccountsViewModel> {
         vmFactory
     }
-
-    var tokenCode = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,80 +81,67 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAccountsBinding.bind(view)
-        binding.btnAddAccount.setOnClickListener { accountsViewModel.showAddAccountDialog() }
-        setAdapter()
+
+        adapter = ViewPagerAdapter(requireActivity(), fragmentList)
+        arrayAdapter = ArrayAdapter(requireContext(), R.layout.account_type_item, accountTypeMap.toList().map { it.second })
+
+        binding.viewPager2.adapter = adapter
+        TabLayoutMediator(binding.tabLayout, binding.viewPager2){
+                tab, pos -> tab.text = accountTypeMap[pos].second
+        }.attach()
+        binding.btnAddAccount.setOnClickListener {
+            accountsViewModel.showAddAccountDialog()
+        }
         setScreen()
     }
 
-    private fun setAdapter() {
-        val adapter = AccountsAdapter(
-            deleteAccountClick = { accountId, accountName ->
-                accountsViewModel.showDeleteAccountDialog(accountId = accountId, accountName = accountName)
-            }
-        )
-        binding.accountsRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.accountsRecyclerView.adapter = adapter
 
-        accountsViewModel.accountsList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
-    }
 
     // AlertDialogs---------------------------------------------------------------------------------
     private fun setScreen() {
         accountsViewModel.accountsScreen.observe(viewLifecycleOwner) {
+            Log.d("MyLog", "Call in setScreen() in AccountFragment")
             when(it) {
                 is AccountsScreen.AddNewAccount -> showAccountDialog()
-                is AccountsScreen.DeleteAccount -> {
-                    showDeleteAccountDialog(accountId = it.accountId, accountName = it.accountName)
-                }
+                is AccountsScreen.DeleteAccount -> {}
                 is AccountsScreen.Nothing -> {}
             }
+
         }
     }
+
 
     private fun showAccountDialog() {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         accountDialogBinding = AccountDialogBinding.inflate(inflater)
+        accountDialogBinding.autoCompleteTxt.setAdapter(arrayAdapter)
         dialog.setContentView(accountDialogBinding.root)
         dialog.show()
 
+        accountDialogBinding.accountForm.setText("imedia-citilink-xiaomi-v")
+
+        accountDialogBinding.autoCompleteTxt.setOnItemClickListener { parent, view, position, id ->
+            if (position == 1) accountDialogBinding.metrikaCounter.visibility = View.VISIBLE
+            else accountDialogBinding.metrikaCounter.visibility = View.GONE
         accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         accountDialogBinding.btnConfirm.setOnClickListener {
             val login = accountDialogBinding.accountForm.text.toString()
             dialog.dismiss()
-            val tokenCode = showWebViewDialog(login)
-//            Log.d("MyLog", tokenCode)
+            Log.d("MyLog", "selected: ${accountTypeMap[position].first}")
+            showWebViewDialog(login, accountType = accountTypeMap[position].first)
+            }
         }
     }
 
-    private fun showDeleteAccountDialog(accountId: Int, accountName: String) {
-        val dialog = settingsDialog()
-        val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-        bindingCustomDialog = CustomDialogBinding.inflate(inflater)
-        dialog.setContentView(bindingCustomDialog.root)
-        dialog.show()
-
-        bindingCustomDialog.text2.text = accountName
-        bindingCustomDialog.btnCancel.setOnClickListener { dialog.dismiss() }
-        bindingCustomDialog.btnConfirm.setOnClickListener {
-            accountsViewModel.deleteAccountClicked(accountId)
-            dialog.dismiss()
-        }
-    }
-
-    private fun showWebViewDialog(login: String) {
+    private fun showWebViewDialog(login: String, accountType: String, metrikaCounter: String?=EMPTY) {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         webViewDialogBinding = WebViewDialogBinding.inflate(inflater)
         dialog.setContentView(webViewDialogBinding.root)
         dialog.show()
 
-//        val url = "https://oauth.yandex.ru/authorize?response_type=code&client_id=4f078917869842f2932a9d30fa5d0bb5&redirect_uri=http://flexstats.ru/yandex_direct_oauth.html&login_hint=imedia-citilink-xiaomi-v"
         webViewDialogBinding.webView.visibility = View.VISIBLE
-//        webViewDialogBinding.webView.loadUrl(url)
         webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH+login)
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
         webViewDialogBinding.webView.webViewClient = WebViewClient()
@@ -149,11 +153,15 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 webViewUrl = webViewDialogBinding.webView.url.toString()
                 delay(100)
             }
-            tokenCode = webViewUrl.split("=")[1].split("&")[0]
+            val tokenCode = webViewUrl.split("=")[1].split("&")[0]
             dialog.dismiss()
-            accountsViewModel.addNewAccount(accountName = login, tokenCode = tokenCode)
+            accountsViewModel.addNewAccount(
+                accountName = login,
+                tokenCode = tokenCode,
+                accountType = accountType,
+                metrikaCounter = metrikaCounter?:EMPTY
+            )
         }
-
         webViewDialogBinding.closeWebViewButton.setOnClickListener {
             dialog.dismiss()
             webViewUrl = "&cid="
