@@ -6,5 +6,7 @@ import com.perfomax.flexstats.api.AccountsFeatureApi
 import javax.inject.Inject
 
 class AccountsFeatureImpl @Inject constructor() : AccountsFeatureApi {
-    override fun open(): Fragment = AccountsFragment.getInstance()
+    override fun openDirectList(): Fragment = AccountsFragment.getInstance()
+
+    override fun openMetrikaList(): Fragment = AccountsFragment.getInstanceMetrikaList()
 }

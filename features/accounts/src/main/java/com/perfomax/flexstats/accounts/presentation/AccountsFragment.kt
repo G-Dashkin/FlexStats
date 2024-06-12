@@ -3,27 +3,18 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.webkit.WebViewClient
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TableLayout
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.perfomax.accounts.R
 import com.perfomax.accounts.databinding.AccountDialogBinding
-import com.perfomax.accounts.databinding.CustomDialogBinding
 import com.perfomax.accounts.databinding.FragmentAccountsBinding
 import com.perfomax.accounts.databinding.WebViewDialogBinding
 import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
@@ -39,7 +30,21 @@ import javax.inject.Inject
 class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
     companion object {
-        fun getInstance(): AccountsFragment = AccountsFragment()
+        fun getInstance(): AccountsFragment {
+            return AccountsFragment().apply {
+                val bundle = Bundle()
+                bundle.putBoolean("METRIKA_LIST_SELECTED", false)
+                arguments = bundle
+            }
+        }
+
+        fun getInstanceMetrikaList(): AccountsFragment {
+            return AccountsFragment().apply {
+                val bundle = Bundle()
+                bundle.putBoolean("METRIKA_LIST_SELECTED", true)
+                arguments = bundle
+            }
+        }
     }
 
     private lateinit var binding: FragmentAccountsBinding
@@ -86,6 +91,8 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAccountsBinding.bind(view)
 
+        binding.btnAddAccount.setOnClickListener { accountsViewModel.showAddAccountDialog() }
+
         adapter = ViewPagerAdapter(requireActivity(), fragmentList)
         arrayAdapter = ArrayAdapter(requireContext(), R.layout.account_type_item, accountTypeMap.toList().map { it.second })
 
@@ -93,12 +100,12 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         TabLayoutMediator(binding.tabLayout, binding.viewPager2){
                 tab, pos -> tab.text = accountTypeMap[pos].second
         }.attach()
-        binding.btnAddAccount.setOnClickListener {
-            accountsViewModel.showAddAccountDialog()
-        }
+
+        if (requireArguments().getBoolean("METRIKA_LIST_SELECTED"))
+        binding.viewPager2.post { binding.viewPager2.setCurrentItem(1, true) }
+
         setScreen()
     }
-
 
 
     // AlertDialogs---------------------------------------------------------------------------------
@@ -122,10 +129,11 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         accountDialogBinding.accountForm.setText("imedia-citilink-xiaomi-v")
 
+        accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
+
         accountDialogBinding.autoCompleteTxt.setOnItemClickListener { parent, view, position, id ->
             if (position == 1) accountDialogBinding.metrikaCounter.visibility = View.VISIBLE
             else accountDialogBinding.metrikaCounter.visibility = View.GONE
-        accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         accountDialogBinding.btnConfirm.setOnClickListener {
             val login = accountDialogBinding.accountForm.text.toString()
             dialog.dismiss()
@@ -162,10 +170,11 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 metrikaCounter = metrikaCounter?:EMPTY
             )
             delay(200)
-            router.navigateTo(
-                fragment = accountsFeatureApi.open(),
-                addToBackStack = false
-            )
+
+            if (accountType == "yandex_metrika")
+            router.navigateTo(fragment = accountsFeatureApi.openMetrikaList(), addToBackStack = false)
+            else router.navigateTo(fragment = accountsFeatureApi.openDirectList(), addToBackStack = false)
+
         }
         webViewDialogBinding.closeWebViewButton.setOnClickListener {
             dialog.dismiss()

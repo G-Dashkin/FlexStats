@@ -99,7 +99,7 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
             when(it.itemId) {
                 R.id.nav_home -> router.navigateTo(fragment = homeFeatureApi.open())
                 R.id.nav_projects -> router.navigateTo(fragment = projectsFeatureApi.open())
-                R.id.nav_accounts -> router.navigateTo(fragment = accountsFeatureApi.open())
+                R.id.nav_accounts -> router.navigateTo(fragment = accountsFeatureApi.openDirectList())
                 R.id.nav_logout -> {
                     router.navigateTo(fragment = authFeatureApi.openLogin())
                     lifecycleScope.launch {
