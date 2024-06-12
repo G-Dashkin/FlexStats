@@ -70,10 +70,6 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
         binding.accountsRecyclerView.layoutManager = LinearLayoutManager(this@YandexDirectListFragment.context)
         binding.accountsRecyclerView.adapter = adapter
         accountsViewModel.accountsList.observe(viewLifecycleOwner) {
-            Log.d("MyLog","observe in YandexDirectListFragment")
-            Log.d("MyLog","accounts:")
-            it.forEach { Log.d("MyLog", it.toString() ) }
-            Log.d("MyLog","---------------------------------------------------------------")
             adapter.submitList(it.yandexDirectFilter())
         }
     }
@@ -81,7 +77,6 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
     // AlertDialogs---------------------------------------------------------------------------------
     private fun setScreen() {
         accountsViewModel.accountsScreen.observe(viewLifecycleOwner) {
-            Log.d("MyLog", "Call in setScreen() in YandexDirectListFragment")
             when(it) {
                 is AccountsScreen.AddNewAccount -> {}
                 is AccountsScreen.DeleteAccount -> {

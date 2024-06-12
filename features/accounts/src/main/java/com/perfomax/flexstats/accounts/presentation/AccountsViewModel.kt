@@ -42,10 +42,6 @@ class AccountsViewModel(
     private fun load() {
         viewModelScope.launch {
             val accounts = geAccountsByProjectUseCase.execute()
-            Log.d("MyLog","load() in ViewModel")
-            Log.d("MyLog","accounts:")
-            accounts.forEach { Log.d("MyLog", it.toString() ) }
-            Log.d("MyLog","---------------------------------------------------------------")
             _accountsList.postValue(accounts)
         }
     }

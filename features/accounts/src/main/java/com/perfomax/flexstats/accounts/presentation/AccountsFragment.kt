@@ -28,6 +28,7 @@ import com.perfomax.accounts.databinding.FragmentAccountsBinding
 import com.perfomax.accounts.databinding.WebViewDialogBinding
 import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
 import com.perfomax.flexstats.accounts.di.DaggerAccountsComponent
+import com.perfomax.flexstats.api.AccountsFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.core.utils.EMPTY
 import com.perfomax.flexstats.core.utils.TOKEN_URL_OAUTH
@@ -63,6 +64,9 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
     @Inject
     lateinit var router: Router
+
+    @Inject
+    lateinit var accountsFeatureApi: AccountsFeatureApi
 
     private val accountsViewModel by viewModels<AccountsViewModel> {
         vmFactory
@@ -100,16 +104,13 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     // AlertDialogs---------------------------------------------------------------------------------
     private fun setScreen() {
         accountsViewModel.accountsScreen.observe(viewLifecycleOwner) {
-            Log.d("MyLog", "Call in setScreen() in AccountFragment")
             when(it) {
                 is AccountsScreen.AddNewAccount -> showAccountDialog()
                 is AccountsScreen.DeleteAccount -> {}
                 is AccountsScreen.Nothing -> {}
             }
-
         }
     }
-
 
     private fun showAccountDialog() {
         val dialog = settingsDialog()
@@ -128,7 +129,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         accountDialogBinding.btnConfirm.setOnClickListener {
             val login = accountDialogBinding.accountForm.text.toString()
             dialog.dismiss()
-            Log.d("MyLog", "selected: ${accountTypeMap[position].first}")
             showWebViewDialog(login, accountType = accountTypeMap[position].first)
             }
         }
@@ -160,6 +160,11 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 tokenCode = tokenCode,
                 accountType = accountType,
                 metrikaCounter = metrikaCounter?:EMPTY
+            )
+            delay(200)
+            router.navigateTo(
+                fragment = accountsFeatureApi.open(),
+                addToBackStack = false
             )
         }
         webViewDialogBinding.closeWebViewButton.setOnClickListener {
