@@ -3,9 +3,11 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
@@ -29,40 +31,12 @@ import javax.inject.Inject
 
 class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
-    companion object {
-        fun getInstance(): AccountsFragment {
-            return AccountsFragment().apply {
-                val bundle = Bundle()
-                bundle.putBoolean("METRIKA_LIST_SELECTED", false)
-                arguments = bundle
-            }
-        }
-
-        fun getInstanceMetrikaList(): AccountsFragment {
-            return AccountsFragment().apply {
-                val bundle = Bundle()
-                bundle.putBoolean("METRIKA_LIST_SELECTED", true)
-                arguments = bundle
-            }
-        }
-    }
-
     private lateinit var binding: FragmentAccountsBinding
     private lateinit var adapter: FragmentStateAdapter
     private lateinit var arrayAdapter: ArrayAdapter<String>
 
     private lateinit var accountDialogBinding: AccountDialogBinding
     private lateinit var webViewDialogBinding: WebViewDialogBinding
-
-    private val fragmentList = listOf(
-        YandexDirectListFragment.newInstance(),
-        YandexMetrikaListFragment.newInstance()
-    )
-
-    private val accountTypeMap = listOf(
-        Pair("yandex_direct", "Яндекс директ"),
-        Pair("yandex_metrika", "Яндекс метрика")
-    )
 
     @Inject
     lateinit var vmFactory: AccountsViewModelFactory
@@ -90,21 +64,29 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAccountsBinding.bind(view)
-
         binding.btnAddAccount.setOnClickListener { accountsViewModel.showAddAccountDialog() }
 
-        adapter = ViewPagerAdapter(requireActivity(), fragmentList)
-        arrayAdapter = ArrayAdapter(requireContext(), R.layout.account_type_item, accountTypeMap.toList().map { it.second })
+        setViewPager()
+        setScreen()
+    }
 
+    private fun setViewPager(){
+        val accountList = listOf("Яндекс директ", "Яндекс метрика")
+
+        val fragmentList = listOf(
+            YandexDirectListFragment.newInstance(),
+            YandexMetrikaListFragment.newInstance()
+        )
+
+        adapter = ViewPagerAdapter(requireActivity(), fragmentList)
+        arrayAdapter = ArrayAdapter(requireContext(), R.layout.account_type_item, accountList)
         binding.viewPager2.adapter = adapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager2){
-                tab, pos -> tab.text = accountTypeMap[pos].second
+                tab, pos -> tab.text = accountList[pos]
         }.attach()
 
         if (requireArguments().getBoolean("METRIKA_LIST_SELECTED"))
-        binding.viewPager2.post { binding.viewPager2.setCurrentItem(1, true) }
-
-        setScreen()
+            binding.viewPager2.post { binding.viewPager2.setCurrentItem(1, true) }
     }
 
 
@@ -120,6 +102,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     }
 
     private fun showAccountDialog() {
+        val accountList = listOf("yandex_direct", "yandex_metrika")
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         accountDialogBinding = AccountDialogBinding.inflate(inflater)
@@ -137,7 +120,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         accountDialogBinding.btnConfirm.setOnClickListener {
             val login = accountDialogBinding.accountForm.text.toString()
             dialog.dismiss()
-            showWebViewDialog(login, accountType = accountTypeMap[position].first)
+            showWebViewDialog(login, accountType = accountList[position])
             }
         }
     }
@@ -152,8 +135,12 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         webViewDialogBinding.webView.visibility = View.VISIBLE
         webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH+login)
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
-        webViewDialogBinding.webView.webViewClient = WebViewClient()
-        webViewDialogBinding.webView.settings.setSupportZoom(true)
+
+        webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String) {
+                webViewDialogBinding.closeWebViewButton.visibility = View.VISIBLE
+            }
+        }
 
         var webViewUrl = EMPTY
         lifecycleScope.launch {
@@ -176,10 +163,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
             else router.navigateTo(fragment = accountsFeatureApi.openDirectList(), addToBackStack = false)
 
         }
-        webViewDialogBinding.closeWebViewButton.setOnClickListener {
-            dialog.dismiss()
-            webViewUrl = "&cid="
-        }
+        webViewDialogBinding.closeWebViewButton.setOnClickListener { dialog.dismiss() }
     }
 
     private fun settingsDialog(): Dialog {
@@ -187,6 +171,25 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         return dialog
+    }
+
+    // Fragment Instance----------------------------------------------------------------------------
+    companion object {
+        fun getInstance(): AccountsFragment {
+            return AccountsFragment().apply {
+                val bundle = Bundle()
+                bundle.putBoolean("METRIKA_LIST_SELECTED", false)
+                arguments = bundle
+            }
+        }
+
+        fun getInstanceMetrikaList(): AccountsFragment {
+            return AccountsFragment().apply {
+                val bundle = Bundle()
+                bundle.putBoolean("METRIKA_LIST_SELECTED", true)
+                arguments = bundle
+            }
+        }
     }
 
 }
