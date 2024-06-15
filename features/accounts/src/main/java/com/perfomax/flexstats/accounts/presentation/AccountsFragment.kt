@@ -3,6 +3,7 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -121,13 +122,17 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
             if (position == 1) accountDialogBinding.metrikaCounter.visibility = View.VISIBLE
             else accountDialogBinding.metrikaCounter.visibility = View.GONE
 
+
         accountDialogBinding.btnConfirm.setOnClickListener {
 
+            val directAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == "yandex_direct" }
+            val metrikaAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == "yandex_metrika" }
 
             if (accountDialogBinding.accountForm.text.isEmpty()) emptyAccount()
             else if (accountDialogBinding.metrikaCounterForm.text.isEmpty() && position == 1) emptyCounter()
-            else if (accountsViewModel.accountsList.value?.any {
-                    it.name == accountDialogBinding.accountForm.text.toString() } == true) accountExists()
+            else if (directAccounts?.any { it.name == accountDialogBinding.accountForm.text.toString() && position == 0 } == true
+                  || metrikaAccounts?.any { it.name == accountDialogBinding.accountForm.text.toString() && position == 1 } == true
+            ) accountExists()
             else if (position != 0 && accountsViewModel.accountsList.value?.any {
                     it.metrikaCounter == accountDialogBinding.metrikaCounterForm.text.toString() } == true) counterExists()
             else {
@@ -148,7 +153,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         webViewDialogBinding.webView.visibility = View.VISIBLE
         webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH+login)
-        CookieManager.getInstance().flush()
+//        CookieManager.getInstance().removeAllCookies(null)
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
 
         webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
@@ -158,7 +163,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 }
                 webViewDialogBinding.closeWebViewButton.visibility = View.VISIBLE
             }
-
         }
 
         var webViewUrl = EMPTY

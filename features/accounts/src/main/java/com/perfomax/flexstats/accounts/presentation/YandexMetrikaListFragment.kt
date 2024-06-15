@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.perfomax.accounts.R
-import com.perfomax.accounts.databinding.CustomDialogBinding
+import com.perfomax.accounts.databinding.AccountsDialogBinding
 import com.perfomax.accounts.databinding.FragmentYandexDirectListBinding
 import com.perfomax.accounts.databinding.FragmentYandexMetrikaListBinding
 import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
@@ -25,7 +25,7 @@ class YandexMetrikaListFragment: Fragment(R.layout.fragment_yandex_metrika_list)
     }
 
     private lateinit var binding: FragmentYandexMetrikaListBinding
-    private lateinit var bindingCustomDialog: CustomDialogBinding
+    private lateinit var bindingCustomDialog: AccountsDialogBinding
 
     @Inject
     lateinit var vmFactory: AccountsViewModelFactory
@@ -81,7 +81,7 @@ class YandexMetrikaListFragment: Fragment(R.layout.fragment_yandex_metrika_list)
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        bindingCustomDialog = CustomDialogBinding.inflate(inflater)
+        bindingCustomDialog = AccountsDialogBinding.inflate(inflater)
         dialog.setContentView(bindingCustomDialog.root)
         dialog.show()
 

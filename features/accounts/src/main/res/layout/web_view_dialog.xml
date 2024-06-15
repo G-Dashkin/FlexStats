@@ -20,18 +20,30 @@
         android:layout_height="match_parent"
         android:background="@color/background"
         android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/closeWebViewButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_width="400dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Ошибка"
+            android:text="Аккаунт не зарегистрирован в системе яндекс директ."
+            android:gravity="center"
             android:textColor="@color/onBackground"
-            android:textSize="28dp" />
+            android:textSize="18dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:text="Укажите другой аккаунт."
+            android:gravity="center"
+            android:textColor="@color/onBackground"
+            android:textSize="18dp" />
 
     </LinearLayout>
 

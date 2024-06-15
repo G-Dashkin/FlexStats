@@ -3,29 +3,18 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.perfomax.accounts.R
-import com.perfomax.accounts.databinding.CustomDialogBinding
-import com.perfomax.accounts.databinding.FragmentAccountsBinding
+import com.perfomax.accounts.databinding.AccountsDialogBinding
 import com.perfomax.accounts.databinding.FragmentYandexDirectListBinding
-import com.perfomax.accounts.databinding.WebViewDialogBinding
 import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
 import com.perfomax.flexstats.accounts.di.DaggerAccountsComponent
-import com.perfomax.flexstats.core.utils.EMPTY
-import com.perfomax.flexstats.core.utils.TOKEN_URL_OAUTH
 import com.perfomax.flexstats.core.utils.yandexDirectFilter
-import com.perfomax.flexstats.models.Account
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
@@ -35,7 +24,7 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
     }
 
     private lateinit var binding: FragmentYandexDirectListBinding
-    private lateinit var bindingCustomDialog: CustomDialogBinding
+    private lateinit var bindingCustomDialog: AccountsDialogBinding
 
     @Inject
     lateinit var vmFactory: AccountsViewModelFactory
@@ -92,7 +81,7 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        bindingCustomDialog = CustomDialogBinding.inflate(inflater)
+        bindingCustomDialog = AccountsDialogBinding.inflate(inflater)
         dialog.setContentView(bindingCustomDialog.root)
         dialog.show()
 
