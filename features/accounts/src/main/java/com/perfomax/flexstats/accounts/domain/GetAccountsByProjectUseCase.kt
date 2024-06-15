@@ -5,7 +5,7 @@ import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.models.Account
 import javax.inject.Inject
 
-class GeAccountsByProjectUseCase @Inject constructor(
+class GetAccountsByProjectUseCase @Inject constructor(
     private val repository: AccountsRepository
 ): UseCaseWithoutParams<List<Account>> {
     override suspend fun execute(): List<Account> {

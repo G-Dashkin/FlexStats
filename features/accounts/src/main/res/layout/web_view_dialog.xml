@@ -14,14 +14,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/alertTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/closeWebViewButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="400dp"
+            android:layout_height="match_parent"
+            android:text="Ошибка"
+            android:textColor="@color/onBackground"
+            android:textSize="28dp" />
+
+
+    </LinearLayout>
+
+
     <Button
         android:id="@+id/closeWebViewButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/primary"
         android:text="Закрыть"
-        android:textSize="34sp"
         android:visibility="gone"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -21,6 +21,8 @@ sealed class ProjectsScreen {
     data class SelectProject(val projectId: Int) : ProjectsScreen()
     data class DeleteProject(val projectId: Int, val projectName: String) : ProjectsScreen()
     data class EditProject(val projectId: Int, val currentName: String) : ProjectsScreen()
+    data object EmptyProject : ProjectsScreen()
+    data object ProjectExists : ProjectsScreen()
     data object Nothing : ProjectsScreen()
 }
 class ProjectsViewModel(
@@ -53,6 +55,15 @@ class ProjectsViewModel(
             createProjectUseCase.execute(Project(name = projectName))
             load()
         }
+
+    }
+
+    fun projectEmpty(){
+        _projectsScreen.value = ProjectsScreen.EmptyProject
+    }
+
+    fun projectExists() {
+        _projectsScreen.value = ProjectsScreen.ProjectExists
     }
 
     fun editProject(projectId: Int, editName: String){

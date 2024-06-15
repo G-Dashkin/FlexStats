@@ -3,9 +3,11 @@ package com.perfomax.flexstats.projects.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -55,7 +57,9 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentProjectsBinding.bind(view)
-        binding.btnAddProjects.setOnClickListener { projectsViewModel.showAddProjectDialog() }
+        binding.btnAddProjects.setOnClickListener {
+            projectsViewModel.showAddProjectDialog()
+        }
         setAdapter()
         setScreen()
     }
@@ -90,6 +94,8 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
             when(it) {
                 is ProjectsScreen.AddNewProject -> showProjectDialog()
                 is ProjectsScreen.SelectProject -> {}
+                is ProjectsScreen.ProjectExists -> projectExists()
+                is ProjectsScreen.EmptyProject -> emptyProject()
                 is ProjectsScreen.EditProject -> {
                     lifecycleScope.launch {
                         showProjectDialog(projectId = it.projectId, currentName = it.currentName)
@@ -115,13 +121,18 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         if (projectId != null) projectDialogBinding.projectNameForm.hint = currentName
         projectDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         projectDialogBinding.btnConfirm.setOnClickListener {
-            lifecycleScope.launch {
-                val projectName = projectDialogBinding.projectNameForm.text
-                if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName.toString())
-                else projectsViewModel.addNewProject(projectName = projectName.toString())
-                delay(100)
-                parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
-                dialog.dismiss()
+            val projectName = projectDialogBinding.projectNameForm.text
+            if (projectName.isEmpty()) projectsViewModel.projectEmpty()
+            else if (projectsViewModel.projectsList.value?.any { it.name == projectName.toString() } == true) projectsViewModel.projectExists()
+            else {
+                lifecycleScope.launch {
+                    val projectName = projectDialogBinding.projectNameForm.text
+                    if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName.toString())
+                    else projectsViewModel.addNewProject(projectName = projectName.toString())
+                    delay(100)
+                    parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                    dialog.dismiss()
+                }
             }
         }
     }
@@ -149,5 +160,14 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         return dialog
+    }
+
+    // Toast space-----------------------------------------------------------------------------
+    private fun emptyProject(){
+        Toast.makeText(activity, "Поле \"Проект\" должно быть заполнено", Toast.LENGTH_LONG).show()
+    }
+
+    private fun projectExists(){
+        Toast.makeText(activity, "Проект с таким названием уже существует", Toast.LENGTH_LONG).show()
     }
 }

@@ -10,23 +10,24 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.accounts.domain.CreateAccountUseCase
 import com.perfomax.flexstats.accounts.domain.CreateTokenUseCase
 import com.perfomax.flexstats.accounts.domain.DeleteAccountUseCase
-import com.perfomax.flexstats.accounts.domain.GeAccountsByProjectUseCase
+import com.perfomax.flexstats.accounts.domain.GetAccountsByProjectUseCase
+import com.perfomax.flexstats.accounts.domain.GetSelectedProjectUseCase
 import com.perfomax.flexstats.models.Account
-import com.perfomax.flexstats.models.Project
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class AccountsScreen {
     data object AddNewAccount : AccountsScreen()
     data class DeleteAccount(val accountId: Int, val accountName: String) : AccountsScreen()
+    data object ProjectNotExists : AccountsScreen()
     data object Nothing : AccountsScreen()
 }
 class AccountsViewModel(
     private val createAccountUseCase: CreateAccountUseCase,
     private val createTokenUseCase: CreateTokenUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
-    private val geAccountsByProjectUseCase: GeAccountsByProjectUseCase
+    private val getAccountsByProjectUseCase: GetAccountsByProjectUseCase,
+    private val getSelectedProjectUseCase: GetSelectedProjectUseCase
 ): ViewModel()  {
 
     private val _accountsList = MutableLiveData<List<Account>>()
@@ -41,16 +42,20 @@ class AccountsViewModel(
 
     private fun load() {
         viewModelScope.launch {
-            val accounts = geAccountsByProjectUseCase.execute()
+            val accounts = getAccountsByProjectUseCase.execute()
             _accountsList.postValue(accounts)
         }
     }
 
     fun showAddAccountDialog(){
-        _accountsScreen.value = AccountsScreen.AddNewAccount
+        viewModelScope.launch {
+            if (getSelectedProjectUseCase.execute().id == 0 ) {
+                _accountsScreen.value = AccountsScreen.ProjectNotExists
+            } else { _accountsScreen.value = AccountsScreen.AddNewAccount }
+        }
     }
 
-    fun addNewAccount(accountName: String, tokenCode: String, accountType: String, metrikaCounter: String){
+    fun addNewAccount(accountName: String, metrikaCounter: String, tokenCode: String, accountType: String){
         viewModelScope.launch {
             val accountToken = createTokenUseCase.execute(tokenCode)
             createAccountUseCase.execute(
@@ -86,7 +91,9 @@ class AccountsViewModelFactory @Inject constructor(
     private val createAccountUseCase: CreateAccountUseCase,
     private val createTokenUseCase: CreateTokenUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
-    private val geAccountsByProjectUseCase: GeAccountsByProjectUseCase
+    private val getAccountsByProjectUseCase: GetAccountsByProjectUseCase,
+    private val getSelectedProjectUseCase: GetSelectedProjectUseCase
+
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -97,7 +104,8 @@ class AccountsViewModelFactory @Inject constructor(
             createAccountUseCase = createAccountUseCase,
             createTokenUseCase = createTokenUseCase,
             deleteAccountUseCase = deleteAccountUseCase,
-            geAccountsByProjectUseCase = geAccountsByProjectUseCase
+            getAccountsByProjectUseCase = getAccountsByProjectUseCase,
+            getSelectedProjectUseCase = getSelectedProjectUseCase
         ) as T
     }
 }

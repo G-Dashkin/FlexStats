@@ -3,13 +3,14 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +29,7 @@ import com.perfomax.flexstats.core.utils.TOKEN_URL_OAUTH
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
@@ -95,6 +97,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         accountsViewModel.accountsScreen.observe(viewLifecycleOwner) {
             when(it) {
                 is AccountsScreen.AddNewAccount -> showAccountDialog()
+                is AccountsScreen.ProjectNotExists -> projectNotExists()
                 is AccountsScreen.DeleteAccount -> {}
                 is AccountsScreen.Nothing -> {}
             }
@@ -117,10 +120,21 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         accountDialogBinding.autoCompleteTxt.setOnItemClickListener { parent, view, position, id ->
             if (position == 1) accountDialogBinding.metrikaCounter.visibility = View.VISIBLE
             else accountDialogBinding.metrikaCounter.visibility = View.GONE
+
         accountDialogBinding.btnConfirm.setOnClickListener {
-            val login = accountDialogBinding.accountForm.text.toString()
-            dialog.dismiss()
-            showWebViewDialog(login, accountType = accountList[position])
+
+
+            if (accountDialogBinding.accountForm.text.isEmpty()) emptyAccount()
+            else if (accountDialogBinding.metrikaCounterForm.text.isEmpty() && position == 1) emptyCounter()
+            else if (accountsViewModel.accountsList.value?.any {
+                    it.name == accountDialogBinding.accountForm.text.toString() } == true) accountExists()
+            else if (position != 0 && accountsViewModel.accountsList.value?.any {
+                    it.metrikaCounter == accountDialogBinding.metrikaCounterForm.text.toString() } == true) counterExists()
+            else {
+                val login = accountDialogBinding.accountForm.text.toString()
+                dialog.dismiss()
+                showWebViewDialog(login, accountType = accountList[position])
+                }
             }
         }
     }
@@ -134,12 +148,17 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         webViewDialogBinding.webView.visibility = View.VISIBLE
         webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH+login)
+        CookieManager.getInstance().flush()
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
 
         webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
+                if (view.title.toString() == "Доступ внешних приложений"){
+                    webViewDialogBinding.webView.visibility = View.GONE
+                }
                 webViewDialogBinding.closeWebViewButton.visibility = View.VISIBLE
             }
+
         }
 
         var webViewUrl = EMPTY
@@ -171,6 +190,23 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         return dialog
+    }
+
+    // Toast space-----------------------------------------------------------------------------
+    private fun emptyAccount(){
+        Toast.makeText(activity, "Поле \"Аккаунт\" должно быть заполнено", Toast.LENGTH_LONG).show()
+    }
+    private fun emptyCounter(){
+        Toast.makeText(activity, "Поле \"Счетчик метрики\" должно быть заполнено", Toast.LENGTH_LONG).show()
+    }
+    private fun accountExists(){
+        Toast.makeText(activity, "Аккаунт с таким названием уже добавлен в данный проект", Toast.LENGTH_LONG).show()
+    }
+    private fun counterExists(){
+        Toast.makeText(activity, "Счетчик метрики с таким названием уже имеется в данный проект", Toast.LENGTH_LONG).show()
+    }
+    private fun projectNotExists(){
+        Toast.makeText(activity, "Для добавления аккаунта необходимо создать проект", Toast.LENGTH_LONG).show()
     }
 
     // Fragment Instance----------------------------------------------------------------------------
