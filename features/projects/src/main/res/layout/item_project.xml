@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:id="@+id/rootElement"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:gravity="center|left"
-android:orientation="horizontal"
-android:padding="10dp" >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|left"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/rootElement"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_border"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/project_name"
@@ -14,7 +22,7 @@ android:padding="10dp" >
         android:layout_height="40dp"
         android:layout_weight="1"
         android:ellipsize="end"
-        android:gravity="left"
+        android:gravity="left|center"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:textColor="?colorOnBackground"
@@ -30,19 +38,19 @@ android:padding="10dp" >
         android:text="Изменить"
         android:textSize="12sp"
         android:textColor="@color/onBackground"
-        android:background="@color/primary"
-        app:cornerRadius = "20dp"/>
+        android:background="@drawable/button_border"/>
 
     <Button
         android:id="@+id/btn_delete"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:background="@color/primary"
+        android:background="@drawable/button_border"
         android:clickable="true"
         android:layout_marginLeft="10dp"
         android:text="Удалить"
         android:textSize="12sp"
         android:textColor="@color/onBackground" />
 
+    </LinearLayout>
 
 </LinearLayout>

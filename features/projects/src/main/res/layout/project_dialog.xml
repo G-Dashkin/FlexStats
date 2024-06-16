@@ -3,6 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@color/onPrimary"
+    android:minWidth="400dp"
+    android:padding="20dp"
     android:orientation="vertical" >
 
     <TextView
@@ -17,32 +19,27 @@
         android:textStyle="bold"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/project_name_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/onBackground"
-            android:text="Название проекта: "
-            android:textSize="18sp"
-            android:textStyle="bold"/>
 
         <EditText
             android:id="@+id/project_name_form"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/form_border"
             android:layout_marginTop="10dp"
-            android:textColor="@color/onBackground" />
+            android:layout_marginBottom="10dp"
+            android:padding="16dp"
+            android:hint="Название проекта"
+            android:gravity="start|center_vertical"
+            android:textColor="@color/onBackground"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
@@ -50,20 +47,22 @@
 
         <Button
             android:id="@+id/btn_cancel"
-            android:layout_width="150dp"
+            android:layout_width="170dp"
             android:layout_height="40dp"
-            android:background="@color/primary"
+            android:background="@drawable/button_border"
             android:clickable="true"
+            android:layout_weight="1"
             android:text="Отменить"
             android:textStyle="bold"
             android:textColor="@color/onBackground" />
 
         <Button
             android:id="@+id/btn_confirm"
-            android:layout_width="150dp"
+            android:layout_width="170dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="40dp"
-            android:background="@color/primary"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_border"
             android:clickable="true"
             android:text="Подтвердить"
             android:textStyle="bold"
