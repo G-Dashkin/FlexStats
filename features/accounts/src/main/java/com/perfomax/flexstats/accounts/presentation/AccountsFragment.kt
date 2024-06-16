@@ -115,7 +115,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         dialog.setContentView(accountDialogBinding.root)
         dialog.show()
 
-        accountDialogBinding.accountForm.setText("imedia-citilink-xiaomi-v")
+//        accountDialogBinding.accountForm.setText("imedia-citilink-xiaomi-v")
 
         accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
 

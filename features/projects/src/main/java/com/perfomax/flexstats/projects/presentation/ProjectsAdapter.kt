@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.perfomax.flexstats.models.Project
+import com.perfomax.projects.R
 import com.perfomax.projects.databinding.ItemProjectBinding
 
 class ProjectsAdapter(
@@ -29,8 +30,13 @@ class ProjectsAdapter(
     inner class ProjectHolder(private val binding: ItemProjectBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(project: Project) {
             binding.projectName.text = project.name
-            if (project.isSelected == true) binding.rootElement.setBackgroundColor(Color.GRAY)
-            else binding.rootElement.setBackgroundColor(Color.WHITE)
+            if (project.isSelected == true) {
+                binding.rootElement.setBackgroundResource(com.perfomax.ui.R.drawable.item_border)
+                binding.projectName.setTextColor(Color.WHITE)
+            } else {
+                binding.rootElement.setBackgroundColor(Color.WHITE)
+                binding.projectName.setTextColor(Color.BLACK)
+            }
             binding.root.setOnClickListener { itemProjectClick.invoke(project.id!!) }
             binding.btnEdit.setOnClickListener { editProjectClick.invoke(project.id!!, project.name) }
             binding.btnDelete.setOnClickListener { deleteProjectClick.invoke(project.id!!, project.name) }

@@ -12,7 +12,7 @@
     <color name="surface">#E4F6F5</color>
     <color name="onSurface">#161D1B</color>
     <color name="surfaceVariant">#DAE5E1</color>
-    <color name="onSurfaceVariant">#3F4946</color>
+    <color name="onSurfaceVariant">#6C6C6C</color>
     <color name="outline">#CFD4D3</color>
 
     <color name="primaryDark">#2D378E</color>
