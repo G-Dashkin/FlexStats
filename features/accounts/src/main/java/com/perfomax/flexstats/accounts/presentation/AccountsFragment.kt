@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -153,7 +154,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         webViewDialogBinding.webView.visibility = View.VISIBLE
         webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH+login)
-//        CookieManager.getInstance().removeAllCookies(null)
+        CookieManager.getInstance().removeAllCookies(null)
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
 
         webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
@@ -210,7 +211,9 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         Toast.makeText(activity, "Счетчик метрики с таким названием уже имеется в данный проект", Toast.LENGTH_LONG).show()
     }
     private fun projectNotExists(){
-        Toast.makeText(activity, "Для добавления аккаунта необходимо создать проект", Toast.LENGTH_LONG).show()
+        val toast = Toast.makeText(activity, "Для добавления аккаунта необходимо создать проект", Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.show()
     }
 
     // Fragment Instance----------------------------------------------------------------------------

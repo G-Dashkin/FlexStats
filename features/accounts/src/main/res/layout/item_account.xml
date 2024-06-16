@@ -3,35 +3,53 @@
 android:id="@+id/rootElement"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-android:gravity="center|left"
+android:gravity="center"
 android:orientation="horizontal"
 android:padding="10dp" >
 
-<TextView
-    android:id="@+id/project_name"
-    android:layout_width="0dp"
-    android:layout_height="40dp"
-    android:layout_weight="1"
-    android:ellipsize="end"
-    android:gravity="left"
-    android:includeFontPadding="false"
-    android:maxLines="1"
-    android:textColor="?colorOnBackground"
-    android:textSize="@dimen/fontSize16"
-    android:textStyle="bold" />
+    <LinearLayout
+        android:id="@+id/account_item"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/account_name"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="left|center"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="?colorOnBackground"
+            android:textSize="@dimen/fontSize16"
+            android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/metrika_counter"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:visibility="gone"
+            android:textColor="?colorOnBackground"
+            android:textSize="@dimen/fontSize16"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_delete"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="40dp"
         android:background="@color/primary"
-        android:clickable="true"
         android:layout_marginLeft="10dp"
         android:text="Удалить"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textColor="@color/onBackground" />
-
 
 </LinearLayout>

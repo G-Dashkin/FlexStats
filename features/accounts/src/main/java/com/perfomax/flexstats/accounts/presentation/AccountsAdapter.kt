@@ -1,7 +1,9 @@
 package com.perfomax.flexstats.accounts.presentation
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -24,14 +26,14 @@ class AccountsAdapter(
         viewHolder.bind(item)
     }
 
-    inner class AccountHolder(private val binding: ItemAccountBinding):RecyclerView.ViewHolder(binding.root){
+    inner class AccountHolder(private val binding: ItemAccountBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(account: Account) {
-            binding.projectName.text = account.name
+            binding.accountName.text = account.name
+            binding.metrikaCounter.text = "Счетчик метрики: ${account.metrikaCounter}"
+            if (account.accountType == "yandex_metrika") binding.metrikaCounter.visibility = View.VISIBLE
             binding.btnDelete.setOnClickListener { deleteAccountClick.invoke(account.id!!, account.name) }
         }
     }
-
-
 
     internal class AccountsDiffCallback : DiffUtil.ItemCallback<Account>(){
         override fun areItemsTheSame(oldItem: Account, newItem: Account): Boolean =
