@@ -1,7 +1,5 @@
 package com.perfomax.flexstats.accounts.presentation
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.perfomax.accounts.databinding.ItemAccountBinding
 import com.perfomax.flexstats.models.Account
-import com.perfomax.flexstats.models.Project
 
 class AccountsAdapter(
     private val deleteAccountClick: (Int, String) -> Unit

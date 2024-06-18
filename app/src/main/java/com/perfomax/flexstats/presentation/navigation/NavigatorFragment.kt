@@ -19,6 +19,8 @@ import com.perfomax.flexstats.api.HomeFeatureApi
 import com.perfomax.flexstats.api.ProjectsFeatureApi
 import com.perfomax.flexstats.api.StartFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
+import com.perfomax.flexstats.core.utils.CALL_MENU_LISTENER
+import com.perfomax.flexstats.core.utils.EMPTY
 import com.perfomax.flexstats.databinding.FragmentNavigatorBinding
 import com.perfomax.flexstats.di.DaggerProvider
 import com.perfomax.flexstats.domain.usecases.GetAuthUserUseCase
@@ -89,10 +91,10 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
         super.onViewCreated(view, savedInstanceState)
 
         toggle = ActionBarDrawerToggle(requireActivity(),
-            binding.drawerLayout,
-            binding.materialToolbar,
-            com.perfomax.ui.R.string.open,
-            com.perfomax.ui.R.string.close)
+                                       binding.drawerLayout,
+                                       binding.materialToolbar,
+                                       com.perfomax.ui.R.string.open,
+                                       com.perfomax.ui.R.string.close)
         binding.drawerLayout.addDrawerListener(toggle)
 
         binding.navView.setNavigationItemSelectedListener {
@@ -113,7 +115,7 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
         }
 
         setActionBarSettings()
-        childFragmentManager.setFragmentResultListener("callMenuListener", viewLifecycleOwner){ _, _ ->
+        childFragmentManager.setFragmentResultListener(CALL_MENU_LISTENER, viewLifecycleOwner){ _, _ ->
             setActionBarSettings()
         }
 
@@ -148,9 +150,10 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
 
             if (allProjects.isNotEmpty()) {
                 val selectedProject = getSelectedProjectUseCase.execute()
-                binding.materialToolbar.title = "Проект: ${selectedProject.name}"
+                binding.materialToolbar.title = "${resources.getString(com.perfomax.ui.R.string.project)} " +
+                                                   selectedProject.name
             } else {
-                binding.materialToolbar.title = ""
+                binding.materialToolbar.title = EMPTY
             }
         }
     }

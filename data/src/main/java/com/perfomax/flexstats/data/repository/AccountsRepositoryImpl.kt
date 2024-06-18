@@ -6,7 +6,6 @@ import com.perfomax.flexstats.data_api.storage.AccountsStorage
 import com.perfomax.flexstats.data_api.storage.AuthStorage
 import com.perfomax.flexstats.data_api.storage.ProjectsStorage
 import com.perfomax.flexstats.models.Account
-import com.perfomax.flexstats.models.Project
 import javax.inject.Inject
 
 class AccountsRepositoryImpl @Inject constructor(

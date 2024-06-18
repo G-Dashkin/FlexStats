@@ -24,7 +24,6 @@ class ResetViewModel: ViewModel() {
     fun showLoginScreen() {
         _resetScreen.value = ResetScreen.Login
     }
-
 }
 
 class ResetViewModelFactory @Inject constructor():  ViewModelProvider.Factory {

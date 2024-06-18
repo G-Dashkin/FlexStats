@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.data.database.entities
 
-import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey

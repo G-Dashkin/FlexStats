@@ -1,7 +1,6 @@
 package com.perfomax.flexstats.data.storage
 
 import com.perfomax.flexstats.data.database.dao.AccountsDao
-import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.data_api.storage.AccountsStorage
 import com.perfomax.flexstats.models.Account

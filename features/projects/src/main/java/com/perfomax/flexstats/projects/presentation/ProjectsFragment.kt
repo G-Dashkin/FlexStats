@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.perfomax.flexstats.core.navigation.Router
+import com.perfomax.flexstats.core.utils.CALL_MENU_LISTENER
 import com.perfomax.flexstats.projects.di.DaggerProjectsComponent
 import com.perfomax.flexstats.projects.di.ProjectsFeatureDepsProvider
 import com.perfomax.projects.R
@@ -70,7 +71,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                 lifecycleScope.launch {
                     projectsViewModel.selectProject(it)
                     delay(100)
-                    parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                    parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                 }
             },
             editProjectClick = { projectId, currentName ->
@@ -100,7 +101,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                     lifecycleScope.launch {
                         showProjectDialog(projectId = it.projectId, currentName = it.currentName)
                         delay(100)
-                        parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                        parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                     }
                 }
                 is ProjectsScreen.DeleteProject -> {
@@ -130,7 +131,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                     if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName.toString())
                     else projectsViewModel.addNewProject(projectName = projectName.toString())
                     delay(100)
-                    parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                    parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                     dialog.dismiss()
                 }
             }
@@ -149,7 +150,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
             lifecycleScope.launch {
                 projectsViewModel.deleteProjectClicked(projectId)
                 delay(100)
-                parentFragmentManager.setFragmentResult("callMenuListener", bundleOf())
+                parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                 dialog.dismiss()
             }
         }

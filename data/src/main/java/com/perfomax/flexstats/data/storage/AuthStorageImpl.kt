@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.data.storage
 
+import com.perfomax.flexstats.core.utils.EMPTY
 import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.models.User
@@ -20,6 +21,6 @@ class AuthStorageImpl @Inject constructor(
     }
     override suspend fun getAuthUser(): User {
         return if (authDao.getAuthUserBase() != null) authDao.getAuthUserBase().toDomain()
-        else User(user = "", email = "", password = "", isLogin = false)
+        else User(user = EMPTY, email = EMPTY, password = EMPTY, isLogin = false)
     }
 }

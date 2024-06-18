@@ -1,20 +1,9 @@
 package com.perfomax.flexstats.data.network
 
-import android.util.Log
 import com.perfomax.flexstats.data.network.retrofit.ProductApi
 import com.perfomax.flexstats.data_api.network.TokenNetwork
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 class TokenNetworkImpl: TokenNetwork {
 

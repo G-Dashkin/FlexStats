@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.data.storage
 
+import com.perfomax.flexstats.core.utils.EMPTY
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.data_api.storage.ProjectsStorage
@@ -31,7 +32,7 @@ class ProjectsStorageImpl @Inject constructor(
         return try {
             selectedProject.toDomain()
         } catch (e:Exception) {
-            Project(0,"",true,0)
+            Project(0, EMPTY,true,0)
         }
     }
     override suspend fun getAllUserProjects(userId: Int): List<Project> {
