@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.auth.presentation
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,11 +18,9 @@ sealed class RegisterScreen {
     data object EmailExists : RegisterScreen()
     data object EmailNotCorrect : RegisterScreen()
     data object EmptyFields : RegisterScreen()
-    data object Nothing : RegisterScreen()
 }
 
 class RegisterViewModel(
-    private val context: Context,
     private val getAllUsersUseCase: GetAllUsersUseCase,
     private val registerUseCase: RegisterUseCase
 ): ViewModel() {
@@ -54,14 +51,9 @@ class RegisterViewModel(
         _registerScreen.value = RegisterScreen.Login
     }
 
-    fun backClicked() {
-        _registerScreen.value = RegisterScreen.Back
-        _registerScreen.value = RegisterScreen.Nothing
-    }
 }
 
 class RegisterViewModelFactory @Inject constructor(
-    private val context: Context,
     private val getAllUsersUseCase: GetAllUsersUseCase,
     private val registerUseCase: RegisterUseCase
 ):  ViewModelProvider.Factory {
@@ -71,7 +63,6 @@ class RegisterViewModelFactory @Inject constructor(
         extras: CreationExtras,
     ): T {
         return RegisterViewModel(
-            context = context,
             getAllUsersUseCase = getAllUsersUseCase,
             registerUseCase = registerUseCase
         ) as T

@@ -2,15 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/zeroDp"
+        android:layout_height="@dimen/height50"
         android:background="@color/primary"
         app:tabTextColor="@color/background"
         app:tabIndicatorColor="@color/onBackground"
@@ -21,19 +20,19 @@ android:orientation="vertical">
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Яндекс директ"/>
+            android:text="@string/yandex_direct"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Яндекс метрика"/>
+            android:text="@string/yandex_metrika"/>
 
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/zeroDp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +47,7 @@ android:orientation="vertical">
     android:backgroundTint="@color/primary"
     app:srcCompat="@drawable/ic_add"
     app:tint="@color/onPrimary"
-    app:maxImageSize="46dp"
+    app:maxImageSize="@dimen/size50"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent" />
 

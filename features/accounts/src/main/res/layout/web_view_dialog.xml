@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <WebView
         android:id="@+id/webView"
-        android:layout_width="400dp"
+        android:layout_width="@dimen/width400"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +19,7 @@
         android:layout_height="match_parent"
         android:background="@color/background"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:padding="@dimen/padding20"
         android:gravity="center"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/closeWebViewButton"
@@ -31,19 +30,19 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Аккаунт не зарегистрирован в системе яндекс директ."
+            android:text="@string/account_not_register"
             android:gravity="center"
             android:textColor="@color/onBackground"
-            android:textSize="18dp" />
+            android:textSize="@dimen/textSize18" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:text="Укажите другой аккаунт."
+            android:layout_marginTop="@dimen/margin24"
+            android:text="@string/select_another_account"
             android:gravity="center"
             android:textColor="@color/onBackground"
-            android:textSize="18dp" />
+            android:textSize="@dimen/textSize18" />
 
     </LinearLayout>
 

@@ -85,7 +85,7 @@ class YandexMetrikaListFragment: Fragment(R.layout.fragment_yandex_metrika_list)
         dialog.setContentView(bindingCustomDialog.root)
         dialog.show()
 
-        bindingCustomDialog.text2.text = accountName
+        bindingCustomDialog.accountName.text = accountName
         bindingCustomDialog.btnCancel.setOnClickListener { dialog.dismiss() }
         bindingCustomDialog.btnConfirm.setOnClickListener {
             accountsViewModel.deleteAccountClicked(accountId)

@@ -21,7 +21,6 @@ sealed class LoginScreen {
     data object PasswordNotCorrect : LoginScreen()
     data object EmptyFields : LoginScreen()
     data object Back : LoginScreen()
-    data object Nothing : LoginScreen()
 }
 class LoginViewModel(
     private val getAllUsersUseCase: GetAllUsersUseCase,
@@ -58,11 +57,6 @@ class LoginViewModel(
 
     fun toResetClicked() {
         _loginScreen.value = LoginScreen.Reset
-    }
-
-    fun backClicked() {
-        _loginScreen.value = LoginScreen.Back
-        _loginScreen.value = LoginScreen.Nothing
     }
 
 }

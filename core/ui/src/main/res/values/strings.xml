@@ -2,9 +2,42 @@
     <string name="app_name">FlexStats</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-
+    <string name="cancel">Отменить</string>
+    <string name="register">Register</string>
     <string name="home">Home</string>
+    <string name="login">Login</string>
+    <string name="user">User</string>
+    <string name="user_name">User Name</string>
+    <string name="user_email">user@mail.ru</string>
     <string name="accounts">Accounts</string>
     <string name="app_project">Add project</string>
     <string name="add_account">Add account</string>
+    <string name="login_here">Login Here</string>
+    <string name="already_member">Already Member? </string>
+    <string name="email">Email</string>
+    <string name="register_now">Register Now</string>
+    <string name="password">Password</string>
+    <string name="not_yet_registered">Not yet registered? </string>
+    <string name="forgot_password">Forgot Password? </string>
+    <string name="reset_password">Reset Password? </string>
+    <string name="reset_here">Reset Here</string>
+    <string name="reset">Reset</string>
+    <string name="yandex_direct">Яндекс директ</string>
+    <string name="yandex_metrika">Яндекс метрика</string>
+    <string name="delete_account">Удалить аккаунт?</string>
+    <string name="delete">Удалить</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="select_account_type">Выберите тип аккаунта</string>
+    <string name="account_email_yandex">Аккаунт/почта яндекса</string>
+    <string name="create_new_account">Создать новый аккаунт?</string>
+    <string name="email_user_exists">Пользователя с таким email не существует</string>
+    <string name="incorrect_password">Пароль неверный</string>
+    <string name="empty_fields">Все поля должны быть заполнены</string>
+    <string name="incorrect_email">Email неверный</string>
+    <string name="start_slogan">Анилитика контекстной рекламы доступная \nв любом месте</string>
+
+    <string name="select_another_account">Укажите другой аккаунт.</string>
+
+
+    <string name="account_not_register">Аккаунт не зарегистрирован в системе яндекс директ.</string>
 </resources>

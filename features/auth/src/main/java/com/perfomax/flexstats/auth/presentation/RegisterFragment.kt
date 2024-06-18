@@ -3,7 +3,6 @@ package com.perfomax.flexstats.auth.presentation
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.perfomax.auth.R
@@ -71,7 +70,6 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
                 is RegisterScreen.EmailExists -> emailExists()
                 is RegisterScreen.EmailNotCorrect -> emailNotCorrect()
                 is RegisterScreen.EmptyFields -> emptyFields()
-                else -> {}
             }
         }
     }
@@ -89,12 +87,12 @@ class RegisterFragment: Fragment(R.layout.fragment_register) {
 
     // Toast space-----------------------------------------------------------------------------
     private fun emailExists(){
-        Toast.makeText(activity, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, com.perfomax.ui.R.string.email_user_exists, Toast.LENGTH_LONG).show()
     }
     private fun emailNotCorrect(){
-        Toast.makeText(activity, "Укажите корректный email", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, com.perfomax.ui.R.string.incorrect_email, Toast.LENGTH_LONG).show()
     }
     private fun emptyFields(){
-        Toast.makeText(activity, "Все поля дожны быть заполнены", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, com.perfomax.ui.R.string.empty_fields, Toast.LENGTH_LONG).show()
     }
 }

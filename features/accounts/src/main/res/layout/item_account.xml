@@ -5,16 +5,15 @@
     android:gravity="center|left"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:id="@+id/rootElement"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingLeft="@dimen/padding10"
+        android:paddingRight="@dimen/padding10"
+        android:paddingTop="@dimen/padding10"
+        android:paddingBottom="@dimen/padding10">
 
         <LinearLayout
             android:orientation="vertical"
@@ -52,22 +51,20 @@
 
         <Button
             android:id="@+id/btn_delete"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/width120"
+            android:layout_height="@dimen/height40"
             android:background="@drawable/button_border"
-            android:layout_marginLeft="10dp"
-            android:text="Удалить"
-            android:textSize="14sp"
+            android:layout_marginLeft="@dimen/margin10"
+            android:text="@string/delete"
+            android:textSize="@dimen/size14"
             android:textColor="@color/onBackground" />
-
-
     </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="5dp" />
+        android:layout_height="@dimen/height5" />
     <Space
         android:layout_width="match_parent"
-        android:layout_height="5dp" />
+        android:layout_height="@dimen/height5" />
 
 </LinearLayout>

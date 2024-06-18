@@ -11,7 +11,6 @@ import javax.inject.Inject
 sealed class ResetScreen {
     data object Login : ResetScreen()
     data object Back : ResetScreen()
-    data object Nothing : ResetScreen()
 }
 
 class ResetViewModel: ViewModel() {
@@ -24,11 +23,6 @@ class ResetViewModel: ViewModel() {
 
     fun showLoginScreen() {
         _resetScreen.value = ResetScreen.Login
-    }
-
-    fun backClicked() {
-        _resetScreen.value = ResetScreen.Back
-        _resetScreen.value = ResetScreen.Nothing
     }
 
 }

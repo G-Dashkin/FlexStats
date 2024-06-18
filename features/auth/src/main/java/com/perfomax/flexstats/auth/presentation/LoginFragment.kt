@@ -1,14 +1,10 @@
 package com.perfomax.flexstats.auth.presentation
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.perfomax.auth.R
 import com.perfomax.auth.databinding.FragmentLoginBinding
@@ -19,7 +15,7 @@ import com.perfomax.flexstats.auth.di.DaggerAuthComponent
 import com.perfomax.flexstats.core.navigation.Router
 import javax.inject.Inject
 
-class LoginFragment(): Fragment(R.layout.fragment_login) {
+class LoginFragment: Fragment(R.layout.fragment_login) {
 
     companion object {
         fun getInstance(): LoginFragment = LoginFragment()
@@ -81,7 +77,6 @@ class LoginFragment(): Fragment(R.layout.fragment_login) {
                 is LoginScreen.PasswordNotCorrect -> passwordNotCorrect()
                 is LoginScreen.EmptyFields -> emptyFields()
                 is LoginScreen.Back -> toBackFragment()
-                else -> {}
             }
         }
     }
@@ -114,12 +109,12 @@ class LoginFragment(): Fragment(R.layout.fragment_login) {
 
     // Toast space-----------------------------------------------------------------------------
     private fun emailNotExists(){
-        Toast.makeText(activity, "Пользователя с таким email не существует", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, com.perfomax.ui.R.string.email_user_exists, Toast.LENGTH_LONG).show()
     }
     private fun passwordNotCorrect(){
-        Toast.makeText(activity, "Пароль неверный", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, com.perfomax.ui.R.string.incorrect_password, Toast.LENGTH_LONG).show()
     }
     private fun emptyFields(){
-        Toast.makeText(activity, "Все поля дожны быть заполнены", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, com.perfomax.ui.R.string.empty_fields, Toast.LENGTH_LONG).show()
     }
 }

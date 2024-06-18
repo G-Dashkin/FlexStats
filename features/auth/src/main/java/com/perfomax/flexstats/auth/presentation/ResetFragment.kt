@@ -2,11 +2,9 @@ package com.perfomax.flexstats.auth.presentation
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.perfomax.auth.R
-import com.perfomax.auth.databinding.FragmentRegisterBinding
 import com.perfomax.auth.databinding.FragmentResetBinding
 import com.perfomax.flexstats.api.AuthFeatureApi
 import com.perfomax.flexstats.auth.di.AuthFeatureDepsProvider
@@ -65,7 +63,6 @@ class ResetFragment: Fragment(R.layout.fragment_reset) {
             when(it) {
                 is ResetScreen.Login -> showLoginScreen()
                 is ResetScreen.Back -> toBackFragment()
-                else -> {}
             }
         }
     }
