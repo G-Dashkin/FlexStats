@@ -26,11 +26,14 @@ import com.perfomax.flexstats.accounts.di.DaggerAccountsComponent
 import com.perfomax.flexstats.api.AccountsFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.core.utils.EMPTY
+import com.perfomax.flexstats.core.utils.METRIKA_LIST_SELECTED
+import com.perfomax.flexstats.core.utils.OUTPUT_ACCESS
 import com.perfomax.flexstats.core.utils.TOKEN_URL_OAUTH
+import com.perfomax.flexstats.core.utils.YANDEX_DIRECT
+import com.perfomax.flexstats.core.utils.YANDEX_METRIKA
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
@@ -74,12 +77,13 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
     }
 
     private fun setViewPager(){
-        val accountList = listOf("Яндекс директ", "Яндекс метрика")
+        val accountList = listOf(
+            getString(com.perfomax.ui.R.string.yandex_direct),
+            getString(com.perfomax.ui.R.string.yandex_metrika))
 
         val fragmentList = listOf(
             YandexDirectListFragment.newInstance(),
-            YandexMetrikaListFragment.newInstance()
-        )
+            YandexMetrikaListFragment.newInstance())
 
         adapter = ViewPagerAdapter(requireActivity(), fragmentList)
         arrayAdapter = ArrayAdapter(requireContext(), R.layout.account_type_item, accountList)
@@ -88,7 +92,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 tab, pos -> tab.text = accountList[pos]
         }.attach()
 
-        if (requireArguments().getBoolean("METRIKA_LIST_SELECTED"))
+        if (requireArguments().getBoolean(METRIKA_LIST_SELECTED))
             binding.viewPager2.post { binding.viewPager2.setCurrentItem(1, true) }
     }
 
@@ -100,13 +104,12 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 is AccountsScreen.AddNewAccount -> showAccountDialog()
                 is AccountsScreen.ProjectNotExists -> projectNotExists()
                 is AccountsScreen.DeleteAccount -> {}
-                is AccountsScreen.Nothing -> {}
             }
         }
     }
 
     private fun showAccountDialog() {
-        val accountList = listOf("yandex_direct", "yandex_metrika")
+        val accountList = listOf(YANDEX_DIRECT, YANDEX_METRIKA)
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         accountDialogBinding = AccountDialogBinding.inflate(inflater)
@@ -125,8 +128,8 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         accountDialogBinding.btnConfirm.setOnClickListener {
 
-            val directAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == "yandex_direct" }
-            val metrikaAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == "yandex_metrika" }
+            val directAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == YANDEX_DIRECT }
+            val metrikaAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == YANDEX_METRIKA }
 
             if (accountDialogBinding.accountForm.text.isEmpty()) emptyAccount()
             else if (accountDialogBinding.metrikaCounterForm.text.isEmpty() && position == 1) emptyCounter()
@@ -158,7 +161,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
-                if (view.title.toString() == "Доступ внешних приложений"){
+                if (view.title.toString() == OUTPUT_ACCESS){
                     webViewDialogBinding.webView.visibility = View.GONE
                 }
                 webViewDialogBinding.closeWebViewButton.visibility = View.VISIBLE
@@ -181,7 +184,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
             )
             delay(200)
 
-            if (accountType == "yandex_metrika")
+            if (accountType == YANDEX_METRIKA)
             router.navigateTo(fragment = accountsFeatureApi.openMetrikaList(), addToBackStack = false)
             else router.navigateTo(fragment = accountsFeatureApi.openDirectList(), addToBackStack = false)
 
@@ -198,19 +201,19 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
     // Toast space-----------------------------------------------------------------------------
     private fun emptyAccount(){
-        Toast.makeText(activity, "Поле \"Аккаунт\" должно быть заполнено", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(com.perfomax.ui.R.string.account_field_empty), Toast.LENGTH_LONG).show()
     }
     private fun emptyCounter(){
-        Toast.makeText(activity, "Поле \"Счетчик метрики\" должно быть заполнено", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(com.perfomax.ui.R.string.metrika_counter_field_empty), Toast.LENGTH_LONG).show()
     }
     private fun accountExists(){
-        Toast.makeText(activity, "Аккаунт с таким названием уже добавлен в данный проект", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(com.perfomax.ui.R.string.account_exists), Toast.LENGTH_LONG).show()
     }
     private fun counterExists(){
-        Toast.makeText(activity, "Счетчик метрики с таким названием уже имеется в данный проект", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(com.perfomax.ui.R.string.account_exists), Toast.LENGTH_LONG).show()
     }
     private fun projectNotExists(){
-        val toast = Toast.makeText(activity, "Для добавления аккаунта необходимо создать проект", Toast.LENGTH_LONG)
+        val toast = Toast.makeText(activity, getString(com.perfomax.ui.R.string.project_must_be_created), Toast.LENGTH_LONG)
         toast.setGravity(Gravity.CENTER, 0, 0)
         toast.show()
     }
@@ -220,7 +223,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         fun getInstance(): AccountsFragment {
             return AccountsFragment().apply {
                 val bundle = Bundle()
-                bundle.putBoolean("METRIKA_LIST_SELECTED", false)
+                bundle.putBoolean(METRIKA_LIST_SELECTED, false)
                 arguments = bundle
             }
         }
@@ -228,7 +231,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         fun getInstanceMetrikaList(): AccountsFragment {
             return AccountsFragment().apply {
                 val bundle = Bundle()
-                bundle.putBoolean("METRIKA_LIST_SELECTED", true)
+                bundle.putBoolean(METRIKA_LIST_SELECTED, true)
                 arguments = bundle
             }
         }

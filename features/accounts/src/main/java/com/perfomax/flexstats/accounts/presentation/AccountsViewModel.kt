@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.accounts.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,7 +19,6 @@ sealed class AccountsScreen {
     data object AddNewAccount : AccountsScreen()
     data class DeleteAccount(val accountId: Int, val accountName: String) : AccountsScreen()
     data object ProjectNotExists : AccountsScreen()
-    data object Nothing : AccountsScreen()
 }
 class AccountsViewModel(
     private val createAccountUseCase: CreateAccountUseCase,
@@ -83,8 +81,6 @@ class AccountsViewModel(
             load()
         }
     }
-
-
 }
 
 class AccountsViewModelFactory @Inject constructor(
