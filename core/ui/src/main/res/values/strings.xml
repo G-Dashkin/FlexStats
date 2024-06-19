@@ -7,6 +7,7 @@
     <string name="home">Home</string>
     <string name="login">Login</string>
     <string name="user">User</string>
+    <string name="metrika_counter">Счетчик метрики:</string>
     <string name="user_name">User Name</string>
     <string name="user_email">user@mail.ru</string>
     <string name="accounts">Accounts</string>

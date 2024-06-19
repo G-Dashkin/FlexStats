@@ -117,14 +117,13 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         dialog.setContentView(accountDialogBinding.root)
         dialog.show()
 
-//        accountDialogBinding.accountForm.setText("imedia-citilink-xiaomi-v")
+        accountDialogBinding.accountForm.setText("imedia-citilink-xiaomi-v")
 
         accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
 
         accountDialogBinding.autoCompleteTxt.setOnItemClickListener { parent, view, position, id ->
             if (position == 1) accountDialogBinding.metrikaCounter.visibility = View.VISIBLE
             else accountDialogBinding.metrikaCounter.visibility = View.GONE
-
 
         accountDialogBinding.btnConfirm.setOnClickListener {
 
@@ -156,12 +155,11 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         webViewDialogBinding.webView.visibility = View.VISIBLE
         webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH+login)
-        CookieManager.getInstance().removeAllCookies(null)
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
 
         webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
-                if (view.title.toString() == OUTPUT_ACCESS){
+                if (view.title.toString() == OUTPUT_ACCESS) {
                     webViewDialogBinding.webView.visibility = View.GONE
                 }
                 webViewDialogBinding.closeWebViewButton.visibility = View.VISIBLE
@@ -187,7 +185,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
             if (accountType == YANDEX_METRIKA)
             router.navigateTo(fragment = accountsFeatureApi.openMetrikaList(), addToBackStack = false)
             else router.navigateTo(fragment = accountsFeatureApi.openDirectList(), addToBackStack = false)
-
         }
         webViewDialogBinding.closeWebViewButton.setOnClickListener { dialog.dismiss() }
     }

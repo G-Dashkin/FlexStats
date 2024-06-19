@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.accounts.presentation
 
+import android.webkit.CookieManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,6 +47,7 @@ class AccountsViewModel(
     }
 
     fun showAddAccountDialog(){
+        CookieManager.getInstance().removeAllCookies(null)
         viewModelScope.launch {
             if (getSelectedProjectUseCase.execute().id == 0 ) {
                 _accountsScreen.value = AccountsScreen.ProjectNotExists

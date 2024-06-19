@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.accounts.presentation
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,14 +8,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.perfomax.accounts.databinding.ItemAccountBinding
+import com.perfomax.flexstats.core.utils.YANDEX_METRIKA
 import com.perfomax.flexstats.models.Account
 
 class AccountsAdapter(
+    private val context: Context,
     private val deleteAccountClick: (Int, String) -> Unit
 ): ListAdapter<Account, RecyclerView.ViewHolder>(AccountsDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return  AccountHolder(binding = ItemAccountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return AccountHolder(binding = ItemAccountBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -26,8 +29,9 @@ class AccountsAdapter(
     inner class AccountHolder(private val binding: ItemAccountBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(account: Account) {
             binding.accountName.text = account.name
-            binding.metrikaCounter.text = "Счетчик метрики: ${account.metrikaCounter}"
-            if (account.accountType == "yandex_metrika") binding.metrikaCounter.visibility = View.VISIBLE
+            binding.metrikaCounter.text = "${context.getString(com.perfomax.ui.R.string.metrika_counter)} " +
+                                          "${account.metrikaCounter}"
+            if (account.accountType == YANDEX_METRIKA) binding.metrikaCounter.visibility = View.VISIBLE
             binding.btnDelete.setOnClickListener { deleteAccountClick.invoke(account.id!!, account.name) }
         }
     }

@@ -52,6 +52,7 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
 
     private fun setAdapter() {
         val adapter = AccountsAdapter(
+            context = requireContext(),
             deleteAccountClick = { accountId, accountName ->
                 accountsViewModel.showDeleteAccountDialog(accountId = accountId, accountName = accountName)
             }
@@ -72,7 +73,6 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
                     showDeleteAccountDialog(accountId = it.accountId, accountName = it.accountName)
                 }
                 is AccountsScreen.ProjectNotExists -> {}
-                is AccountsScreen.Nothing -> {}
             }
         }
     }
