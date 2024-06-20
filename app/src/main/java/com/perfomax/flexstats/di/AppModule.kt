@@ -9,20 +9,24 @@ import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
 import com.perfomax.flexstats.data.datastore.SettingsDataStoreImpl
-import com.perfomax.flexstats.data.network.TokenNetworkImpl
+import com.perfomax.flexstats.data.network.retrofit.YandexAccessToken.YandexAccessYandexAccessTokenNetworkImpl
+import com.perfomax.flexstats.data.network.retrofit.YandexDirectStats.YandexDirectStatsNetworkImpl
 import com.perfomax.flexstats.data.repository.AccountsRepositoryImpl
 import com.perfomax.flexstats.data.repository.AuthRepositoryImpl
 import com.perfomax.flexstats.data.repository.ProjectsRepositoryImpl
+import com.perfomax.flexstats.data.repository.StatsRepositoryImpl
 import com.perfomax.flexstats.data.storage.AccountsStorageImpl
 import com.perfomax.flexstats.data.storage.AuthStorageImpl
 import com.perfomax.flexstats.data.storage.ProjectsStorageImpl
 import com.perfomax.flexstats.data_api.datastore.SettingsDataStore
-import com.perfomax.flexstats.data_api.network.TokenNetwork
+import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
+import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.presentation.navigation.NavigatorLifecycle
 import com.perfomax.flexstats.presentation.navigation.RouterImpl
 import com.perfomax.flexstats.data_api.repository.AuthRepository
 import com.perfomax.flexstats.data_api.repository.ProjectsRepository
+import com.perfomax.flexstats.data_api.repository.StatsRepository
 import com.perfomax.flexstats.data_api.storage.AccountsStorage
 import com.perfomax.flexstats.data_api.storage.AuthStorage
 import com.perfomax.flexstats.data_api.storage.ProjectsStorage
@@ -118,17 +122,30 @@ class AppModule(private val application: Application) {
         projectsStorage: ProjectsStorage,
         accountsStorage: AccountsStorage,
         authStorage: AuthStorage,
-        tokenNetwork: TokenNetwork
+        yandexAccessTokenNetwork: YandexAccessTokenNetwork
     ): AccountsRepository = AccountsRepositoryImpl(
         projectsStorage =  projectsStorage,
         accountsStorage = accountsStorage,
         authStorage = authStorage,
-        tokenNetwork = tokenNetwork
+        yandexAccessTokenNetwork = yandexAccessTokenNetwork
     )
 
     // Network provides----------------------------------------------------------------------------
     @Singleton
     @Provides
-    fun provideNetworkStorage(): TokenNetwork = TokenNetworkImpl()
+    fun provideNetworkStorage(): YandexAccessTokenNetwork = YandexAccessYandexAccessTokenNetworkImpl()
+
+    @Singleton
+    @Provides
+    fun provideYandexDirectStatsNetwork(): YandexDirectStatsNetwork = YandexDirectStatsNetworkImpl()
+
+    // Stats provides-----------------------------------------------------------------------------
+    @Singleton
+    @Provides
+    fun provideStatsRepository(
+        yandexDirectStatsNetwork: YandexDirectStatsNetwork
+    ): StatsRepository = StatsRepositoryImpl(
+        yandexDirectStatsNetwork = yandexDirectStatsNetwork
+    )
 
 }

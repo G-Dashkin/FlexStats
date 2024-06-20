@@ -1,6 +1,6 @@
 package com.perfomax.flexstats.data.repository
 
-import com.perfomax.flexstats.data_api.network.TokenNetwork
+import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.data_api.storage.AccountsStorage
 import com.perfomax.flexstats.data_api.storage.AuthStorage
@@ -12,7 +12,7 @@ class AccountsRepositoryImpl @Inject constructor(
     private val accountsStorage: AccountsStorage,
     private val projectsStorage: ProjectsStorage,
     private val authStorage: AuthStorage,
-    private val tokenNetwork: TokenNetwork
+    private val yandexAccessTokenNetwork: YandexAccessTokenNetwork
 ): AccountsRepository {
     override suspend fun create(account: Account) {
         val authedUserId = authStorage.getAuthUser().id
@@ -29,7 +29,7 @@ class AccountsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createToken(tokenCode: String): String {
-        return tokenNetwork.getToken(tokenCode = tokenCode)
+        return yandexAccessTokenNetwork.getToken(tokenCode = tokenCode)
     }
 
     override suspend fun delete(accountId: Int) {

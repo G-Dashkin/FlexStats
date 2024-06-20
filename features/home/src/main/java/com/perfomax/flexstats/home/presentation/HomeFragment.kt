@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.home.di.DaggerHomeComponent
 import com.perfomax.flexstats.home.di.HomeFeatureDepsProvider
@@ -17,7 +18,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var binding: FragmentHomeBinding
 
     @Inject
+    lateinit var vmFactory: HomeViewModelFactory
+
+    @Inject
     lateinit var router: Router
+
+    private val homeViewModel by viewModels<HomeViewModel> {
+        vmFactory
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +40,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
+
+        binding.clickTest.setOnClickListener {
+            homeViewModel.loadStats()
+        }
     }
 
     companion object {

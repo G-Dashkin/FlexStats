@@ -1,5 +1,5 @@
 package com.perfomax.flexstats.data_api.network
 
-interface TokenNetwork {
+interface YandexAccessTokenNetwork {
     suspend fun getToken(tokenCode: String): String
 }
