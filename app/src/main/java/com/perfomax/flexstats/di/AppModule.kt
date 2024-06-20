@@ -7,6 +7,7 @@ import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.data.database.dao.AccountsDao
 import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
+import com.perfomax.flexstats.data.database.dao.YandexDirectStatsDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
 import com.perfomax.flexstats.data.datastore.SettingsDataStoreImpl
 import com.perfomax.flexstats.data.network.retrofit.YandexAccessToken.YandexAccessYandexAccessTokenNetworkImpl
@@ -137,15 +138,19 @@ class AppModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideYandexDirectStatsNetwork(): YandexDirectStatsNetwork = YandexDirectStatsNetworkImpl()
+    fun provideYandexDirectStatsNetwork(
+        yandexDirectStatsDao: YandexDirectStatsDao
+    ): YandexDirectStatsNetwork = YandexDirectStatsNetworkImpl(yandexDirectStatsDao = yandexDirectStatsDao)
 
     // Stats provides-----------------------------------------------------------------------------
+    @Provides
+    @Singleton
+    fun provideYandexDirectStatsDao(db: AppDatabase): YandexDirectStatsDao = db.yandexDirectStatsDao()
+
     @Singleton
     @Provides
     fun provideStatsRepository(
         yandexDirectStatsNetwork: YandexDirectStatsNetwork
-    ): StatsRepository = StatsRepositoryImpl(
-        yandexDirectStatsNetwork = yandexDirectStatsNetwork
-    )
+    ): StatsRepository = StatsRepositoryImpl(yandexDirectStatsNetwork = yandexDirectStatsNetwork)
 
 }

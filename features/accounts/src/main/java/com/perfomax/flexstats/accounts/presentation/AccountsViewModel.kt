@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.accounts.presentation
 
+import android.util.Log
 import android.webkit.CookieManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -58,6 +59,7 @@ class AccountsViewModel(
     fun addNewAccount(accountName: String, metrikaCounter: String, tokenCode: String, accountType: String){
         viewModelScope.launch {
             val accountToken = createTokenUseCase.execute(tokenCode)
+            Log.d("MyLog", "accountToken: $accountToken")
             createAccountUseCase.execute(
                 Account(
                     name = accountName,
