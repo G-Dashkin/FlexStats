@@ -23,7 +23,6 @@ sealed class ProjectsScreen {
     data class EditProject(val projectId: Int, val currentName: String) : ProjectsScreen()
     data object EmptyProject : ProjectsScreen()
     data object ProjectExists : ProjectsScreen()
-    data object Nothing : ProjectsScreen()
 }
 class ProjectsViewModel(
     private val getUserProjectsUseCase: GetUserProjectsUseCase,

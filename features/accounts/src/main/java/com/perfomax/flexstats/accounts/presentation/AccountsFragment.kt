@@ -136,7 +136,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                   || metrikaAccounts?.any { it.name == accountDialogBinding.accountForm.text.toString() && position == 1 } == true
             ) accountExists()
             else if (position != 0 && accountsViewModel.accountsList.value?.any {
-                    it.metrikaCounter == accountDialogBinding.metrikaCounterForm.text.toString() } == true) counterExists()
+                     it.metrikaCounter == accountDialogBinding.metrikaCounterForm.text.toString() } == true) counterExists()
             else {
                 val login = accountDialogBinding.accountForm.text.toString()
                 dialog.dismiss()
@@ -170,7 +170,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         lifecycleScope.launch {
             while (!webViewUrl.contains("&cid=")){
                 webViewUrl = webViewDialogBinding.webView.url.toString()
-                delay(100)
+                delay(200)
             }
             val tokenCode = webViewUrl.split("=")[1].split("&")[0]
             dialog.dismiss()
@@ -181,7 +181,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 metrikaCounter = metrikaCounter?:EMPTY
             )
             delay(200)
-
             if (accountType == YANDEX_METRIKA)
             router.navigateTo(fragment = accountsFeatureApi.openMetrikaList(), addToBackStack = false)
             else router.navigateTo(fragment = accountsFeatureApi.openDirectList(), addToBackStack = false)

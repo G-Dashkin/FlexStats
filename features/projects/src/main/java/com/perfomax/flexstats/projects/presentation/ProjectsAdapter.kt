@@ -1,14 +1,12 @@
 package com.perfomax.flexstats.projects.presentation
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.perfomax.flexstats.models.Project
-import com.perfomax.projects.R
 import com.perfomax.projects.databinding.ItemProjectBinding
 
 class ProjectsAdapter(

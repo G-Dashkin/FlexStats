@@ -30,31 +30,4 @@ class SettingsDataStoreImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    //    override suspend fun getAuthUser(): User {
-//        val preference = context.dataStore.data.first()
-//        return preference[USER]?.parsStringToUser()?: User(-1, "","","", false)
-//    }
-//
-//    override suspend fun setAuthUser(authUser: User) {
-//        context.dataStore.edit { preference ->
-//            preference[USER] = authUser.parsUserToString()
-//        }
-//    }
-//
-//    override suspend fun setAuth() {
-//        context.dataStore.edit { preference ->
-//            preference[AUTH] = true
-//        }
-//    }
-//
-//    override suspend fun getAuth(): Boolean {
-//        val preference = context.dataStore.data.first()
-//        return preference[AUTH]?:false
-//    }
-//
-//    override suspend fun logout() {
-//        context.dataStore.edit { preference ->
-//            preference[AUTH] = false
-//        }
-//    }
 }

@@ -100,5 +100,4 @@ class YandexMetrikaListFragment: Fragment(R.layout.fragment_yandex_metrika_list)
         return dialog
     }
 
-
 }

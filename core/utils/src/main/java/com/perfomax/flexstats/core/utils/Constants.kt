@@ -2,6 +2,10 @@ package com.perfomax.flexstats.core.utils
 
 const val EMPTY = ""
 
+const val BASE_OAUTH_TOKEN_URL = "https://oauth.yandex.ru/"
+const val CLIENT_ID = "4f078917869842f2932a9d30fa5d0bb5"
+const val CLIENT_SECRET = "b7c67382bff24f2b89ccecc5e7ade0a4"
+
 const val OUTPUT_ACCESS = "Доступ внешних приложений"
 const val YANDEX_METRIKA = "yandex_metrika"
 const val YANDEX_DIRECT = "yandex_direct"

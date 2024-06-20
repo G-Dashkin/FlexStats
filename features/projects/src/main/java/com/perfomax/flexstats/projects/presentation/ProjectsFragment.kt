@@ -70,7 +70,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
             itemProjectClick = {
                 lifecycleScope.launch {
                     projectsViewModel.selectProject(it)
-                    delay(100)
+                    delay(200)
                     parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                 }
             },
@@ -100,14 +100,13 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                 is ProjectsScreen.EditProject -> {
                     lifecycleScope.launch {
                         showProjectDialog(projectId = it.projectId, currentName = it.currentName)
-                        delay(100)
+                        delay(200)
                         parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                     }
                 }
                 is ProjectsScreen.DeleteProject -> {
                     showDeleteProjectDialog(projectId = it.projectId, projectName = it.projectName)
                 }
-                is ProjectsScreen.Nothing -> {}
             }
         }
     }
@@ -130,7 +129,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                     val projectName = projectDialogBinding.projectNameForm.text
                     if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName.toString())
                     else projectsViewModel.addNewProject(projectName = projectName.toString())
-                    delay(100)
+                    delay(200)
                     parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                     dialog.dismiss()
                 }
@@ -149,7 +148,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         bindingCustomDialog.btnConfirm.setOnClickListener {
             lifecycleScope.launch {
                 projectsViewModel.deleteProjectClicked(projectId)
-                delay(100)
+                delay(200)
                 parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                 dialog.dismiss()
             }
@@ -165,10 +164,10 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
 
     // Toast space-----------------------------------------------------------------------------
     private fun emptyProject(){
-        Toast.makeText(activity, "Поле \"Проект\" должно быть заполнено", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(com.perfomax.ui.R.string.project_empty_field), Toast.LENGTH_LONG).show()
     }
 
     private fun projectExists(){
-        Toast.makeText(activity, "Проект с таким названием уже существует", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(com.perfomax.ui.R.string.project_exists), Toast.LENGTH_LONG).show()
     }
 }
