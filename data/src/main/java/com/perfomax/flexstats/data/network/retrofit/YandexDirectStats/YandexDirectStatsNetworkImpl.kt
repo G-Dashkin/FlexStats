@@ -87,7 +87,8 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
                 account = "dddd",
                 impressions = 1000,
                 clicks = 100,
-                cost = "14".toFloat()
+                cost = "14".toFloat(),
+                project_id = 0
             ))
         }
     }

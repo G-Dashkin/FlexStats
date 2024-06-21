@@ -18,7 +18,9 @@ data class YandexDirectStatsEntity(
     @ColumnInfo(name = "clicks")
     val clicks: Int,
     @ColumnInfo(name = "cost")
-    val cost: Float
+    val cost: Float,
+    @ColumnInfo(name = "project_id")
+    val project_id: Int
 ) {
     companion object {
         const val TABLE_NAME = "yandex_direct"
@@ -28,5 +30,6 @@ data class YandexDirectStatsEntity(
         const val IMPRESSIONS = "impressions"
         const val CLICKS = "clicks"
         const val COST = "cost"
+        const val PROJECT_ID = "project_id"
     }
 }
