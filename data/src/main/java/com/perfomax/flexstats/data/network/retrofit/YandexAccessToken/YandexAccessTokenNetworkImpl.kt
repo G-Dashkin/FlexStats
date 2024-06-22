@@ -7,7 +7,7 @@ import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class YandexAccessYandexAccessTokenNetworkImpl: YandexAccessTokenNetwork {
+class YandexAccessTokenNetworkImpl: YandexAccessTokenNetwork {
 
     override suspend fun getToken(tokenCode: String): String  {
 

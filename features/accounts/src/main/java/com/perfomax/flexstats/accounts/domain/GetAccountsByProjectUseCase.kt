@@ -9,6 +9,6 @@ class GetAccountsByProjectUseCase @Inject constructor(
     private val repository: AccountsRepository
 ): UseCaseWithoutParams<List<Account>> {
     override suspend fun execute(): List<Account> {
-        return repository.getUserAll()
+        return repository.getAllByUser()
     }
 }

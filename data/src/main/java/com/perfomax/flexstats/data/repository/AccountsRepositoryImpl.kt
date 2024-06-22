@@ -36,7 +36,7 @@ class AccountsRepositoryImpl @Inject constructor(
         accountsStorage.delete(accountId = accountId)
     }
 
-    override suspend fun getUserAll(): List<Account> {
+    override suspend fun getAllByUser(): List<Account> {
         val authedUserId = authStorage.getAuthUser().id
         val selectedProject = projectsStorage.getSelectedProject(userId = authedUserId?:0)
         return accountsStorage.getAllAccountsOfUser(projectId = selectedProject.id?:0)

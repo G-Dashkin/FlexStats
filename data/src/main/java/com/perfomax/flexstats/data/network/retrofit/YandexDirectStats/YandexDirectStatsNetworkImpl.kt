@@ -5,20 +5,23 @@ import com.perfomax.flexstats.core.utils.DIRECT_API_TOKEN_URL
 import com.perfomax.flexstats.data.database.dao.YandexDirectStatsDao
 import com.perfomax.flexstats.data.database.entities.YandexDirectStatsEntity
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
-import com.perfomax.flexstats.models.Stats
+import com.perfomax.flexstats.data_api.storage.AuthStorage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 class YandexDirectStatsNetworkImpl @Inject constructor(
-    private val yandexDirectStatsDao: YandexDirectStatsDao
+    private val yandexDirectStatsDao: YandexDirectStatsDao,
+    private val authStorage: AuthStorage
 ): YandexDirectStatsNetwork {
 
-//    private val flexStatDao = db.flexStatDao()
     override suspend fun getStats(date: String, account: String, token: String) {
 
         val bodyFields = mapOf(
@@ -48,48 +51,47 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
             .build()
         val yandexDirectStatsApi = retrofit.create(YandexDirectStatsApi::class.java)
 
-
         val yandexDirectStatsCall = yandexDirectStatsApi.getData(
             body_fields = bodyFields,
             login = account,
             token = "Bearer $token"
         )
-        GlobalScope.launch {
-            var result = yandexDirectStatsCall.execute()
-            var count = 1
-            while (result.code() != 200) {
-                result = yandexDirectStatsCall.clone().execute()
-                count = count.inc()
-                Log.d("MyLog", result.errorBody()!!.charStream().readText())
-                delay(1000)
-                Log.d("MyLog", "----------------------------------------------------------")
-            }
 
-            val request = yandexDirectStatsCall.clone().request()
-            val newClient = OkHttpClient()
-            val dataYD = newClient.newCall(request).execute()
+        var result = yandexDirectStatsCall.execute()
+        var count = 1
+        while (result.code() != 200) {
+            result = yandexDirectStatsCall.clone().execute()
+            count = count.inc()
+            delay(100)
+        }
 
-            val yandexData = mutableListOf<List<String>>()
-            dataYD.body.also {
-                it?.byteStream()?.bufferedReader()?.forEachLine { stats ->
-                    yandexData.add(stats.split("\\s".toRegex()))
-                }
-            }
-            Log.d("MyLog", yandexData[0].toString())
-            yandexData.removeAt(0)
-            yandexData.forEach {
-                Log.d("MyLog", it.toString())
-            }
+        val request = yandexDirectStatsCall.clone().request()
+        val newClient = OkHttpClient()
+        val dataYD = newClient.newCall(request).execute()
 
-            yandexDirectStatsDao.insert(YandexDirectStatsEntity(
-                id = 0,
-                date = "dfdfd",
-                account = "dddd",
-                impressions = 1000,
-                clicks = 100,
-                cost = "14".toFloat(),
-                project_id = 0
-            ))
+        val yandexData = mutableListOf<List<String>>()
+        dataYD.body.also {
+            it?.byteStream()?.bufferedReader()?.forEachLine { stats ->
+                yandexData.add(stats.split("\\s".toRegex()))
+            }
+        }
+
+        yandexData.removeAt(0)
+        Log.d("MyLog", yandexData.toString())
+        yandexData.forEach { dataList ->
+            Log.d("MyLog", dataList.toString())
+            yandexDirectStatsDao.insert(
+                YandexDirectStatsEntity(
+                    id = 0,
+                    date = date,
+                    account = account,
+                    campaign = dataList[0],
+                    impressions = dataList[1].toInt(),
+                    clicks = dataList[2].toInt(),
+                    cost = dataList[3].toDouble(),
+                    project_id = authStorage.getAuthUser().id?:0
+                )
+            )
         }
     }
 }

@@ -10,7 +10,7 @@ import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.database.dao.YandexDirectStatsDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
 import com.perfomax.flexstats.data.datastore.SettingsDataStoreImpl
-import com.perfomax.flexstats.data.network.retrofit.YandexAccessToken.YandexAccessYandexAccessTokenNetworkImpl
+import com.perfomax.flexstats.data.network.retrofit.YandexAccessToken.YandexAccessTokenNetworkImpl
 import com.perfomax.flexstats.data.network.retrofit.YandexDirectStats.YandexDirectStatsNetworkImpl
 import com.perfomax.flexstats.data.repository.AccountsRepositoryImpl
 import com.perfomax.flexstats.data.repository.AuthRepositoryImpl
@@ -33,6 +33,8 @@ import com.perfomax.flexstats.data_api.storage.AuthStorage
 import com.perfomax.flexstats.data_api.storage.ProjectsStorage
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -134,13 +136,17 @@ class AppModule(private val application: Application) {
     // Network provides----------------------------------------------------------------------------
     @Singleton
     @Provides
-    fun provideNetworkStorage(): YandexAccessTokenNetwork = YandexAccessYandexAccessTokenNetworkImpl()
+    fun provideNetworkStorage(): YandexAccessTokenNetwork = YandexAccessTokenNetworkImpl()
 
     @Singleton
     @Provides
     fun provideYandexDirectStatsNetwork(
-        yandexDirectStatsDao: YandexDirectStatsDao
-    ): YandexDirectStatsNetwork = YandexDirectStatsNetworkImpl(yandexDirectStatsDao = yandexDirectStatsDao)
+        yandexDirectStatsDao: YandexDirectStatsDao,
+        authStorage: AuthStorage
+    ): YandexDirectStatsNetwork = YandexDirectStatsNetworkImpl(
+        yandexDirectStatsDao = yandexDirectStatsDao,
+        authStorage = authStorage
+    )
 
     // Stats provides-----------------------------------------------------------------------------
     @Provides
@@ -150,7 +156,13 @@ class AppModule(private val application: Application) {
     @Singleton
     @Provides
     fun provideStatsRepository(
-        yandexDirectStatsNetwork: YandexDirectStatsNetwork
-    ): StatsRepository = StatsRepositoryImpl(yandexDirectStatsNetwork = yandexDirectStatsNetwork)
+        yandexDirectStatsNetwork: YandexDirectStatsNetwork,
+        yandexDirectStatsDao: YandexDirectStatsDao,
+        accountsRepository: AccountsRepository
+    ): StatsRepository = StatsRepositoryImpl(
+        yandexDirectStatsNetwork = yandexDirectStatsNetwork,
+        yandexDirectStatsDao = yandexDirectStatsDao,
+        accountsRepository = accountsRepository
+    )
 
 }

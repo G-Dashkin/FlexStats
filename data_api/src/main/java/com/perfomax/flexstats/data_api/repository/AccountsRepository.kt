@@ -6,5 +6,5 @@ interface AccountsRepository {
     suspend fun create(account: Account)
     suspend fun createToken(tokenCode: String): String
     suspend fun delete(accountId: Int)
-    suspend fun getUserAll(): List<Account>
+    suspend fun getAllByUser(): List<Account>
 }

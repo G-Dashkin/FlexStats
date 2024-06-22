@@ -1,9 +1,8 @@
 package com.perfomax.flexstats.data_api.storage
 
-import com.perfomax.flexstats.models.Project
-import com.perfomax.flexstats.models.Stats
+import com.perfomax.flexstats.models.YandexDirectStats
 
 interface YandexDirectStatsStorage {
-    suspend fun add(project: Stats)
-    suspend fun getAllUserProjects(userId: Int): List<Stats>
+    suspend fun add(project: YandexDirectStats)
+    suspend fun getAllUserProjects(): List<YandexDirectStats>
 }
