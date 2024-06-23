@@ -24,11 +24,18 @@ class StatsAdapter(): ListAdapter<YandexDirectStats, RecyclerView.ViewHolder>(St
 
     inner class StatsHolder(private val binding: ItemStatsBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(stats: YandexDirectStats) {
-            binding.textDate.text = stats.date
-            binding.textClicks.text = stats.clicks.toString()
-            binding.textCost.text = stats.cost.toString()
-            binding.textTransactions.text = "0"
-            binding.textRevenue.text = "0.0"
+            binding.valueDate.text = stats.date
+
+            binding.valueImpressions.text = stats.impressions.toString()
+            binding.valueClicks.text = stats.clicks.toString()
+            binding.valueCosts.text = stats.cost.toString()
+
+            binding.valueTransactions.text
+            binding.valueRevenue.text
+
+//            binding.valueCPC.text = (stats.cost!! / stats.impressions?.toDouble()!!).toString()
+            binding.valueCR.text
+            binding.valueDRR
         }
     }
 

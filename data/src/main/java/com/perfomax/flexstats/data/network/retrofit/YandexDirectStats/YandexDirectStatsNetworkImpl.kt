@@ -2,27 +2,23 @@ package com.perfomax.flexstats.data.network.retrofit.YandexDirectStats
 
 import android.util.Log
 import com.perfomax.flexstats.core.utils.DIRECT_API_TOKEN_URL
-import com.perfomax.flexstats.data.database.dao.YandexDirectStatsDao
+import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data.database.entities.YandexDirectStatsEntity
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.storage.AuthStorage
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import com.perfomax.flexstats.models.YandexDirectStats
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 class YandexDirectStatsNetworkImpl @Inject constructor(
-    private val yandexDirectStatsDao: YandexDirectStatsDao,
+    private val statsDao: StatsDao,
     private val authStorage: AuthStorage
 ): YandexDirectStatsNetwork {
 
-    override suspend fun getStats(date: String, account: String, token: String) {
+    override suspend fun getStats(date: String, account: String, token: String): List<YandexDirectStats> {
 
         val bodyFields = mapOf(
             "params" to mapOf(
@@ -69,29 +65,43 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
         val newClient = OkHttpClient()
         val dataYD = newClient.newCall(request).execute()
 
-        val yandexData = mutableListOf<List<String>>()
+        val yandexStringsData = mutableListOf<List<String>>()
         dataYD.body.also {
             it?.byteStream()?.bufferedReader()?.forEachLine { stats ->
-                yandexData.add(stats.split("\\s".toRegex()))
+                yandexStringsData.add(stats.split("\\s".toRegex()))
             }
         }
+        yandexStringsData.removeAt(0)
 
-        yandexData.removeAt(0)
-        Log.d("MyLog", yandexData.toString())
-        yandexData.forEach { dataList ->
-            Log.d("MyLog", dataList.toString())
-            yandexDirectStatsDao.insert(
-                YandexDirectStatsEntity(
-                    id = 0,
-                    date = date,
-                    account = account,
-                    campaign = dataList[0],
-                    impressions = dataList[1].toInt(),
-                    clicks = dataList[2].toInt(),
-                    cost = dataList[3].toDouble(),
-                    project_id = authStorage.getAuthUser().id?:0
-                )
-            )
+        val yandexData = mutableListOf<YandexDirectStats>()
+
+        yandexStringsData.forEach {
+            yandexData.add(YandexDirectStats(
+                date = date,
+                account = account,
+                campaign = it[0],
+                impressions = it[1].toInt(),
+                clicks = it[2].toInt(),
+                cost = it[3].toDouble()
+            ))
         }
+
+        return yandexData
+//        Log.d("MyLog", yandexData.toString())
+//        yandexData.forEach { dataList ->
+//            Log.d("MyLog", dataList.toString())
+//            statsDao.insertYandexDirect(
+//                YandexDirectStatsEntity(
+//                    id = 0,
+//                    date = date,
+//                    account = account,
+//                    campaign = dataList[0],
+//                    impressions = dataList[1].toInt(),
+//                    clicks = dataList[2].toInt(),
+//                    cost = dataList[3].toDouble(),
+//                    project_id = authStorage.getAuthUser().id?:0
+//                )
+//            )
+//        }
     }
 }

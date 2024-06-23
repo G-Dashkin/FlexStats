@@ -5,24 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = YandexDirectStatsEntity.TABLE_NAME)
-data class YandexDirectStatsEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int,
+data class StatsEntity(
     @ColumnInfo(name = "date")
     val date: String,
-    @ColumnInfo(name = "account")
-    val account: String,
-    @ColumnInfo(name = "campaign")
-    val campaign: String,
-    @ColumnInfo(name = "impressions")
-    val impressions: Int,
-    @ColumnInfo(name = "clicks")
-    val clicks: Int,
-    @ColumnInfo(name = "cost")
-    val cost: Double,
-    @ColumnInfo(name = "project_id")
-    val project_id: Int
 ) {
     companion object {
         const val TABLE_NAME = "yandex_direct"

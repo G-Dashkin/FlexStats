@@ -6,16 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.perfomax.flexstats.home.domain.usecases.GetStatsUseCase
+import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
+import com.perfomax.flexstats.home.domain.usecases.GetYandexDirectUseCase
+import com.perfomax.flexstats.home.domain.usecases.GetYandexMetrikaUseCase
 import com.perfomax.flexstats.home.domain.usecases.LoadStatsUseCase
-import com.perfomax.flexstats.models.Account
 import com.perfomax.flexstats.models.YandexDirectStats
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomeViewModel(
     private val loadStatsUseCase: LoadStatsUseCase,
-    private val getStatsUseCase: GetStatsUseCase
+    private val getYandexDirectUseCase: GetYandexDirectUseCase,
+    private val getYandexMetrikaUseCase: GetYandexMetrikaUseCase,
+    private val getGeneralUseCase: GetGeneralUseCase
 ): ViewModel() {
 
     private val _statsList = MutableLiveData<List<YandexDirectStats>>()
@@ -25,13 +28,14 @@ class HomeViewModel(
     val homeScreen: LiveData<YandexDirectStats> = _homeScreen
 
     init {
-        load()
+//        load()
     }
 
     private fun load() {
         viewModelScope.launch {
-            val stats = getStatsUseCase.execute()
-            _statsList.postValue(stats)
+            getYandexDirectUseCase.execute()
+            val stats = getYandexDirectUseCase.execute()
+//            _statsList.postValue(stats)
         }
     }
 
@@ -42,19 +46,31 @@ class HomeViewModel(
         }
     }
 
-    fun getStats() {
+    fun getYandexDirect() {
         viewModelScope.launch {
-            val stats = getStatsUseCase.execute()
-            _statsList.postValue(stats)
+            getYandexDirectUseCase.execute()
         }
     }
 
+    fun getYandexMetrika() {
+        viewModelScope.launch {
+            getYandexMetrikaUseCase.execute()
+        }
+    }
+
+    fun getGeneral() {
+        viewModelScope.launch {
+            getGeneralUseCase.execute()
+        }
+    }
 
 }
 
 class HomeViewModelFactory @Inject constructor(
     private val loadStatsUseCase: LoadStatsUseCase,
-    private val getStatsUseCase: GetStatsUseCase
+    private val getYandexDirectUseCase: GetYandexDirectUseCase,
+    private val getYandexMetrikaUseCase: GetYandexMetrikaUseCase,
+    private val getGeneralUseCase: GetGeneralUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -63,7 +79,9 @@ class HomeViewModelFactory @Inject constructor(
     ): T {
         return HomeViewModel(
             loadStatsUseCase = loadStatsUseCase,
-            getStatsUseCase = getStatsUseCase
+            getYandexDirectUseCase = getYandexDirectUseCase,
+            getYandexMetrikaUseCase = getYandexMetrikaUseCase,
+            getGeneralUseCase = getGeneralUseCase
         ) as T
     }
 }
