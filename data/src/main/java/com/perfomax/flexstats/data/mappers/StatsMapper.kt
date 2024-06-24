@@ -9,7 +9,6 @@ internal fun YandexDirectStatsEntity.toDomain(): YandexDirectStats {
     return YandexDirectStats (
         date = date,
         account = account,
-        campaign = campaign,
         impressions = impressions,
         cost = cost,
         clicks = clicks,
@@ -22,7 +21,6 @@ internal fun YandexDirectStats.toDomain(): YandexDirectStatsEntity {
         id = id?:0,
         date = date?:"",
         account = account?:"",
-        campaign = campaign?:"",
         impressions = impressions?:0,
         cost = cost?:0.0,
         clicks = clicks?:0,

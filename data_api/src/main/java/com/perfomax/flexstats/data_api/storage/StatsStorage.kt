@@ -4,7 +4,7 @@ import com.perfomax.flexstats.models.YandexDirectStats
 
 interface StatsStorage {
 
-    suspend fun addData(data: List<YandexDirectStats>)
+    suspend fun addYandexDirectData(data: List<YandexDirectStats>)
 
     suspend fun getYD()
     suspend fun getYM()

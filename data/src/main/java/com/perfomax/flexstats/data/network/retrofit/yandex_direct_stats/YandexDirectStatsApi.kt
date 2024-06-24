@@ -1,4 +1,4 @@
-package com.perfomax.flexstats.data.network.retrofit.YandexDirectStats
+package com.perfomax.flexstats.data.network.retrofit.yandex_direct_stats
 
 import retrofit2.Call
 import retrofit2.http.Body

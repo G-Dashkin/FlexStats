@@ -1,4 +1,4 @@
-package com.perfomax.flexstats.data.network.retrofit.YandexAccessToken
+package com.perfomax.flexstats.data.network.retrofit.yandex_access_token
 
 import com.perfomax.flexstats.core.utils.BASE_OAUTH_TOKEN_URL
 import com.perfomax.flexstats.core.utils.CLIENT_ID

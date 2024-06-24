@@ -13,8 +13,6 @@ data class YandexDirectStatsEntity(
     val date: String,
     @ColumnInfo(name = "account")
     val account: String,
-    @ColumnInfo(name = "campaign")
-    val campaign: String,
     @ColumnInfo(name = "impressions")
     val impressions: Int,
     @ColumnInfo(name = "clicks")
@@ -29,7 +27,6 @@ data class YandexDirectStatsEntity(
         const val ID = "id"
         const val DATE = "date"
         const val ACCOUNT = "account"
-        const val CAMPAIGN = "campaign"
         const val IMPRESSIONS = "impressions"
         const val CLICKS = "clicks"
         const val COST = "cost"

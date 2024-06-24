@@ -1,4 +1,4 @@
-package com.perfomax.flexstats.data.network.retrofit.YandexAccessToken
+package com.perfomax.flexstats.data.network.retrofit.yandex_access_token
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

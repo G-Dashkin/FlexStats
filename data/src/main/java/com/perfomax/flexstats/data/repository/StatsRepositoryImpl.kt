@@ -2,6 +2,7 @@ package com.perfomax.flexstats.data.repository
 
 import android.util.Log
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
+import com.perfomax.flexstats.data_api.network.YandexMetrikaStatsNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.data_api.repository.StatsRepository
 import com.perfomax.flexstats.data_api.storage.StatsStorage
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class StatsRepositoryImpl @Inject constructor(
     private val accountsRepository: AccountsRepository,
     private val yandexDirectStatsNetwork: YandexDirectStatsNetwork,
+    private val yandexMetrikaStatsNetwork: YandexMetrikaStatsNetwork,
     private val statsStorage: StatsStorage,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): StatsRepository {
@@ -27,19 +29,29 @@ class StatsRepositoryImpl @Inject constructor(
         // выгрузка яндкес директ
         accountsList.forEach { account ->
             // выгрузка по апи, получение статистики по аккаунту
-            val yandexDirectStats = yandexDirectStatsNetwork.getStats(
+            if (account.accountType == "yandex_direct") {
+                val yandexDirectStats = yandexDirectStatsNetwork.getStats(
                     date = defaultDate,
                     account = account.name,
+                    token = account.accountToken ?: ""
+                )
+                Log.d("MyLog", "Update Stats--------------------------------------------------")
+                yandexDirectStats.forEach { Log.d("MyLog", it.toString()) }
+                // Загрузка в таблицу yandex_direct (через сторадж)
+                statsStorage.addYandexDirectData(yandexDirectStats)
+            }
+
+            if (account.accountType == "yandex_metrika") {
+
+                yandexMetrikaStatsNetwork.getStats(
+                    date = defaultDate,
+                    metrikaCounter = account.metrikaCounter?:"",
                     token = account.accountToken?:""
                 )
-
-            Log.d("MyLog", "Update Stats--------------------------------------------------")
-            yandexDirectStats.forEach {
-                Log.d("MyLog", it.toString())
             }
-            // Загрузка в базу (через сторадж)
-            statsStorage.addData(yandexDirectStats)
         }
+        dataProcessing()
+    }
         // -------------------------------------------------------------------------------------
         // выгрузка яндкес метрика
         // counterList.forEach {}
@@ -47,8 +59,7 @@ class StatsRepositoryImpl @Inject constructor(
         // Вызов внутреннего метода для загрузки в "general_stats"
 
 
-        dataProcessing()
-    }
+
 
     override suspend fun getYandexDirectStats() {
         statsStorage.getYD()
@@ -63,6 +74,8 @@ class StatsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun dataProcessing() {
+//        val yandexDidectDate = statsStorage.getYD()
+//        val yandexMetrikaDate = statsStorage.getYM()
 
     }
 
@@ -71,5 +84,4 @@ class StatsRepositoryImpl @Inject constructor(
 //        return@withContext yandexDirectStatsDao.getData().map { it.toDomain() }
         return@withContext listOf<YandexDirectStats>()
     }
-
 }

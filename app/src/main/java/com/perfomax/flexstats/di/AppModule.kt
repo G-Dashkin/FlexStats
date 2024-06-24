@@ -10,8 +10,9 @@ import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
 import com.perfomax.flexstats.data.datastore.SettingsDataStoreImpl
-import com.perfomax.flexstats.data.network.retrofit.YandexAccessToken.YandexAccessTokenNetworkImpl
-import com.perfomax.flexstats.data.network.retrofit.YandexDirectStats.YandexDirectStatsNetworkImpl
+import com.perfomax.flexstats.data.network.retrofit.yandex_access_token.YandexAccessTokenNetworkImpl
+import com.perfomax.flexstats.data.network.retrofit.yandex_direct_stats.YandexDirectStatsNetworkImpl
+import com.perfomax.flexstats.data.network.retrofit.yandex_metrika_stats.YandexMetrikaStatsNetworkImpl
 import com.perfomax.flexstats.data.repository.AccountsRepositoryImpl
 import com.perfomax.flexstats.data.repository.AuthRepositoryImpl
 import com.perfomax.flexstats.data.repository.ProjectsRepositoryImpl
@@ -23,6 +24,7 @@ import com.perfomax.flexstats.data.storage.StatsStorageImpl
 import com.perfomax.flexstats.data_api.datastore.SettingsDataStore
 import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
+import com.perfomax.flexstats.data_api.network.YandexMetrikaStatsNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.presentation.navigation.NavigatorLifecycle
 import com.perfomax.flexstats.presentation.navigation.RouterImpl
@@ -148,6 +150,16 @@ class AppModule(private val application: Application) {
         authStorage = authStorage
     )
 
+    @Singleton
+    @Provides
+    fun provideYandexMetrikaStatsNetwork(
+        statsDao: StatsDao,
+        authStorage: AuthStorage
+    ): YandexMetrikaStatsNetwork = YandexMetrikaStatsNetworkImpl(
+        statsDao = statsDao,
+        authStorage = authStorage
+    )
+
     // Stats provides-----------------------------------------------------------------------------
     @Provides
     @Singleton
@@ -163,10 +175,12 @@ class AppModule(private val application: Application) {
     @Provides
     fun provideStatsRepository(
         yandexDirectStatsNetwork: YandexDirectStatsNetwork,
+        yandexMetrikaStatsNetwork: YandexMetrikaStatsNetwork,
         accountsRepository: AccountsRepository,
         statsStorage: StatsStorage
     ): StatsRepository = StatsRepositoryImpl(
         yandexDirectStatsNetwork = yandexDirectStatsNetwork,
+        yandexMetrikaStatsNetwork = yandexMetrikaStatsNetwork,
         accountsRepository = accountsRepository,
         statsStorage = statsStorage
     )

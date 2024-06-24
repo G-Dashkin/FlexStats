@@ -10,7 +10,7 @@ import javax.inject.Inject
 class StatsStorageImpl @Inject constructor(
     private val statsDao: StatsDao
 ): StatsStorage {
-    override suspend fun addData(data: List<YandexDirectStats>) {
+    override suspend fun addYandexDirectData(data: List<YandexDirectStats>) {
         statsDao.removeYandexDirectData(
             date = data.first().date?:"",
             projectId = data.first().project_id?:0

@@ -13,12 +13,6 @@ data class YandexMetrikaStatsEntity(
     val date: String,
     @ColumnInfo(name = "counter")
     val counter: String,
-    @ColumnInfo(name = "medium")
-    val medium: String,
-    @ColumnInfo(name = "source")
-    val source: String,
-    @ColumnInfo(name = "campaign")
-    val campaign: String,
     @ColumnInfo(name = "transactions")
     val transactions: Int,
     @ColumnInfo(name = "revenue")
@@ -31,9 +25,6 @@ data class YandexMetrikaStatsEntity(
         const val ID = "id"
         const val DATE = "date"
         const val COUNTER = "counter"
-        const val MEDIUM = "medium"
-        const val SOURCE = "source"
-        const val CAMPAIGN = "campaign"
         const val TRANSACTIONS = "transactions"
         const val REVENUE = "revenue"
         const val PROJECT_ID = "project_id"

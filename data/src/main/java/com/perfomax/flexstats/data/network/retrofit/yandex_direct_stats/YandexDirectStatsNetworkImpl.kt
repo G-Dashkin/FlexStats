@@ -1,9 +1,7 @@
-package com.perfomax.flexstats.data.network.retrofit.YandexDirectStats
+package com.perfomax.flexstats.data.network.retrofit.yandex_direct_stats
 
-import android.util.Log
-import com.perfomax.flexstats.core.utils.DIRECT_API_TOKEN_URL
+import com.perfomax.flexstats.core.utils.DIRECT_API_BASE_URL
 import com.perfomax.flexstats.data.database.dao.StatsDao
-import com.perfomax.flexstats.data.database.entities.YandexDirectStatsEntity
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.storage.AuthStorage
 import com.perfomax.flexstats.models.YandexDirectStats
@@ -27,7 +25,6 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
                     "DateTo" to date
                 ),
                 "FieldNames" to arrayListOf(
-                    "CampaignName",
                     "Impressions",
                     "Clicks",
                     "Cost"
@@ -42,7 +39,7 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
         )
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(DIRECT_API_TOKEN_URL)
+            .baseUrl(DIRECT_API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val yandexDirectStatsApi = retrofit.create(YandexDirectStatsApi::class.java)
@@ -79,10 +76,9 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
             yandexData.add(YandexDirectStats(
                 date = date,
                 account = account,
-                campaign = it[0],
-                impressions = it[1].toInt(),
-                clicks = it[2].toInt(),
-                cost = it[3].toDouble()
+                impressions = it[0].toInt(),
+                clicks = it[1].toInt(),
+                cost = it[2].toDouble()
             ))
         }
 
