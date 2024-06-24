@@ -13,6 +13,7 @@ import com.perfomax.flexstats.models.YandexDirectStats
 import com.perfomax.flexstats.models.YandexMetrikaStats
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -34,32 +35,39 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
 //            "limit" to 10000
 //        )
 
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor).build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl(METRIKA_API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
         val yandexMetrikaStatsApi = retrofit.create(YandexMetrikaStatsApi::class.java)
 
 
-        val bodyFields = "$metrikaCounter" +
-                            "&date1=$date" +
-                            "&date2=$date" +
-                            "&metrics=ym:s:ecommercePurchases" +
-                            "&dimensions=ym:s:lastsignUTMMedium" +
-                            "&accuracy=full" +
-                            "&limit=10000"
+        val url_params = "155462" +
+                "&date1=2024-02-29" +
+                "&date2=2024-02-29" +
+                "&metrics=ym:s:ecommercePurchases" +
+                "&dimensions=ym:s:lastsignUTMMedium" +
+                "&filters=ym:s:lastsignUTMSource=='yandex'" +
+                "&accuracy=full" +
+                "&limit=10000"
 
         val yandexMetrikaStatsCall = yandexMetrikaStatsApi.getData(
             token = "OAuth $token",
-            body_fields = bodyFields
+//            url_params = url_params
         )
 
-        val metrikaStatsRequest = yandexMetrikaStatsCall.request()
-        Log.d("MyLog", metrikaStatsRequest.toString())
-//        Log.d("MyLog", yandexMetrikaStatsCall.errorBody()!!.string())
-        var result = yandexMetrikaStatsCall.execute()
-//
-        Log.d("MyLog", result.toString())
+        Log.d("MyLog", "------------------------------------------------------------------")
+        yandexMetrikaStatsCall.execute()
+//        Log.d("MyLog", result.code().toString())
+//        Log.d("MyLog", result.message())
+//        Log.d("MyLog", result.body().toString())
+        Log.d("MyLog", "------------------------------------------------------------------")
 
 //        var result = yandexMetrikaStatsCall.execute()
 //        var count = 1

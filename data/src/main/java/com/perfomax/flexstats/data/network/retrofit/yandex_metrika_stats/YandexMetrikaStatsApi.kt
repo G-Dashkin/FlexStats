@@ -11,21 +11,11 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface YandexMetrikaStatsApi {
-//    @JvmSuppressWildcards
-//    @GET("stat/v1/data")
-//    fun getData(
-//        @Body body_fields: Map<String, Any>?,
-//        @Header("Authorization") token: String,
-//    ): Call<Unit>
 
-    @JvmSuppressWildcards
-    @GET("/stat/v1/data?")
+    //    @JvmSuppressWildcards
+    @GET("stat/v1/data?id=155462&date1=2024-02-29&date2=2024-02-29&metrics=ym:s:ecommercePurchases&dimensions=ym:s:lastsignUTMMedium&accuracy=full&limit=10000")
     fun getData(
-        @Header("Authorization") token: String,
-        @Url body_fields: String
+        @Header("Authorization") token: String
     ): Call<Unit>
-
-//    @GET("users/{userId}")
-//    fun getUserById(@Path("userId") userId: Int): Call<User>
 
 }
