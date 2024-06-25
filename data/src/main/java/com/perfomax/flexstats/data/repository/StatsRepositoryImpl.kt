@@ -28,38 +28,34 @@ class StatsRepositoryImpl @Inject constructor(
 
         // выгрузка яндкес директ
         accountsList.forEach { account ->
-            // выгрузка по апи, получение статистики по аккаунту
+            // выгрузка по апи, получение статистики по аккаунту yandex_direct
             if (account.accountType == "yandex_direct") {
                 val yandexDirectStats = yandexDirectStatsNetwork.getStats(
                     date = defaultDate,
                     account = account.name,
                     token = account.accountToken ?: ""
                 )
-                Log.d("MyLog", "Update Stats--------------------------------------------------")
-                yandexDirectStats.forEach { Log.d("MyLog", it.toString()) }
-                // Загрузка в таблицу yandex_direct (через сторадж)
+                // Загрузка в сторадж
                 statsStorage.addYandexDirectData(yandexDirectStats)
             }
 
+            // выгрузка по апи, получение статистики по аккаунту yandex_metrika
             if (account.accountType == "yandex_metrika") {
-
-                yandexMetrikaStatsNetwork.getStats(
+                val yandexMetrikaStats = yandexMetrikaStatsNetwork.getStats(
                     date = defaultDate,
                     metrikaCounter = account.metrikaCounter?:"",
                     token = account.accountToken?:""
                 )
+                // Загрузка в сторадж
+                statsStorage.addYandexMetrikaData(yandexMetrikaStats)
             }
         }
         dataProcessing()
     }
-        // -------------------------------------------------------------------------------------
-        // выгрузка яндкес метрика
-        // counterList.forEach {}
-
-        // Вызов внутреннего метода для загрузки в "general_stats"
-
-
-
+    // -------------------------------------------------------------------------------------
+    // выгрузка яндкес метрика
+    // counterList.forEach {}
+    // Вызов внутреннего метода для загрузки в "general_stats"
 
     override suspend fun getYandexDirectStats() {
         statsStorage.getYD()

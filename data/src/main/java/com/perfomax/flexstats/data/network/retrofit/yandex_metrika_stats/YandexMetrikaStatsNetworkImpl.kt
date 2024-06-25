@@ -14,6 +14,9 @@ import com.perfomax.flexstats.models.YandexMetrikaStats
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -23,17 +26,7 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
     private val authStorage: AuthStorage
 ): YandexMetrikaStatsNetwork {
 
-    override suspend fun getStats(date: String, metrikaCounter: String, token: String){
-
-//        val bodyFields = mapOf(
-//            "id" to metrikaCounter,
-//            "date1" to date,
-//            "date2" to date,
-//            "metrics" to "ym:s:ecommercePurchases, ym:s:ecommerceRUBConvertedRevenue",
-//            "dimensions" to "ym:s:lastsignUTMMedium, ym:s:lastsignUTMSource",
-//            "accuracy" to "full",
-//            "limit" to 10000
-//        )
+    override suspend fun getStats(date: String, metrikaCounter: String, token: String): List<YandexMetrikaStats> {
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -45,29 +38,19 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
+
         val yandexMetrikaStatsApi = retrofit.create(YandexMetrikaStatsApi::class.java)
-
-
-        val url_params = "155462" +
-                "&date1=2024-02-29" +
-                "&date2=2024-02-29" +
-                "&metrics=ym:s:ecommercePurchases" +
-                "&dimensions=ym:s:lastsignUTMMedium" +
-                "&filters=ym:s:lastsignUTMSource=='yandex'" +
-                "&accuracy=full" +
-                "&limit=10000"
-
         val yandexMetrikaStatsCall = yandexMetrikaStatsApi.getData(
             token = "OAuth $token",
-//            url_params = url_params
+            id = metrikaCounter,
+            date1 = date,
+            date2 = date,
+            metrics = "ym:s:ecommercePurchases",
+            dimensions = "ym:s:lastsignUTMMedium",
         )
-
-        Log.d("MyLog", "------------------------------------------------------------------")
-        yandexMetrikaStatsCall.execute()
-//        Log.d("MyLog", result.code().toString())
-//        Log.d("MyLog", result.message())
-//        Log.d("MyLog", result.body().toString())
-        Log.d("MyLog", "------------------------------------------------------------------")
+        val x = yandexMetrikaStatsCall.execute()
+        Log.d("MyLog", x.body()?.data.toString())
+        return listOf()
 
 //        var result = yandexMetrikaStatsCall.execute()
 //        var count = 1
@@ -76,7 +59,6 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
 //            count = count.inc()
 //            delay(100)
 //        }
-//
 //        val request = yandexMetrikaStatsCall.clone().request()
 //        val newClient = OkHttpClient()
 //        val dataYD = newClient.newCall(request).execute()

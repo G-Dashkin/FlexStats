@@ -5,17 +5,25 @@ import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.data_api.storage.StatsStorage
 import com.perfomax.flexstats.models.YandexDirectStats
+import com.perfomax.flexstats.models.YandexMetrikaStats
 import javax.inject.Inject
 
 class StatsStorageImpl @Inject constructor(
     private val statsDao: StatsDao
 ): StatsStorage {
+
+
+
     override suspend fun addYandexDirectData(data: List<YandexDirectStats>) {
         statsDao.removeYandexDirectData(
             date = data.first().date?:"",
             projectId = data.first().project_id?:0
         )
         statsDao.insertYandexDirectData(data = data.map { it.toDomain() })
+    }
+
+    override suspend fun addYandexMetrikaData(data: List<YandexMetrikaStats>) {
+
     }
 
     override suspend fun getYD() {

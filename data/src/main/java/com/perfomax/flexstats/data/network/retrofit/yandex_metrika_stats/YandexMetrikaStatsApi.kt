@@ -12,10 +12,16 @@ import retrofit2.http.Url
 
 interface YandexMetrikaStatsApi {
 
-    //    @JvmSuppressWildcards
-    @GET("stat/v1/data?id=155462&date1=2024-02-29&date2=2024-02-29&metrics=ym:s:ecommercePurchases&dimensions=ym:s:lastsignUTMMedium&accuracy=full&limit=10000")
+    @GET("stat/v1/data")
     fun getData(
-        @Header("Authorization") token: String
-    ): Call<Unit>
+        @Header("Authorization") token: String,
+        @Query("id") id: String,
+        @Query("date1") date1: String,
+        @Query("date2") date2: String,
+        @Query("metrics") metrics: String,
+        @Query("dimensions") dimensions: String,
+        @Query("accuracy") accuracy: String = "full",
+        @Query("limit") limit: String = "10000"
+    ): Call<YandexMetrikaStatsPojo>
 
 }

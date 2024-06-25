@@ -8,5 +8,5 @@ interface YandexAccessTokenApi {
     @JvmSuppressWildcards
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("token")
-    suspend fun getAccessToken(@Body data: String): YandexAccessToken
+    suspend fun getAccessToken(@Body data: String): YandexAccessTokenPojo
 }
