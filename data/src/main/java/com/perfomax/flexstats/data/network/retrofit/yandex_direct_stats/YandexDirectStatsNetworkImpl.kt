@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.data.network.retrofit.yandex_direct_stats
 
+import android.util.Log
 import com.perfomax.flexstats.core.utils.DIRECT_API_BASE_URL
 import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
@@ -16,7 +17,7 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
     private val authStorage: AuthStorage
 ): YandexDirectStatsNetwork {
 
-    override suspend fun getStats(date: String, account: String, token: String): List<YandexDirectStats> {
+    override suspend fun getStats(date: String, account: String, token: String): YandexDirectStats {
 
         val bodyFields = mapOf(
             "params" to mapOf(
@@ -69,35 +70,12 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
             }
         }
         yandexStringsData.removeAt(0)
-
-        val yandexData = mutableListOf<YandexDirectStats>()
-
-        yandexStringsData.forEach {
-            yandexData.add(YandexDirectStats(
-                date = date,
-                account = account,
-                impressions = it[0].toInt(),
-                clicks = it[1].toInt(),
-                cost = it[2].toDouble()
-            ))
-        }
-
-        return yandexData
-//        Log.d("MyLog", yandexData.toString())
-//        yandexData.forEach { dataList ->
-//            Log.d("MyLog", dataList.toString())
-//            statsDao.insertYandexDirect(
-//                YandexDirectStatsEntity(
-//                    id = 0,
-//                    date = date,
-//                    account = account,
-//                    campaign = dataList[0],
-//                    impressions = dataList[1].toInt(),
-//                    clicks = dataList[2].toInt(),
-//                    cost = dataList[3].toDouble(),
-//                    project_id = authStorage.getAuthUser().id?:0
-//                )
-//            )
-//        }
+        return YandexDirectStats(
+            date = date,
+            account = account,
+            impressions = yandexStringsData[0][0].toInt(),
+            clicks = yandexStringsData[0][1].toInt(),
+            cost = yandexStringsData[0][2].toDouble()
+        )
     }
 }

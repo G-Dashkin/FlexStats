@@ -1,6 +1,8 @@
 package com.perfomax.flexstats.data.repository
 
 import android.util.Log
+import com.perfomax.flexstats.core.utils.YANDEX_DIRECT
+import com.perfomax.flexstats.core.utils.YANDEX_METRIKA
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.network.YandexMetrikaStatsNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
@@ -20,42 +22,34 @@ class StatsRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): StatsRepository {
 
-    private val defaultDate = "2024-02-29"
+    private val defaultDate = "2024-02-28"
 
     override suspend fun updateStats(): Unit = withContext(dispatcher) {
 
         val accountsList = accountsRepository.getAllByUser()
 
-        // выгрузка яндкес директ
         accountsList.forEach { account ->
-            // выгрузка по апи, получение статистики по аккаунту yandex_direct
-            if (account.accountType == "yandex_direct") {
+            if (account.accountType == YANDEX_DIRECT) {
                 val yandexDirectStats = yandexDirectStatsNetwork.getStats(
                     date = defaultDate,
                     account = account.name,
                     token = account.accountToken ?: ""
                 )
-                // Загрузка в сторадж
                 statsStorage.addYandexDirectData(yandexDirectStats)
             }
 
-            // выгрузка по апи, получение статистики по аккаунту yandex_metrika
-            if (account.accountType == "yandex_metrika") {
+
+            if (account.accountType == YANDEX_METRIKA) {
                 val yandexMetrikaStats = yandexMetrikaStatsNetwork.getStats(
                     date = defaultDate,
                     metrikaCounter = account.metrikaCounter?:"",
                     token = account.accountToken?:""
                 )
-                // Загрузка в сторадж
                 statsStorage.addYandexMetrikaData(yandexMetrikaStats)
             }
         }
         dataProcessing()
     }
-    // -------------------------------------------------------------------------------------
-    // выгрузка яндкес метрика
-    // counterList.forEach {}
-    // Вызов внутреннего метода для загрузки в "general_stats"
 
     override suspend fun getYandexDirectStats() {
         statsStorage.getYD()

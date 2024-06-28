@@ -12,18 +12,21 @@ class StatsStorageImpl @Inject constructor(
     private val statsDao: StatsDao
 ): StatsStorage {
 
-
-
-    override suspend fun addYandexDirectData(data: List<YandexDirectStats>) {
+    override suspend fun addYandexDirectData(data: YandexDirectStats) {
+        Log.d("MyLog", data.toString())
         statsDao.removeYandexDirectData(
-            date = data.first().date?:"",
-            projectId = data.first().project_id?:0
+            date = data.date?:"",
+            projectId = data.project_id?:0
         )
-        statsDao.insertYandexDirectData(data = data.map { it.toDomain() })
+        statsDao.insertYandexDirectData(data = data.toDomain() )
     }
 
-    override suspend fun addYandexMetrikaData(data: List<YandexMetrikaStats>) {
-
+    override suspend fun addYandexMetrikaData(data: YandexMetrikaStats) {
+        statsDao.removeYandexMetrikaData(
+            date = data.date?:"",
+            projectId = data.project_id?:0
+        )
+        statsDao.insertYandexMetrikaData(data = data.toDomain() )
     }
 
     override suspend fun getYD() {

@@ -20,7 +20,8 @@ interface YandexMetrikaStatsApi {
         @Query("date2") date2: String,
         @Query("metrics") metrics: String,
         @Query("dimensions") dimensions: String,
-        @Query("accuracy") accuracy: String = "full",
+        @Query("filters") filters: String = "",
+        @Query("accuracy") accuracy: String = "1",
         @Query("limit") limit: String = "10000"
     ): Call<YandexMetrikaStatsPojo>
 

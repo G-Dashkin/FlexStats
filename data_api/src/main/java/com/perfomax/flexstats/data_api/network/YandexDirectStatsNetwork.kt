@@ -4,5 +4,5 @@ import com.perfomax.flexstats.models.YandexDirectStats
 
 
 interface YandexDirectStatsNetwork {
-    suspend fun getStats(date: String, account: String, token: String): List<YandexDirectStats>
+    suspend fun getStats(date: String, account: String, token: String): YandexDirectStats
 }

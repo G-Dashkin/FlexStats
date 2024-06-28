@@ -13,10 +13,16 @@ import com.perfomax.flexstats.data.database.entities.YandexMetrikaStatsEntity
 interface StatsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertYandexDirectData(data: List<YandexDirectStatsEntity>)
+    suspend fun insertYandexDirectData(data: YandexDirectStatsEntity)
 
-    @Query("DELETE FROM yandex_direct WHERE date = :date AND project_id = :projectId ")
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertYandexMetrikaData(data: YandexMetrikaStatsEntity)
+
+    @Query("DELETE FROM ${YandexDirectStatsEntity.TABLE_NAME} WHERE date = :date AND project_id = :projectId ")
     suspend fun removeYandexDirectData(date: String, projectId: Int)
+
+    @Query("DELETE FROM ${YandexMetrikaStatsEntity.TABLE_NAME} WHERE date = :date AND project_id = :projectId ")
+    suspend fun removeYandexMetrikaData(date: String, projectId: Int)
 
     @Query("SELECT date FROM yandex_direct " +
             "GROUP BY date")
