@@ -18,7 +18,7 @@ data class YandexDirectStatsEntity(
     @ColumnInfo(name = "clicks")
     val clicks: Int,
     @ColumnInfo(name = "cost")
-    val cost: Double,
+    val cost: Long,
     @ColumnInfo(name = "project_id")
     val project_id: Int
 ) {

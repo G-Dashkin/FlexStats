@@ -6,6 +6,6 @@ data class YandexDirectStats (
     var account: String? = null,
     var impressions: Int? = null,
     var clicks: Int? = null,
-    var cost: Double? = null,
+    var cost: Long? = null,
     var project_id: Int? = null
 )

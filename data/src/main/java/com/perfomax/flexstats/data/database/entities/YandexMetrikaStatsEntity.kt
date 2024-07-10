@@ -16,7 +16,7 @@ data class YandexMetrikaStatsEntity(
     @ColumnInfo(name = "transactions")
     val transactions: Int,
     @ColumnInfo(name = "revenue")
-    val revenue: Double,
+    val revenue: Long,
     @ColumnInfo(name = "project_id")
     val project_id: Int
 ) {

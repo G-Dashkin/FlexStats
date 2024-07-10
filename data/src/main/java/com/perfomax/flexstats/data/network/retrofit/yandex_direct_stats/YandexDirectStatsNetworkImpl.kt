@@ -17,7 +17,12 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
     private val authStorage: AuthStorage
 ): YandexDirectStatsNetwork {
 
-    override suspend fun getStats(date: String, account: String, token: String): YandexDirectStats {
+    override suspend fun getStats(
+        date: String,
+        account: String,
+        token: String,
+        projectId: Int
+    ): YandexDirectStats {
 
         val bodyFields = mapOf(
             "params" to mapOf(
@@ -75,7 +80,8 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
             account = account,
             impressions = yandexStringsData[0][0].toInt(),
             clicks = yandexStringsData[0][1].toInt(),
-            cost = yandexStringsData[0][2].toDouble()
+            cost = yandexStringsData[0][2].toDouble().toLong(),
+            project_id = projectId
         )
     }
 }

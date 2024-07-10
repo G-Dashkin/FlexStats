@@ -1,8 +1,10 @@
 package com.perfomax.flexstats.data.mappers
 
+import com.perfomax.flexstats.data.database.entities.GeneralStatsEntity
 import com.perfomax.flexstats.data.database.entities.ProjectEntity
 import com.perfomax.flexstats.data.database.entities.YandexDirectStatsEntity
 import com.perfomax.flexstats.data.database.entities.YandexMetrikaStatsEntity
+import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.Project
 import com.perfomax.flexstats.models.YandexDirectStats
 import com.perfomax.flexstats.models.YandexMetrikaStats
@@ -24,7 +26,7 @@ internal fun YandexDirectStats.toDomain(): YandexDirectStatsEntity {
         date = date?:"",
         account = account?:"",
         impressions = impressions?:0,
-        cost = cost?:0.0,
+        cost = cost?:0,
         clicks = clicks?:0,
         project_id = project_id?:0
     )
@@ -46,7 +48,20 @@ internal fun YandexMetrikaStats.toDomain(): YandexMetrikaStatsEntity {
         date = date?:"",
         counter = counter?:"",
         transactions = transactions?:0,
-        revenue = revenue?:0.0,
+        revenue = revenue?:0,
+        project_id = project_id?:0
+    )
+}
+
+internal fun GeneralStats.toDomain(): GeneralStatsEntity {
+    return GeneralStatsEntity (
+        id = id?:0,
+        date = date?:"",
+        impressions = impressions?:0,
+        cost = cost?:0,
+        clicks = clicks?:0,
+        transactions = transactions?:0,
+        revenue = revenue?:0,
         project_id = project_id?:0
     )
 }

@@ -11,20 +11,16 @@ data class GeneralStatsEntity(
     val id: Int,
     @ColumnInfo(name = "date")
     val date: String,
-    @ColumnInfo(name = "account")
-    val account: String,
-    @ColumnInfo(name = "campaign")
-    val campaign: String,
     @ColumnInfo(name = "impressions")
     val impressions: Int,
     @ColumnInfo(name = "clicks")
     val clicks: Int,
     @ColumnInfo(name = "cost")
-    val cost: Double,
+    val cost: Long,
     @ColumnInfo(name = "transactions")
     val transactions: Int,
     @ColumnInfo(name = "revenue")
-    val revenue: Double,
+    val revenue: Long,
     @ColumnInfo(name = "project_id")
     val project_id: Int
 ) {

@@ -7,6 +7,6 @@ interface StatsRepository {
     suspend fun getYandexDirectStats()
     suspend fun getYandexMetrikaStats()
     suspend fun getGeneralStats()
-    suspend fun dataProcessing()
+    suspend fun dataProcessing(updateDate: String, projectId: Int)
     suspend fun getStats(): List<YandexDirectStats>
 }

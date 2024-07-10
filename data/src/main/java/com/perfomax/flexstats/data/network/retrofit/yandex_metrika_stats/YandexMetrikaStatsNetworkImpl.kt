@@ -27,7 +27,12 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
     private val authStorage: AuthStorage
 ): YandexMetrikaStatsNetwork {
 
-    override suspend fun getStats(date: String, metrikaCounter: String, token: String): YandexMetrikaStats {
+    override suspend fun getStats(
+        date: String,
+        metrikaCounter: String,
+        token: String,
+        projectId: Int
+    ): YandexMetrikaStats {
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -51,11 +56,16 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
             dimensions = "ym:s:lastsignUTMMedium, ym:s:lastsignUTMSource",
         )
         val yandexMetrikaStats = yandexMetrikaStatsCall.execute()
+        Log.d("MyLog", "test .toLong(): ${yandexMetrikaStats.body()?.totals?.get(1)?.toLong()}")
+
+        Log.d("MyLog", "------------------------------------------------------------------")
+
         return YandexMetrikaStats(
             date = date,
             counter = metrikaCounter,
             transactions = yandexMetrikaStats.body()?.totals?.get(0)?.toInt(),
-            revenue = yandexMetrikaStats.body()?.totals?.get(1)
+            revenue = yandexMetrikaStats.body()?.totals?.get(1)?.toLong(),
+            project_id = projectId
         )
     }
 }
