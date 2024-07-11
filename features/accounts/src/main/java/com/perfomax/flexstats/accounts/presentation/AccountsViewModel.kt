@@ -59,7 +59,6 @@ class AccountsViewModel(
     fun addNewAccount(accountName: String, metrikaCounter: String, tokenCode: String, accountType: String){
         viewModelScope.launch {
             val accountToken = createTokenUseCase.execute(tokenCode)
-            Log.d("MyLog", "accountToken: $accountToken")
             createAccountUseCase.execute(
                 Account(
                     name = accountName,

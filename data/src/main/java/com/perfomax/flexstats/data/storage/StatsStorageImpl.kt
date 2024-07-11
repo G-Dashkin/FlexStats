@@ -38,12 +38,6 @@ class StatsStorageImpl @Inject constructor(
             date = data.date?:"",
             projectId = data.project_id?:0
         )
-        //------------------------------------------------------------------------------------------
-        Log.d("MyLogGeneralData", "Получение данных из таблицы GeneralData----------------")
-        statsDao.getGeneralData().forEach { Log.d("MyLogGeneralData", it.toString()) }
-        Log.d("MyLogGeneralData", "Добавление данных в таблицу GeneralData---------------")
-        Log.d("MyLogGeneralData", data.toDomain().toString())
-        //------------------------------------------------------------------------------------------
         statsDao.insertGeneralData(data = data.toDomain())
     }
 
