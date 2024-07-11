@@ -75,13 +75,24 @@ class YandexDirectStatsNetworkImpl @Inject constructor(
             }
         }
         yandexStringsData.removeAt(0)
-        return YandexDirectStats(
-            date = date,
-            account = account,
-            impressions = yandexStringsData[0][0].toInt(),
-            clicks = yandexStringsData[0][1].toInt(),
-            cost = yandexStringsData[0][2].toDouble().toLong(),
-            project_id = projectId
-        )
+        return if (yandexStringsData.isEmpty()) {
+            YandexDirectStats(
+                date = date,
+                account = account,
+                impressions = 0,
+                clicks = 0,
+                cost = 0,
+                project_id = projectId
+            )
+        } else {
+            YandexDirectStats(
+                date = date,
+                account = account,
+                impressions = yandexStringsData[0][0].toInt(),
+                clicks = yandexStringsData[0][1].toInt(),
+                cost = yandexStringsData[0][2].toDouble().toLong(),
+                project_id = projectId
+            )
+        }
     }
 }

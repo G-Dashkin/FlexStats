@@ -8,6 +8,7 @@ import com.perfomax.flexstats.data_api.storage.StatsStorage
 import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.YandexDirectStats
 import com.perfomax.flexstats.models.YandexMetrikaStats
+import java.time.LocalDate
 import javax.inject.Inject
 
 class StatsStorageImpl @Inject constructor(
@@ -37,7 +38,34 @@ class StatsStorageImpl @Inject constructor(
             date = data.date?:"",
             projectId = data.project_id?:0
         )
-        statsDao.insertGeneralData(data = data.toDomain() )
+        //------------------------------------------------------------------------------------------
+        Log.d("MyLogGeneralData", "Получение данных из таблицы GeneralData----------------")
+        statsDao.getGeneralData().forEach { Log.d("MyLogGeneralData", it.toString()) }
+        Log.d("MyLogGeneralData", "Добавление данных в таблицу GeneralData---------------")
+        Log.d("MyLogGeneralData", data.toDomain().toString())
+        //------------------------------------------------------------------------------------------
+        statsDao.insertGeneralData(data = data.toDomain())
+    }
+
+
+    override suspend fun checkAccountYD(account: String, project_id: Int): Boolean {
+        val checkedDate = statsDao.getDateYDByAccount(account = account, projectId = project_id)
+        return checkedDate.isNotEmpty()
+    }
+
+    override suspend fun checkCounterYM(counter: String, project_id: Int): Boolean {
+        val checkedDate = statsDao.getDateYMByCounter(counter = counter, projectId = project_id)
+        return checkedDate.isNotEmpty()
+    }
+
+    override suspend fun getLastUpdateDateYD(account: String, project_id: Int): String {
+        val yandexDirectDateByAccount = statsDao.getDateYDByAccount(account = account, projectId = project_id)
+        return yandexDirectDateByAccount.first().date
+    }
+
+    override suspend fun getLastUpdateDateYM(counter: String, project_id: Int): String {
+        val yandexMetrikaDateByCounter = statsDao.getDateYMByCounter(counter = counter, projectId = project_id)
+        return yandexMetrikaDateByCounter.first().date
     }
 
     override suspend fun getYD(date: String, project_id: Int): List<YandexDirectStats> {

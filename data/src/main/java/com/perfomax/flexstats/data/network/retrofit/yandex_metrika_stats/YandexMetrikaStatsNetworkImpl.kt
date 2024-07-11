@@ -56,9 +56,6 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
             dimensions = "ym:s:lastsignUTMMedium, ym:s:lastsignUTMSource",
         )
         val yandexMetrikaStats = yandexMetrikaStatsCall.execute()
-        Log.d("MyLog", "test .toLong(): ${yandexMetrikaStats.body()?.totals?.get(1)?.toLong()}")
-
-        Log.d("MyLog", "------------------------------------------------------------------")
 
         return YandexMetrikaStats(
             date = date,

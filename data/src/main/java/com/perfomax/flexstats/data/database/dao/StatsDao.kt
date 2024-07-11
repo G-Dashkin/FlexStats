@@ -19,7 +19,7 @@ interface StatsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertYandexMetrikaData(data: YandexMetrikaStatsEntity)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGeneralData(data: GeneralStatsEntity)
 
     @Query("DELETE FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
@@ -38,10 +38,18 @@ interface StatsDao {
             "GROUP BY date")
     suspend fun getData(): List<StatsEntity>
 
-    @Query("SELECT * FROM yandex_direct WHERE date = :date AND project_id = :projectId ")
+    @Query("SELECT * FROM yandex_direct WHERE account = :account AND project_id = :projectId " +
+           "ORDER BY date DESC")
+    suspend fun getDateYDByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
+
+    @Query("SELECT * FROM yandex_metrika WHERE counter = :counter AND project_id = :projectId " +
+            "ORDER BY date DESC")
+    suspend fun getDateYMByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
+
+    @Query("SELECT * FROM yandex_direct WHERE date = :date AND project_id = :projectId")
     suspend fun getYandexDirectData(date: String, projectId: Int): List<YandexDirectStatsEntity>
 
-    @Query("SELECT * FROM yandex_metrika WHERE date = :date AND project_id = :projectId ")
+    @Query("SELECT * FROM yandex_metrika WHERE date = :date AND project_id = :projectId")
     suspend fun getYandexMetrikaData(date: String, projectId: Int): List<YandexMetrikaStatsEntity>
 
     @Query("SELECT * FROM general_stats")
