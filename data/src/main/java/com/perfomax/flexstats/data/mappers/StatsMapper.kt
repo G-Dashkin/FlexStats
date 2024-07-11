@@ -65,3 +65,16 @@ internal fun GeneralStats.toDomain(): GeneralStatsEntity {
         project_id = project_id?:0
     )
 }
+
+internal fun GeneralStatsEntity.toDomain(): GeneralStats {
+    return GeneralStats (
+        id = id,
+        date = date,
+        impressions = impressions,
+        cost = cost,
+        clicks = clicks,
+        transactions = transactions,
+        revenue = revenue,
+        project_id = project_id
+    )
+}

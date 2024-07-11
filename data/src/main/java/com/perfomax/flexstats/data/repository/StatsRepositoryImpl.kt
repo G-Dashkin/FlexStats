@@ -121,8 +121,8 @@ class StatsRepositoryImpl @Inject constructor(
 //        statsStorage.getYM()
     }
 
-    override suspend fun getGeneralStats() {
-        statsStorage.getGeneral()
+    override suspend fun getGeneralStats(): List<GeneralStats> {
+        return statsStorage.getGeneral()
     }
 
     override suspend fun dataProcessing(updateDate: String, projectId: Int) {

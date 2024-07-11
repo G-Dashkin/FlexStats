@@ -10,6 +10,7 @@ import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetYandexDirectUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetYandexMetrikaUseCase
 import com.perfomax.flexstats.home.domain.usecases.LoadStatsUseCase
+import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.YandexDirectStats
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,21 +22,20 @@ class HomeViewModel(
     private val getGeneralUseCase: GetGeneralUseCase
 ): ViewModel() {
 
-    private val _statsList = MutableLiveData<List<YandexDirectStats>>()
-    val statsList: LiveData<List<YandexDirectStats>> = _statsList
+    private val _statsList = MutableLiveData<List<GeneralStats>>()
+    val statsList: LiveData<List<GeneralStats>> = _statsList
 
     private val _homeScreen = MutableLiveData<YandexDirectStats>()
     val homeScreen: LiveData<YandexDirectStats> = _homeScreen
 
     init {
-//        load()
+        load()
     }
 
     private fun load() {
         viewModelScope.launch {
-            getYandexDirectUseCase.execute()
-            val stats = getYandexDirectUseCase.execute()
-//            _statsList.postValue(stats)
+            val stats = getGeneralUseCase.execute()
+            _statsList.postValue(stats)
         }
     }
 
