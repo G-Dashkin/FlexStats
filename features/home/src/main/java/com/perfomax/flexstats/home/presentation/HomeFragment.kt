@@ -1,6 +1,7 @@
 package com.perfomax.flexstats.home.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -40,22 +41,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
 
-        binding.loadStats.setOnClickListener {
-            homeViewModel.loadStats()
-        }
-
-        binding.getYandexDirect.setOnClickListener {
-            homeViewModel.getYandexDirect()
-        }
-
-        binding.getYandexMetrika.setOnClickListener {
-            homeViewModel.getYandexMetrika()
-        }
-
-        binding.loadGeneral.setOnClickListener {
-            homeViewModel.getGeneral()
+        binding.updateStatsButton.setOnClickListener {
+            homeViewModel.updateStats()
         }
         setAdapter()
+        setProgressIndicator()
     }
 
     private fun setAdapter() {
@@ -67,6 +57,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private fun setProgressIndicator() {
+        homeViewModel.progressIndicator.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.circularProgressIndicator.visibility = View.VISIBLE
+                binding.circularProgressIndicator.bringToFront()
+                binding.updateStatsButton.isEnabled = false
+                binding.selectPeriodButton.isEnabled = false
+            } else {
+                binding.circularProgressIndicator.visibility = View.GONE
+                binding.updateStatsButton.isEnabled = true
+                binding.selectPeriodButton.isEnabled = true
+            }
+        }
+    }
 
     companion object {
         fun getInstance(): HomeFragment = HomeFragment()

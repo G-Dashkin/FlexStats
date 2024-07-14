@@ -6,6 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <ProgressBar
+        android:id="@+id/circularProgressIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:indicatorSize="50dp"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:maxHeight="150dp"
+        android:minHeight="150dp"
+        android:minWidth="150dp"
+        android:maxWidth="150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/stats_recycler_view"
+        app:layout_constraintStart_toStartOf="@+id/stats_recycler_view"
+        app:layout_constraintTop_toTopOf="@+id/twTitle"/>
+
     <LinearLayout
         android:id="@+id/twTitle"
         android:layout_width="match_parent"
@@ -91,62 +108,34 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/loadStats"
-            android:layout_width="wrap_content"
-            android:layout_height="57dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Обновить"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/loadGeneral"
-            android:layout_width="wrap_content"
-            android:layout_height="57dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="General"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <Button
+            android:id="@+id/updateStatsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Обновить статистику"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/getYandexDirect"
-            android:layout_width="wrap_content"
+            android:id="@+id/selectPeriodButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="Таблица \nYandex Direct"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="Период статистики"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/getYandexMetrika"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="Таблица \nYandex Metrika"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-
+            app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
