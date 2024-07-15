@@ -5,8 +5,6 @@ import com.perfomax.flexstats.models.YandexDirectStats
 
 interface StatsRepository {
     suspend fun updateStats()
-    suspend fun getYandexDirectStats()
-    suspend fun getYandexMetrikaStats()
     suspend fun getGeneralStats(): List<GeneralStats>
     suspend fun dataProcessing(updateDate: String, projectId: Int)
     suspend fun getStats(): List<YandexDirectStats>

@@ -113,16 +113,10 @@ class StatsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getYandexDirectStats() {
-//        statsStorage.getYD()
-    }
-
-    override suspend fun getYandexMetrikaStats() {
-//        statsStorage.getYM()
-    }
-
     override suspend fun getGeneralStats(): List<GeneralStats> {
-        return statsStorage.getGeneral()
+        val accountsList = accountsRepository.getAllByUser()
+        val projectId = accountsList.first().projectId
+        return statsStorage.getGeneral(project_id = projectId?:0)
     }
 
     override suspend fun dataProcessing(updateDate: String, projectId: Int) {

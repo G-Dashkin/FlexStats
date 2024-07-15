@@ -15,6 +15,6 @@ interface StatsStorage {
     suspend fun getLastUpdateDateYD(account: String, project_id: Int): String
     suspend fun getLastUpdateDateYM(counter: String, project_id: Int): String
     suspend fun getYM(date: String, project_id: Int): List<YandexMetrikaStats>
-    suspend fun getGeneral(): List<GeneralStats>
+    suspend fun getGeneral(project_id: Int): List<GeneralStats>
 
 }
