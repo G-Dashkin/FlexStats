@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.home.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +11,10 @@ import com.perfomax.flexstats.home.domain.usecases.LoadStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.YandexDirectStats
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 import javax.inject.Inject
 
 class HomeViewModel(
@@ -28,9 +31,6 @@ class HomeViewModel(
     private val _homeScreen = MutableLiveData<YandexDirectStats>()
     val homeScreen: LiveData<YandexDirectStats> = _homeScreen
 
-    val DEFAULT_FIRST_DATE = "2024-07-10"
-    val DEFAULT_SECOND_DATE = "2024-07-13"
-
     init {
         loadGeneralStatsList()
     }
@@ -39,8 +39,8 @@ class HomeViewModel(
         viewModelScope.launch {
             val stats = getGeneralUseCase.execute(
                 statsPeriod = Pair(
-                    first = DEFAULT_FIRST_DATE,
-                    second = DEFAULT_SECOND_DATE
+                    first = defaultStatsPeriodTest().get("standardDate")!!.first,
+                    second = defaultStatsPeriodTest().get("standardDate")!!.second
                 )
             )
             _statsList.postValue(stats)
@@ -68,6 +68,37 @@ class HomeViewModel(
             _statsList.postValue(stats)
         }
 
+    }
+
+
+
+    fun defaultStatsPeriodTest(): Map<String, Pair<String, String>>{
+
+        val thirtyDays = Calendar.getInstance()
+        val yesterday = Calendar.getInstance()
+        thirtyDays.add(Calendar.DAY_OF_YEAR, -30)
+        yesterday.add(Calendar.DAY_OF_YEAR, -1)
+
+        val statsPeriodMap = mutableMapOf<String, Pair<String, String>>()
+        statsPeriodMap.put("millisecondsDate", Pair(
+            thirtyDays.timeInMillis.toString(),
+            yesterday.timeInMillis.toString()
+        )
+        )
+        statsPeriodMap.put("standardDate", Pair(
+            convertTimeToDate(thirtyDays.timeInMillis),
+            convertTimeToDate(yesterday.timeInMillis)
+            )
+        )
+        return statsPeriodMap
+    }
+
+
+    fun convertTimeToDate(time:Long): String {
+        val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        utc.timeInMillis = time
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return format.format(utc.time)
     }
 
 }

@@ -10,6 +10,9 @@ import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.Project
 import com.perfomax.flexstats.models.YandexDirectStats
 import com.perfomax.home.databinding.ItemStatsBinding
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class StatsAdapter(): ListAdapter<GeneralStats, RecyclerView.ViewHolder>(StatsDiffCallback()){
 
@@ -24,19 +27,23 @@ class StatsAdapter(): ListAdapter<GeneralStats, RecyclerView.ViewHolder>(StatsDi
     }
 
     inner class StatsHolder(private val binding: ItemStatsBinding):RecyclerView.ViewHolder(binding.root){
+
+        val df = DecimalFormat("#0.00")
+        val dec = DecimalFormat("###,###,###,###,###", DecimalFormatSymbols(Locale.ENGLISH))
+
         fun bind(stats: GeneralStats) {
             binding.valueDate.text = stats.date
 
-            binding.valueImpressions.text = stats.impressions.toString()
-            binding.valueClicks.text = stats.clicks.toString()
-            binding.valueCosts.text = stats.cost.toString()
+            binding.valueImpressions.text = dec.format(stats.impressions).replace(",", " ")
+            binding.valueClicks.text = dec.format(stats.clicks).replace(",", " ")
+            binding.valueCosts.text = dec.format(stats.cost).replace(",", " ") + "р."
 
-            binding.valueTransactions.text
-            binding.valueRevenue.text
+            binding.valueTransactions.text = dec.format(stats.transactions).replace(",", " ")
+            binding.valueRevenue.text = dec.format(stats.revenue).replace(",", " ") + "р."
 
-//            binding.valueCPC.text = (stats.cost!! / stats.impressions?.toDouble()!!).toString()
-            binding.valueCR.text
-            binding.valueDRR
+            binding.valueCPC.text = df.format(((stats.cost?:0).div(stats.clicks?.toDouble()!!))) + "р."
+            binding.valueCR.text = df.format(((stats.clicks?:0).div(stats.transactions?.toDouble()!!))) + "%"
+            binding.valueDRR.text = df.format(((stats.cost?:0).div(stats.revenue?.toDouble()!!)*100)) + "%"
         }
     }
 
