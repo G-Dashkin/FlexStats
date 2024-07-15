@@ -113,10 +113,10 @@ class StatsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getGeneralStats(): List<GeneralStats> {
+    override suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats> {
         val accountsList = accountsRepository.getAllByUser()
         val projectId = accountsList.first().projectId
-        return statsStorage.getGeneral(project_id = projectId?:0)
+        return statsStorage.getGeneral(project_id = projectId?:0, stats_period = statsPeriod)
     }
 
     override suspend fun dataProcessing(updateDate: String, projectId: Int) {

@@ -28,13 +28,21 @@ class HomeViewModel(
     private val _homeScreen = MutableLiveData<YandexDirectStats>()
     val homeScreen: LiveData<YandexDirectStats> = _homeScreen
 
+    val DEFAULT_FIRST_DATE = "2024-07-10"
+    val DEFAULT_SECOND_DATE = "2024-07-13"
+
     init {
         loadGeneralStatsList()
     }
 
     private fun loadGeneralStatsList() {
         viewModelScope.launch {
-            val stats = getGeneralUseCase.execute()
+            val stats = getGeneralUseCase.execute(
+                statsPeriod = Pair(
+                    first = DEFAULT_FIRST_DATE,
+                    second = DEFAULT_SECOND_DATE
+                )
+            )
             _statsList.postValue(stats)
         }
     }
@@ -47,6 +55,19 @@ class HomeViewModel(
             loadGeneralStatsList()
             _progressIndicator.value = false
         }
+    }
+
+    fun selectStatsPeriod(firstDate: String, secondDate: String) {
+        viewModelScope.launch {
+            val stats = getGeneralUseCase.execute(
+                statsPeriod = Pair(
+                    first = firstDate,
+                    second = secondDate
+                )
+            )
+            _statsList.postValue(stats)
+        }
+
     }
 
 }

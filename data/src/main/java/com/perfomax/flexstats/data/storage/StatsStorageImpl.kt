@@ -72,7 +72,11 @@ class StatsStorageImpl @Inject constructor(
         return yandexMetrikaData.map { it.toDomain() }
     }
 
-    override suspend fun getGeneral(project_id: Int): List<GeneralStats> {
-        return statsDao.getGeneralData(projectId = project_id).map { it.toDomain() }
+    override suspend fun getGeneral(project_id: Int, statsPeriod: Pair<String, String>): List<GeneralStats> {
+        return statsDao.getGeneralData(
+            projectId = project_id,
+            firstDate = statsPeriod.first,
+            secondDate = statsPeriod.second
+        ).map { it.toDomain() }
     }
 }

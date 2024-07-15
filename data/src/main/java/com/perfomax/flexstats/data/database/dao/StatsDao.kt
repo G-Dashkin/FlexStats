@@ -52,6 +52,6 @@ interface StatsDao {
     @Query("SELECT * FROM yandex_metrika WHERE date = :date AND project_id = :projectId")
     suspend fun getYandexMetrikaData(date: String, projectId: Int): List<YandexMetrikaStatsEntity>
 
-    @Query("SELECT * FROM general_stats WHERE project_id = :projectId")
-    suspend fun getGeneralData(projectId: Int): List<GeneralStatsEntity>
+    @Query("SELECT * FROM general_stats WHERE project_id = :projectId AND date >= :firstDate AND date <= :secondDate")
+    suspend fun getGeneralData(projectId: Int, firstDate: String, secondDate: String): List<GeneralStatsEntity>
 }
