@@ -3,6 +3,7 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -117,7 +118,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         dialog.setContentView(accountDialogBinding.root)
         dialog.show()
 
-        accountDialogBinding.accountForm.setText("imedia-citilink-xiaomi-v")
+        accountDialogBinding.accountForm.setText("imedia-kcitilink")
 
         accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
 
@@ -158,19 +159,21 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
 
         webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                if (view.title.toString() == OUTPUT_ACCESS) {
-                    webViewDialogBinding.webView.visibility = View.GONE
-                }
-                webViewDialogBinding.closeWebViewButton.visibility = View.VISIBLE
-            }
+//            override fun onPageFinished(view: WebView, url: String) {
+//                Log.d("MyLog", view.title.toString())
+//                if (view.title.toString() == OUTPUT_ACCESS) {
+//                    Log.d("MyLog", view.title.toString())
+//                    webViewDialogBinding.webView.visibility = View.GONE
+//                }
+//                webViewDialogBinding.closeWebViewButton.visibility = View.VISIBLE
+//            }
         }
 
         var webViewUrl = EMPTY
         lifecycleScope.launch {
             while (!webViewUrl.contains("&cid=")){
                 webViewUrl = webViewDialogBinding.webView.url.toString()
-                delay(200)
+                delay(300)
             }
             val tokenCode = webViewUrl.split("=")[1].split("&")[0]
             dialog.dismiss()

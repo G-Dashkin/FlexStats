@@ -55,7 +55,7 @@ class StatsRepositoryImpl @Inject constructor(
                         }
                     }
                 } else {
-                    for(day in 4..DEFAULT_UPDATE_DAYS) {
+                    for(day in 1..DEFAULT_UPDATE_DAYS) {
                         val updateDate = LocalDateTime.now().minusDays(day.toLong()).format(formatter)
                         val yandexDirectStats = yandexDirectStatsNetwork.getStats(
                             date = updateDate,
@@ -93,7 +93,7 @@ class StatsRepositoryImpl @Inject constructor(
                         }
                     }
                 } else {
-                    for(date in 4..DEFAULT_UPDATE_DAYS) {
+                    for(date in 1..DEFAULT_UPDATE_DAYS) {
                         val updateDate = LocalDateTime.now().minusDays(date.toLong()).format(formatter)
                         val yandexMetrikaStats = yandexMetrikaStatsNetwork.getStats(
                             date = updateDate,

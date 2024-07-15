@@ -2,6 +2,7 @@ package com.perfomax.flexstats.presentation.navigation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -139,7 +140,12 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
             val authUser = getAuthUserUseCase.execute()
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.user_name).text = authUser.user
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.user_email).text = authUser.email
-
+//            val currentFragmentP = parentFragmentManager.fragments
+//            val currentFragmentC = childFragmentManager.fragments
+//            Log.d("MyLog", currentFragmentP.toString())
+//            Log.d("MyLog", currentFragmentP.view.)
+//            Log.d("MyLog", currentFragmentP)
+//            Log.d("MyLog", currentFragmentC.toString())
             if (userIsAuth) {
                 binding.materialToolbar.visibility = View.VISIBLE
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
