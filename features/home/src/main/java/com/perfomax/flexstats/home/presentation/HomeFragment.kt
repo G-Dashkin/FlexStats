@@ -68,8 +68,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .setTitleText("Выберети период отображения статистики")
             .setSelection(
                 Pair(
-                    homeViewModel.defaultStatsPeriodTest().get("millisecondsDate")!!.first.toLong(),
-                    homeViewModel.defaultStatsPeriodTest().get("millisecondsDate")!!.second.toLong()
+                    homeViewModel.defaultStatsPeriod().get("millisecondsDate")!!.first.toLong(),
+                    homeViewModel.defaultStatsPeriod().get("millisecondsDate")!!.second.toLong()
                 )
             )
             .build()

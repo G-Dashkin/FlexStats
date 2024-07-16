@@ -39,8 +39,8 @@ class HomeViewModel(
         viewModelScope.launch {
             val stats = getGeneralUseCase.execute(
                 statsPeriod = Pair(
-                    first = defaultStatsPeriodTest().get("standardDate")!!.first,
-                    second = defaultStatsPeriodTest().get("standardDate")!!.second
+                    first = defaultStatsPeriod().get("standardDate")!!.first,
+                    second = defaultStatsPeriod().get("standardDate")!!.second
                 )
             )
             _statsList.postValue(stats)
@@ -72,7 +72,7 @@ class HomeViewModel(
 
 
 
-    fun defaultStatsPeriodTest(): Map<String, Pair<String, String>>{
+    fun defaultStatsPeriod(): Map<String, Pair<String, String>>{
 
         val thirtyDays = Calendar.getInstance()
         val yesterday = Calendar.getInstance()
