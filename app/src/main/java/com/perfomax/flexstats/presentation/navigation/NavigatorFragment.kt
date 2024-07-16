@@ -22,6 +22,7 @@ import com.perfomax.flexstats.api.StartFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.core.utils.CALL_MENU_LISTENER
 import com.perfomax.flexstats.core.utils.EMPTY
+import com.perfomax.flexstats.core.utils.getFragmentName
 import com.perfomax.flexstats.databinding.FragmentNavigatorBinding
 import com.perfomax.flexstats.di.DaggerProvider
 import com.perfomax.flexstats.domain.usecases.GetAuthUserUseCase
@@ -29,8 +30,11 @@ import com.perfomax.flexstats.domain.usecases.LogoutUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetUserProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
 import com.perfomax.flexstats.start.domain.usecases.GetAuthUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private val START_SCREENS = listOf("StartFragment", "LoginFragment", "RegisterFragment", "ResetFragment")
 
 class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder {
 
@@ -135,24 +139,12 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
     private fun setActionBarSettings(){
 
         lifecycleScope.launch {
-            val userIsAuth = getAuthUseCase.execute()
             val allProjects = getUserProjectsUseCase.execute()
             val authUser = getAuthUserUseCase.execute()
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.user_name).text = authUser.user
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.user_email).text = authUser.email
-//            val currentFragmentP = parentFragmentManager.fragments
-//            val currentFragmentC = childFragmentManager.fragments
-//            Log.d("MyLog", currentFragmentP.toString())
-//            Log.d("MyLog", currentFragmentP.view.)
-//            Log.d("MyLog", currentFragmentP)
-//            Log.d("MyLog", currentFragmentC.toString())
-            if (userIsAuth) {
-                binding.materialToolbar.visibility = View.VISIBLE
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            } else {
-                binding.materialToolbar.visibility = View.GONE
-                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            }
+
+            toolbarSettings()
 
             if (allProjects.isNotEmpty()) {
                 val selectedProject = getSelectedProjectUseCase.execute()
@@ -160,6 +152,23 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
                                                    selectedProject.name
             } else {
                 binding.materialToolbar.title = EMPTY
+            }
+        }
+    }
+
+    private fun toolbarSettings(){
+        lifecycleScope.launch {
+            binding.materialToolbar.visibility = View.GONE
+            binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            var currentFragmentName = childFragmentManager.getFragmentName()
+            while (currentFragmentName in START_SCREENS) {
+                currentFragmentName = childFragmentManager.getFragmentName()
+                val userIsAuth = getAuthUseCase.execute()
+                if (currentFragmentName !in START_SCREENS && userIsAuth) {
+                    binding.materialToolbar.visibility = View.VISIBLE
+                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                }
+                delay(100)
             }
         }
     }

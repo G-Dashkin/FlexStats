@@ -64,7 +64,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun showDatePiker() {
         val picker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTheme(com.perfomax.ui.R.style.ThemeMaterialCalendar)
+            .setTheme(com.perfomax.ui.R.style.MaterialCalendarTheme)
             .setTitleText("Выберети период отображения статистики")
             .setSelection(
                 Pair(

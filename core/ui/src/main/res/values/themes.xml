@@ -11,7 +11,16 @@
         <item name="colorOutline">@color/outline</item>
     </style>
 
-    <style name="ThemeMaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+    <style name="MaterialCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="materialCalendarHeaderTitle">@style/MyDatePickerHeaderTitle</item>
         <item name="android:windowFullscreen">false</item>
+        <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="MyDatePickerHeaderTitle" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+
 </resources>
