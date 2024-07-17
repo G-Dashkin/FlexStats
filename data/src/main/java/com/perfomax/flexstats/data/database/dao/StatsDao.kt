@@ -8,7 +8,6 @@ import com.perfomax.flexstats.data.database.entities.GeneralStatsEntity
 import com.perfomax.flexstats.data.database.entities.StatsEntity
 import com.perfomax.flexstats.data.database.entities.YandexDirectStatsEntity
 import com.perfomax.flexstats.data.database.entities.YandexMetrikaStatsEntity
-import com.perfomax.flexstats.models.Account
 
 @Dao
 interface StatsDao {
@@ -40,11 +39,19 @@ interface StatsDao {
 
     @Query("SELECT * FROM yandex_direct WHERE account = :account AND project_id = :projectId " +
            "ORDER BY date DESC")
-    suspend fun getDateYDByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
+    suspend fun getLastDateYDByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
+
+    @Query("SELECT * FROM yandex_direct WHERE account = :account AND project_id = :projectId " +
+            "ORDER BY date ASC")
+    suspend fun getFirstDateYDByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
 
     @Query("SELECT * FROM yandex_metrika WHERE counter = :counter AND project_id = :projectId " +
             "ORDER BY date DESC")
-    suspend fun getDateYMByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
+    suspend fun getLastDateYMByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
+
+    @Query("SELECT * FROM yandex_metrika WHERE counter = :counter AND project_id = :projectId " +
+            "ORDER BY date ASC")
+    suspend fun getFirstDateYMByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
 
     @Query("SELECT * FROM yandex_direct WHERE date = :date AND project_id = :projectId")
     suspend fun getYandexDirectData(date: String, projectId: Int): List<YandexDirectStatsEntity>

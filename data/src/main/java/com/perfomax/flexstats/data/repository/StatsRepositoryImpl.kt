@@ -13,9 +13,11 @@ import com.perfomax.flexstats.models.YandexDirectStats
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Period
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -27,7 +29,8 @@ class StatsRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): StatsRepository {
 
-    val DEFAULT_UPDATE_DAYS = 7
+    // Здесь добавить логику получения месяцев
+    // Даты должны быть в диапазоне - от вчерашнего дня и до начала месяца
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     //Добавить логику - если данны обновлены по вчерашний день, то обновлять не нужно
@@ -36,10 +39,20 @@ class StatsRepositoryImpl @Inject constructor(
         val accountsList = accountsRepository.getAllByUser()
         val projectId = accountsList.first().projectId
 
+        // Прогон всех аккаунтов в цикле
         accountsList.forEach { account ->
-            if (account.accountType == YANDEX_DIRECT) {
+            if (account.accountType == YANDEX_DIRECT) { // Если аккаунт является аккаунтом яндекс директа, то выгружается стата по директу
+
+                // Проверка, имеются ли выгруженные данные по аккаунту
                 val isDataByAccountYDExists = statsStorage.checkAccountYD(account = account.name, project_id = projectId?:0)
+
+                // Если данные поаккаунт имеются, то происходит выгрузка от последней даты обновления и до вчерашнего дня
                 if (isDataByAccountYDExists){
+                    // Здесь получается должно быть два периода обновления:
+                        // 1.С поледней даты обновления по аккаунту и по вчера
+                        // 2.С ранней даты обновления по аккаунту и по прошлый месяц (до 6 последних месяце в умолчанию)
+
+                    // это процесс обновления с поледней даты и по вчера (вынести в отдельную функцию)
                     val lastUpdateDate = statsStorage.getLastUpdateDateYD(account = account.name, project_id = projectId?:0)
                     val yesterdayDate = LocalDateTime.now().minusDays(1).format(formatter)
                     if (lastUpdateDate != yesterdayDate){
@@ -54,8 +67,28 @@ class StatsRepositoryImpl @Inject constructor(
                             statsStorage.addYandexDirectData(data = yandexDirectStats)
                         }
                     }
+
+                    // это процесс обновления с ранней даты и по начало месяца
+                    // Здесь нужно получить:
+                    // -раннюю дату обновления по аккаунту (Это будет 1 день месяцы)
+                    val firstUpdateDate = statsStorage.getFirstUpdateDateYD(account = account.name, project_id = projectId?:0)
+                    Log.d("MyLog", "firstUpdateDate: $firstUpdateDate by account: ${account.name}")
+                    // -дату 1 дня прошлого месяца следующего за месяцем раннеей даты обновления,
+                    // но не дальне 6 моследних месяцев от текущего месяа (констанотное значение,
+                    // которое можно будет менить в настройках)
+
+                    val startUpdateDate = updatePreviousDays(firstUpdateDate)
+
+                    for (day in 1 ..90){
+
+                    }
+
+                // Если данных по аккаунт нет, тогда выгрузка происходит с начала текущего месяца и до вчерашнего дня
+                //----------------------------------------------------------------------------------
+                //----------------------тут все-----------------------------------------------------
+                //----------------------------------------------------------------------------------
                 } else {
-                    for(day in 1..DEFAULT_UPDATE_DAYS) {
+                    for(day in 1..updateNextDays()) {
                         val updateDate = LocalDateTime.now().minusDays(day.toLong()).format(formatter)
                         val yandexDirectStats = yandexDirectStatsNetwork.getStats(
                             date = updateDate,
@@ -66,10 +99,14 @@ class StatsRepositoryImpl @Inject constructor(
                         statsStorage.addYandexDirectData(data = yandexDirectStats)
                     }
                 }
+                //----------------------------------------------------------------------------------
+                //----------------------------------------------------------------------------------
+                //----------------------------------------------------------------------------------
             }
 
             //--------------------------------------------------------------------------------------
-            if (account.accountType == YANDEX_METRIKA) {
+            if (account.accountType == YANDEX_METRIKA) { // Если аккаунт является аккаунтом яндекс метрики, то выгружается стата по метрике
+                // Проверка, имеются ли выгруженные данные по аккаунту
                 val isDataByCounterYMExists = statsStorage.checkCounterYM(
                     counter = account.metrikaCounter?:"",
                     project_id = projectId?:0
@@ -92,8 +129,17 @@ class StatsRepositoryImpl @Inject constructor(
                             statsStorage.addYandexMetrikaData(data = yandexMetrikaStats)
                         }
                     }
+
+                    val firstUpdateDate = statsStorage.getFirstUpdateDateYM(
+                        counter = account.metrikaCounter?:"",
+                        project_id = projectId?:0
+                    )
+                    Log.d("MyLog", "firstUpdateDate: $firstUpdateDate by counter: ${account.metrikaCounter}")
+                //----------------------------------------------------------------------------------
+                //----------------------тут все-----------------------------------------------------
+                //----------------------------------------------------------------------------------
                 } else {
-                    for(date in 1..DEFAULT_UPDATE_DAYS) {
+                    for(date in 1..updateNextDays()) {
                         val updateDate = LocalDateTime.now().minusDays(date.toLong()).format(formatter)
                         val yandexMetrikaStats = yandexMetrikaStatsNetwork.getStats(
                             date = updateDate,
@@ -104,10 +150,13 @@ class StatsRepositoryImpl @Inject constructor(
                         statsStorage.addYandexMetrikaData(data = yandexMetrikaStats)
                     }
                 }
+                //----------------------------------------------------------------------------------
+                //----------------------------------------------------------------------------------
+                //----------------------------------------------------------------------------------
             }
         }
 
-        for(date in 1..DEFAULT_UPDATE_DAYS) {
+        for(date in 1..updateNextDays()) {
             val updateDate = LocalDateTime.now().minusDays(date.toLong()).format(formatter)
             dataProcessing(updateDate = updateDate, projectId = projectId ?: 0)
         }
@@ -154,4 +203,40 @@ class StatsRepositoryImpl @Inject constructor(
         )
         return Period.between(date1, date2).days
     }
+
+    fun updateNextDays(): Int {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+        val firstDayMonth = YearMonth.now().atDay( 1 ).toString()
+        val yesterday = LocalDateTime.now().minusDays(1).format(formatter)
+
+        val firstTimestampInclusive = LocalDate.of(
+            firstDayMonth.split("-")[0].toInt(),
+            firstDayMonth.split("-")[1].toInt(),
+            firstDayMonth.split("-")[2].toInt(),
+        )
+        val secondTimestampExclusive = LocalDate.of(
+            yesterday.split("-")[0].toInt(),
+            yesterday.split("-")[1].toInt(),
+            yesterday.split("-")[2].toInt(),
+        )
+        val numberOfDays = Duration.between(
+            firstTimestampInclusive.atStartOfDay(),
+            secondTimestampExclusive.atStartOfDay())
+            .toDays()
+            .toInt()
+            .inc()
+        return numberOfDays
+    }
+
+    fun updatePreviousDays(firstUpdateDate:String): String {
+        val firstTimestampInclusive = LocalDate.of(
+            firstUpdateDate.split("-")[0].toInt(),
+            firstUpdateDate.split("-")[1].toInt(),
+            firstUpdateDate.split("-")[2].toInt(),
+        )
+        val startUpdateDate = firstTimestampInclusive.minusMonths(1).toString()
+        return startUpdateDate
+    }
+
 }
