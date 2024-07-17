@@ -72,15 +72,23 @@ class StatsRepositoryImpl @Inject constructor(
                     // Здесь нужно получить:
                     // -раннюю дату обновления по аккаунту (Это будет 1 день месяцы)
                     val firstUpdateDate = statsStorage.getFirstUpdateDateYD(account = account.name, project_id = projectId?:0)
-                    Log.d("MyLog", "firstUpdateDate: $firstUpdateDate by account: ${account.name}")
+
                     // -дату 1 дня прошлого месяца следующего за месяцем раннеей даты обновления,
                     // но не дальне 6 моследних месяцев от текущего месяа (констанотное значение,
                     // которое можно будет менить в настройках)
-
+                    Log.d("MyLog", "firstUpdateDate: $firstUpdateDate by account: ${account.name}")
                     val startUpdateDate = updatePreviousDays(firstUpdateDate)
+                    for (day in startUpdateDate.second..startUpdateDate.first){
+                        val updateDate = LocalDateTime.now().minusDays(day.toLong()).format(formatter)
+                        Log.d("MyLog", "updateDate: $updateDate")
 
-                    for (day in 1 ..90){
-
+//                        val yandexDirectStats = yandexDirectStatsNetwork.getStats(
+//                            date = updateDate,
+//                            account = account.name,
+//                            token = account.accountToken ?: "",
+//                            projectId = projectId ?: 0
+//                        )
+//                        statsStorage.addYandexDirectData(data = yandexDirectStats)
                     }
 
                 // Если данных по аккаунт нет, тогда выгрузка происходит с начала текущего месяца и до вчерашнего дня
@@ -135,6 +143,19 @@ class StatsRepositoryImpl @Inject constructor(
                         project_id = projectId?:0
                     )
                     Log.d("MyLog", "firstUpdateDate: $firstUpdateDate by counter: ${account.metrikaCounter}")
+                    val startUpdateDate = updatePreviousDays(firstUpdateDate)
+
+                    for (day in startUpdateDate.second..startUpdateDate.first){
+                        val updateDate = LocalDateTime.now().minusDays(day.toLong()).format(formatter)
+                        Log.d("MyLog", "updateDate: $updateDate")
+//                        val yandexMetrikaStats = yandexMetrikaStatsNetwork.getStats(
+//                            date = updateDate,
+//                            metrikaCounter = account.metrikaCounter?:"",
+//                            token = account.accountToken?:"",
+//                            projectId = projectId?:0
+//                        )
+//                        statsStorage.addYandexMetrikaData(data = yandexMetrikaStats)
+                    }
                 //----------------------------------------------------------------------------------
                 //----------------------тут все-----------------------------------------------------
                 //----------------------------------------------------------------------------------
@@ -229,14 +250,46 @@ class StatsRepositoryImpl @Inject constructor(
         return numberOfDays
     }
 
-    fun updatePreviousDays(firstUpdateDate:String): String {
-        val firstTimestampInclusive = LocalDate.of(
+    fun updatePreviousDays(firstUpdateDate: String): Pair<Int, Int> {
+
+        // 1) Типа дата первого обновления аккаунта полученная из базы и дата за вчерашний день
+        val yesterday = LocalDateTime.now().minusDays(1).format(formatter)
+
+        // 2) Получение даты первого обновления аккаунта минус 1 месяц
+        val startUpdateDate = LocalDate.of(
+            firstUpdateDate.split("-")[0].toInt(),
+            firstUpdateDate.split("-")[1].toInt(),
+            firstUpdateDate.split("-")[2].toInt(),
+        ).minusMonths(1)
+
+        val endUpdateDate = LocalDate.of(
             firstUpdateDate.split("-")[0].toInt(),
             firstUpdateDate.split("-")[1].toInt(),
             firstUpdateDate.split("-")[2].toInt(),
         )
-        val startUpdateDate = firstTimestampInclusive.minusMonths(1).toString()
-        return startUpdateDate
+
+        // 3) Вычисление количества дней между вчерашнем днем и датой перого обновления базы (минус 1 месяц)
+        val secondTimestampExclusive = LocalDate.of(
+            yesterday.split("-")[0].toInt(),
+            yesterday.split("-")[1].toInt(),
+            yesterday.split("-")[2].toInt(),
+        )
+
+        val firstUpdateDays = Duration.between(
+            startUpdateDate.atStartOfDay(),
+            secondTimestampExclusive.atStartOfDay())
+            .toDays()
+            .toInt()
+            .inc()
+
+        val lastUpdateDays = Duration.between(
+            endUpdateDate.atStartOfDay(),
+            secondTimestampExclusive.atStartOfDay())
+            .toDays()
+            .toInt().inc()
+            .inc()
+
+        return Pair(firstUpdateDays, lastUpdateDays)
     }
 
 }

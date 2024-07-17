@@ -20,9 +20,12 @@ fun main() {
         firstUpdateDate.split("-")[1].toInt(),
         firstUpdateDate.split("-")[2].toInt(),
     ).minusMonths(1)
-    println("  startUpdateDate: $startUpdateDate")
-    println("  firstUpdateDate: $firstUpdateDate")
-    println("        yesterday: $yesterday")
+
+    val endUpdateDate = LocalDate.of(
+        firstUpdateDate.split("-")[0].toInt(),
+        firstUpdateDate.split("-")[1].toInt(),
+        firstUpdateDate.split("-")[2].toInt(),
+    )
 
     // 3) Вычисление количества дней между вчерашнем днем и датой перого обновления базы (минус 1 месяц)
     val secondTimestampExclusive = LocalDate.of(
@@ -30,26 +33,25 @@ fun main() {
         yesterday.split("-")[1].toInt(),
         yesterday.split("-")[2].toInt(),
     )
-    println("secondTimestampExclusive: $secondTimestampExclusive")
-    val numberBetweenDays_FirstDay = Duration.between(
+
+    val firstUpdateDays = Duration.between(
         startUpdateDate.atStartOfDay(),
         secondTimestampExclusive.atStartOfDay())
         .toDays()
         .toInt()
         .inc()
-    println("numberBetweenDays_FirstDay: $numberBetweenDays_FirstDay")
 
-    // тут нужно получить кличество дней от сегодняшней даты минус дата начала обновления с прошолго месяца
-    // а тут кличество дней от сегодняшней даты минус дата последнего обновления
+    val lastUpdateDays = Duration.between(
+        endUpdateDate.atStartOfDay(),
+        secondTimestampExclusive.atStartOfDay())
+        .toDays()
+        .toInt().inc()
+        .inc()
 
-    val lastDay = 47 // МНЕ НУЖНО!!! получить это число
-    val firstDay = 77
-
-    for (day in lastDay ..numberBetweenDays_FirstDay){
-        // функция получет дату с минусом колучества дней от сегодняцшнего дня.
-        val updateDate = LocalDateTime.now().minusDays(day.toLong()).format(formatter)
-        print(" $updateDate |")
-    }
+//    for (day in lastUpdateDays ..firstUpdateDays){
+//        val updateDate = LocalDateTime.now().minusDays(day.toLong()).format(formatter)
+//        print(" $updateDate |")
+//    }
 
 }
 
