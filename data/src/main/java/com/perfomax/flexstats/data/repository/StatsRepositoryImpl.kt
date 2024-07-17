@@ -177,10 +177,21 @@ class StatsRepositoryImpl @Inject constructor(
             }
         }
 
+        // здесь нужно получить период обновления
+        // с самаой ранней даты, по последней день
+
+        // Нужно вычислять...
+        // сначала вы обновление от последней даты, до вчерашней, т.е. "обновление вперед"
         for(date in 1..updateNextDays()) {
             val updateDate = LocalDateTime.now().minusDays(date.toLong()).format(formatter)
+            Log.d("MyLog", "updateNextDays(): ${updateNextDays()}")
+            Log.d("MyLog", "updateDate: $updateDate")
             dataProcessing(updateDate = updateDate, projectId = projectId ?: 0)
         }
+
+        // далее нужно "обновление назад" т.е. от ранней даты обновления в таблице GeneralStats()
+        // до ранней даты обновления в таблицах yandexDidectDate и yandexMetrikaDate
+
     }
 
     override suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats> {
