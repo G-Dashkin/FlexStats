@@ -28,6 +28,12 @@ class HomeViewModel(
     private val _progressIndicator = MutableLiveData(false)
     val progressIndicator: LiveData<Boolean> = _progressIndicator
 
+    private val _selectedStatsPeriod = MutableLiveData(Pair(
+            defaultStatsPeriod().get("standardDate")!!.first,
+            defaultStatsPeriod().get("standardDate")!!.second
+    ))
+    val selectedStatsPeriod: LiveData<Pair<String, String>> = _selectedStatsPeriod
+
     private val _homeScreen = MutableLiveData<YandexDirectStats>()
     val homeScreen: LiveData<YandexDirectStats> = _homeScreen
 
@@ -39,8 +45,8 @@ class HomeViewModel(
         viewModelScope.launch {
             val stats = getGeneralUseCase.execute(
                 statsPeriod = Pair(
-                    first = defaultStatsPeriod().get("standardDate")!!.first,
-                    second = defaultStatsPeriod().get("standardDate")!!.second
+                    first = _selectedStatsPeriod.value!!.first,
+                    second = _selectedStatsPeriod.value!!.second
                 )
             )
             _statsList.postValue(stats)
@@ -71,7 +77,6 @@ class HomeViewModel(
     }
 
 
-
     fun defaultStatsPeriod(): Map<String, Pair<String, String>>{
 
         val thirtyDays = Calendar.getInstance()
@@ -83,7 +88,7 @@ class HomeViewModel(
         statsPeriodMap.put("millisecondsDate", Pair(
             thirtyDays.timeInMillis.toString(),
             yesterday.timeInMillis.toString()
-        )
+            )
         )
         statsPeriodMap.put("standardDate", Pair(
             convertTimeToDate(thirtyDays.timeInMillis),

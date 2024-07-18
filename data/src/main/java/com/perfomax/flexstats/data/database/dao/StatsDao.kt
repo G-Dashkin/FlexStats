@@ -33,13 +33,12 @@ interface StatsDao {
             "WHERE date = :date AND project_id = :projectId")
     suspend fun removeGeneralData(date: String, projectId: Int)
 
-    @Query("SELECT date FROM yandex_direct " +
-            "GROUP BY date")
-    suspend fun getData(): List<StatsEntity>
-
     @Query("SELECT * FROM yandex_direct WHERE account = :account AND project_id = :projectId " +
            "ORDER BY date DESC")
     suspend fun getLastDateYDByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
+    @Query("SELECT * FROM yandex_direct WHERE project_id = :projectId " +
+            "ORDER BY date DESC")
+    suspend fun getLastDateYDByAccount(projectId: Int): List<YandexDirectStatsEntity>
 
     @Query("SELECT * FROM yandex_direct WHERE account = :account AND project_id = :projectId " +
             "ORDER BY date ASC")
@@ -52,6 +51,10 @@ interface StatsDao {
     @Query("SELECT * FROM yandex_metrika WHERE counter = :counter AND project_id = :projectId " +
             "ORDER BY date DESC")
     suspend fun getLastDateYMByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
+
+    @Query("SELECT * FROM yandex_metrika WHERE project_id = :projectId " +
+            "ORDER BY date DESC")
+    suspend fun getLastDateYMByCounter(projectId: Int): List<YandexMetrikaStatsEntity>
 
     @Query("SELECT * FROM yandex_metrika WHERE counter = :counter AND project_id = :projectId " +
             "ORDER BY date ASC")

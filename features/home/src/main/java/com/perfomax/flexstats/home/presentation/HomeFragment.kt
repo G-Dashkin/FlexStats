@@ -1,6 +1,7 @@
 package com.perfomax.flexstats.home.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
@@ -76,6 +77,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         picker.show(this.parentFragmentManager, "TAG")
         picker.addOnPositiveButtonClickListener {
+            Log.d("MyLog", "homeViewModel.convertTimeToDate(it.first) ${homeViewModel.convertTimeToDate(it.first)}")
+            Log.d("MyLog", "homeViewModel.convertTimeToDate(it.second) ${homeViewModel.convertTimeToDate(it.second)}")
             homeViewModel.selectStatsPeriod(
                 firstDate = homeViewModel.convertTimeToDate(it.first),
                 secondDate = homeViewModel.convertTimeToDate(it.second)
