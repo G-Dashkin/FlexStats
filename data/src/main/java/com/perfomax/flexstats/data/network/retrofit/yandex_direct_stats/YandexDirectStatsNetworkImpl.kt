@@ -1,7 +1,6 @@
 package com.perfomax.flexstats.data.network.retrofit.yandex_direct_stats
 
-import android.util.Log
-import com.perfomax.flexstats.core.utils.DIRECT_API_BASE_URL
+import com.perfomax.flexstats.core.contracts.DIRECT_API_BASE_URL
 import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.storage.AuthStorage

@@ -1,26 +1,15 @@
 package com.perfomax.flexstats.data.network.retrofit.yandex_metrika_stats
 
-import android.util.Log
-import com.perfomax.flexstats.core.utils.CLIENT_ID
-import com.perfomax.flexstats.core.utils.CLIENT_SECRET
-import com.perfomax.flexstats.core.utils.DIRECT_API_BASE_URL
-import com.perfomax.flexstats.core.utils.METRIKA_API_BASE_URL
+import com.perfomax.flexstats.core.contracts.METRIKA_API_BASE_URL
 import com.perfomax.flexstats.data.database.dao.StatsDao
-import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.network.YandexMetrikaStatsNetwork
 import com.perfomax.flexstats.data_api.storage.AuthStorage
-import com.perfomax.flexstats.models.YandexDirectStats
 import com.perfomax.flexstats.models.YandexMetrikaStats
-import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
-import kotlin.reflect.typeOf
 
 class YandexMetrikaStatsNetworkImpl @Inject constructor(
     private val statsDao: StatsDao,

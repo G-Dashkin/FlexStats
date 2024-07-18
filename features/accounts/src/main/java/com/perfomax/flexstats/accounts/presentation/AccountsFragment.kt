@@ -3,13 +3,10 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
-import android.webkit.CookieManager
-import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -26,12 +23,11 @@ import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
 import com.perfomax.flexstats.accounts.di.DaggerAccountsComponent
 import com.perfomax.flexstats.api.AccountsFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
-import com.perfomax.flexstats.core.utils.EMPTY
-import com.perfomax.flexstats.core.utils.METRIKA_LIST_SELECTED
-import com.perfomax.flexstats.core.utils.OUTPUT_ACCESS
-import com.perfomax.flexstats.core.utils.TOKEN_URL_OAUTH
-import com.perfomax.flexstats.core.utils.YANDEX_DIRECT
-import com.perfomax.flexstats.core.utils.YANDEX_METRIKA
+import com.perfomax.flexstats.core.contracts.EMPTY
+import com.perfomax.flexstats.core.contracts.METRIKA_LIST_SELECTED
+import com.perfomax.flexstats.core.contracts.TOKEN_URL_OAUTH
+import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
+import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -147,7 +143,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         }
     }
 
-    private fun showWebViewDialog(login: String, accountType: String, metrikaCounter: String?=EMPTY) {
+    private fun showWebViewDialog(login: String, accountType: String, metrikaCounter: String?= EMPTY) {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         webViewDialogBinding = WebViewDialogBinding.inflate(inflater)
@@ -155,7 +151,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         dialog.show()
 
         webViewDialogBinding.webView.visibility = View.VISIBLE
-        webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH+login)
+        webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH +login)
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
 
         webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
@@ -181,7 +177,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 accountName = login,
                 tokenCode = tokenCode,
                 accountType = accountType,
-                metrikaCounter = metrikaCounter?:EMPTY
+                metrikaCounter = metrikaCounter?: EMPTY
             )
             delay(200)
             if (accountType == YANDEX_METRIKA)

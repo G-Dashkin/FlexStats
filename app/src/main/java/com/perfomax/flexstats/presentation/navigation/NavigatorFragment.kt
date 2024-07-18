@@ -2,7 +2,6 @@ package com.perfomax.flexstats.presentation.navigation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +19,8 @@ import com.perfomax.flexstats.api.HomeFeatureApi
 import com.perfomax.flexstats.api.ProjectsFeatureApi
 import com.perfomax.flexstats.api.StartFeatureApi
 import com.perfomax.flexstats.core.navigation.Router
-import com.perfomax.flexstats.core.utils.CALL_MENU_LISTENER
-import com.perfomax.flexstats.core.utils.EMPTY
+import com.perfomax.flexstats.core.contracts.CALL_MENU_LISTENER
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.core.utils.getFragmentName
 import com.perfomax.flexstats.databinding.FragmentNavigatorBinding
 import com.perfomax.flexstats.di.DaggerProvider

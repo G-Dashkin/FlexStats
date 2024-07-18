@@ -13,7 +13,7 @@ import com.perfomax.flexstats.api.HomeFeatureApi
 import com.perfomax.flexstats.auth.di.AuthFeatureDepsProvider
 import com.perfomax.flexstats.auth.di.DaggerAuthComponent
 import com.perfomax.flexstats.core.navigation.Router
-import com.perfomax.flexstats.core.utils.CALL_MENU_LISTENER
+import com.perfomax.flexstats.core.contracts.CALL_MENU_LISTENER
 import javax.inject.Inject
 
 class LoginFragment: Fragment(R.layout.fragment_login) {

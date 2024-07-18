@@ -1,6 +1,8 @@
-package com.perfomax.flexstats.core.utils
+package com.perfomax.flexstats.core.contracts
 
 const val EMPTY = ""
+
+const val DATE_FORMAT = "yyyy-MM-dd"
 
 const val DIRECT_API_BASE_URL = "https://api.direct.yandex.com/"
 const val BASE_OAUTH_TOKEN_URL = "https://oauth.yandex.ru/"

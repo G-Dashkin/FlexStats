@@ -1,6 +1,6 @@
 package com.perfomax.flexstats.data.mappers
 
-import com.perfomax.flexstats.core.utils.EMPTY
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.data.database.entities.AccountEntity
 import com.perfomax.flexstats.models.Account
 
@@ -20,8 +20,8 @@ internal fun Account.toDomain(): AccountEntity {
         id = id?:0,
         name = name,
         token = accountToken?: EMPTY,
-        type = accountType?:EMPTY,
-        metrikaCounter = metrikaCounter?:EMPTY,
+        type = accountType?: EMPTY,
+        metrikaCounter = metrikaCounter?: EMPTY,
         projectId = projectId?:0,
     )
 }

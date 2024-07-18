@@ -3,7 +3,6 @@ package com.perfomax.flexstats.projects.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -14,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.perfomax.flexstats.core.navigation.Router
-import com.perfomax.flexstats.core.utils.CALL_MENU_LISTENER
+import com.perfomax.flexstats.core.contracts.CALL_MENU_LISTENER
 import com.perfomax.flexstats.projects.di.DaggerProjectsComponent
 import com.perfomax.flexstats.projects.di.ProjectsFeatureDepsProvider
 import com.perfomax.projects.R

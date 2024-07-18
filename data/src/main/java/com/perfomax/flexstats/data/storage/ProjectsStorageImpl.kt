@@ -1,6 +1,6 @@
 package com.perfomax.flexstats.data.storage
 
-import com.perfomax.flexstats.core.utils.EMPTY
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.data_api.storage.ProjectsStorage

@@ -1,12 +1,20 @@
 package com.perfomax.flexstats.data.storage
 
+import android.util.Log
+import com.perfomax.flexstats.core.contracts.DATE_FORMAT
 import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.data_api.storage.StatsStorage
 import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.YandexDirectStats
 import com.perfomax.flexstats.models.YandexMetrikaStats
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
+
 
 class StatsStorageImpl @Inject constructor(
     private val statsDao: StatsDao
@@ -67,6 +75,17 @@ class StatsStorageImpl @Inject constructor(
     override suspend fun getFirstUpdateDateYM(counter: String, project_id: Int): String {
         val yandexMetrikaDateByCounter = statsDao.getFirstDateYMByCounter(counter = counter, projectId = project_id)
         return yandexMetrikaDateByCounter.first().date
+    }
+
+    override suspend fun getFirstUpdateDateGeneral(project_id: Int): String {
+        val simpleDateFormat = SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH)
+        val yandexMetrikaDate = SimpleDateFormat(DATE_FORMAT).parse(
+            statsDao.getFirstDateYMByCounter(projectId = project_id).first().date
+        )
+        val yandexDirectDate = SimpleDateFormat(DATE_FORMAT).parse(
+            statsDao.getFirstDateYDByAccount(projectId = project_id).first().date)
+        val minDate = listOf(yandexMetrikaDate,yandexDirectDate).min().time
+        return simpleDateFormat.format(minDate)
     }
 
     override suspend fun getYD(date: String, project_id: Int): List<YandexDirectStats> {

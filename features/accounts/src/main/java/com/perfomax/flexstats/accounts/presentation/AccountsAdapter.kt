@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.perfomax.accounts.databinding.ItemAccountBinding
-import com.perfomax.flexstats.core.utils.YANDEX_METRIKA
+import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.models.Account
 
 class AccountsAdapter(
