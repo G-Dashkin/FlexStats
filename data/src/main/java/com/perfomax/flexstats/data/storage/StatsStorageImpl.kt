@@ -117,4 +117,10 @@ class StatsStorageImpl @Inject constructor(
         val minDate = listOf(yandexMetrikaDate,yandexDirectDate).max().time
         return simpleDateFormat.format(minDate)
     }
+
+    override suspend fun clearStats(project_id: Int) {
+        statsDao.clearYD(project_id)
+        statsDao.clearYM(project_id)
+        statsDao.clearGeneral(project_id)
+    }
 }

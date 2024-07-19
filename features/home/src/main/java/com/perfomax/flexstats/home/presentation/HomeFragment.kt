@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.perfomax.flexstats.core.navigation.Router
+import com.perfomax.flexstats.core.utils.toTimestamp
 import com.perfomax.flexstats.home.di.DaggerHomeComponent
 import com.perfomax.flexstats.home.di.HomeFeatureDepsProvider
 import com.perfomax.home.R
@@ -50,6 +51,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             showDatePiker()
         }
 
+        binding.clearBaseButton.setOnClickListener {
+            homeViewModel.clearStats()
+        }
+
         setAdapter()
         setProgressIndicator()
     }
@@ -69,16 +74,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             .setTitleText("Выберети период отображения статистики")
             .setSelection(
                 Pair(
-                    homeViewModel.defaultStatsPeriod().get("millisecondsDate")!!.first.toLong(),
-                    homeViewModel.defaultStatsPeriod().get("millisecondsDate")!!.second.toLong()
+                    homeViewModel.selectedStatsPeriod.value?.first?.toTimestamp(),
+                    homeViewModel.selectedStatsPeriod.value?.second?.toTimestamp(),
                 )
             )
             .build()
 
         picker.show(this.parentFragmentManager, "TAG")
         picker.addOnPositiveButtonClickListener {
-            Log.d("MyLog", "homeViewModel.convertTimeToDate(it.first) ${homeViewModel.convertTimeToDate(it.first)}")
-            Log.d("MyLog", "homeViewModel.convertTimeToDate(it.second) ${homeViewModel.convertTimeToDate(it.second)}")
             homeViewModel.selectStatsPeriod(
                 firstDate = homeViewModel.convertTimeToDate(it.first),
                 secondDate = homeViewModel.convertTimeToDate(it.second)
@@ -96,10 +99,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 binding.circularProgressIndicator.bringToFront()
                 binding.updateStatsButton.isEnabled = false
                 binding.selectPeriodButton.isEnabled = false
+                binding.selectAutoUpdateButton.isEnabled = false
+                binding.clearBaseButton.isEnabled = false
             } else {
                 binding.circularProgressIndicator.visibility = View.GONE
                 binding.updateStatsButton.isEnabled = true
                 binding.selectPeriodButton.isEnabled = true
+                binding.selectAutoUpdateButton.isEnabled = true
+                binding.clearBaseButton.isEnabled = true
             }
         }
     }

@@ -74,4 +74,16 @@ interface StatsDao {
            "WHERE project_id = :projectId AND date >= :firstDate AND date <= :secondDate " +
            "ORDER BY date DESC")
     suspend fun getGeneralData(projectId: Int, firstDate: String, secondDate: String): List<GeneralStatsEntity>
+
+
+    @Query("DELETE FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
+            "WHERE project_id = :projectId")
+    suspend fun clearYD(projectId: Int)
+    @Query("DELETE FROM ${YandexMetrikaStatsEntity.TABLE_NAME} " +
+            "WHERE project_id = :projectId")
+    suspend fun clearYM(projectId: Int)
+    @Query("DELETE FROM ${GeneralStatsEntity.TABLE_NAME} " +
+            "WHERE project_id = :projectId")
+    suspend fun clearGeneral(projectId: Int)
+
 }

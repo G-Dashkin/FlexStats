@@ -39,6 +39,7 @@ class StatsRepositoryImpl @Inject constructor(
         val accountsList = accountsRepository.getAllByUser()
         val projectId = accountsList.first().projectId
         accountsList.forEach { account ->
+            Log.d("MyLogStats", "Start account: ${account.name} Start type: ${account.accountType}--------------------------------------------")
             if (account.accountType == YANDEX_DIRECT) yandexDirectStatsProcessing(account = account, project_id = projectId?:0)
             if (account.accountType == YANDEX_METRIKA) yandexMetrikaStatsProcessing(account = account, project_id = projectId?:0)
         }
@@ -53,19 +54,27 @@ class StatsRepositoryImpl @Inject constructor(
 
     private suspend fun yandexDirectStatsProcessing(account: Account, project_id: Int) {
         val isDataByAccountYDExists = statsStorage.checkAccountYD(account = account.name, project_id = project_id)
+        Log.d("MyLogStats", "isDataByAccountYDExists: $isDataByAccountYDExists")
         if (isDataByAccountYDExists){
             val lastUpdateDate = statsStorage.getLastUpdateDateYD(account = account.name, project_id = project_id)
-            for (updateDay in lastUpdateDate.toTimestamp()..yesterdayDate.toTimestamp(1)) {
-                Log.d("MyLog","updateDay: ${updateDay.toDateString()}" )
-                yandexDirectUpdate(updateDate = updateDay.toDateString(), account = account, project_id = project_id)
-            }
+            val daysFromYesterday = lastUpdateDate.getDaysDiapason(yesterdayDate).minus(1)
 
+            Log.d("MyLogStats", "yandexDirectStatsProcessing() | lastUpdateDate: $lastUpdateDate")
+            Log.d("MyLogStats", "yandexDirectStatsProcessing() | daysFromYesterday: $daysFromYesterday")
+            Log.d("MyLogStats", "yandexDirectStatsProcessing() | yesterdayDate: $yesterdayDate")
+
+            for (updateDay in 1..daysFromYesterday) {
+                val updateDate = LocalDateTime.now().minusDays(updateDay.toLong()).format(formatter)
+                yandexDirectUpdate(updateDate = updateDate, account = account, project_id = project_id)
+            }
             val firstUpdateDate = statsStorage.getFirstUpdateDateYD(account = account.name, project_id = project_id)
+            Log.d("MyLogStats", "yandexDirectStatsProcessing() | firstUpdateDate: $firstUpdateDate")
             if (firstUpdateDate.isNotMaxUpdateDate(DEFAULT_MAX_UPDATE_MONTHS)){
                 yandexDirectUpdate(updateDate = firstUpdateDate, account = account, project_id = project_id)
             }
         } else {
             val updateDate = LocalDateTime.now().minusDays(1).format(formatter)
+            Log.d("MyLogStats", "yandexDirectStatsProcessing() | updateDate: $updateDate")
             yandexDirectUpdate(updateDate = updateDate, account = account, project_id = project_id)
         }
     }
@@ -75,26 +84,34 @@ class StatsRepositoryImpl @Inject constructor(
             counter = account.metrikaCounter?:"",
             project_id = project_id
         )
+        Log.d("MyLogStats", "isDataByCounterYMExists: $isDataByCounterYMExists")
         if (isDataByCounterYMExists){
             val lastUpdateDate = statsStorage.getLastUpdateDateYM(counter = account.metrikaCounter?:"", project_id = project_id)
-            for (updateDay in lastUpdateDate.toTimestamp()..yesterdayDate.toTimestamp(1)) {
-                Log.d("MyLog","updateDay: ${updateDay.toDateString()}" )
-                yandexMetrikaUpdate(updateDate = updateDay.toDateString(), account = account, project_id = project_id)
-            }
+            val daysFromYesterday = lastUpdateDate.getDaysDiapason(yesterdayDate).minus(1)
 
+            Log.d("MyLogStats", "yandexMetrikaStatsProcessing() | lastUpdateDate: $lastUpdateDate")
+            Log.d("MyLogStats", "yandexMetrikaStatsProcessing() | daysFromYesterday: $daysFromYesterday")
+            Log.d("MyLogStats", "yandexMetrikaStatsProcessing() | yesterdayDate: $yesterdayDate")
+
+            for (updateDay in 1..daysFromYesterday) {
+                val updateDate = LocalDateTime.now().minusDays(updateDay.toLong()).format(formatter)
+                yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
+            }
             val firstUpdateDate = statsStorage.getFirstUpdateDateYM(counter = account.metrikaCounter?:"", project_id = project_id)
+            Log.d("MyLogStats", "yandexMetrikaStatsProcessing() | yesterdayDate: $yesterdayDate")
             if (firstUpdateDate.isNotMaxUpdateDate(DEFAULT_MAX_UPDATE_MONTHS)){
                 yandexMetrikaUpdate(updateDate = firstUpdateDate, account = account, project_id = project_id)
             }
         } else {
             val updateDate = LocalDateTime.now().minusDays(1).format(formatter)
+            Log.d("MyLogStats", "yandexMetrikaStatsProcessing() | updateDate: $updateDate")
             yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
         }
     }
 
     private suspend fun dataProcessing(projectId: Int) {
         val firstUpdateDate = statsStorage.getFirstUpdateDateGeneral(projectId)
-        val daysDiapason = firstUpdateDate.getDaysDiapason(yesterdayDate)
+        val daysDiapason = firstUpdateDate.getDaysDiapason(yesterdayDate).minus(1)
         for(date in 1..daysDiapason) {
             val updateDate = LocalDateTime.now().minusDays(date.toLong()).format(formatter)
             val yandexDidectDate = statsStorage.getYD(date = updateDate, project_id = projectId)
@@ -135,4 +152,9 @@ class StatsRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun clearStats() {
+        val accountsList = accountsRepository.getAllByUser()
+        val projectId = accountsList.first().projectId
+        statsStorage.clearStats(project_id = projectId?:0)
+    }
 }

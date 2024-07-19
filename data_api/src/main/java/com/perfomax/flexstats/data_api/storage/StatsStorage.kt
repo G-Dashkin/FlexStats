@@ -24,4 +24,7 @@ interface StatsStorage {
     suspend fun getLastUpdateDateYD(account: String, project_id: Int): String
     suspend fun getLastUpdateDateYM(counter: String, project_id: Int): String
     suspend fun getLastUpdateDateGeneral(project_id: Int): String
+
+    suspend fun clearStats(project_id: Int)
+
 }

@@ -83,6 +83,11 @@ fun Long.toDateString (minusDays: Int = 0): String {
     return if (minusDays != 0) stringDateMinusDays else stringDate
 }
 
+fun String.daysFromYesterday() {
+
+    this
+}
+
 fun FragmentManager.getFragmentName():String {
     return this.fragments.get(0).toString().split("{")[0]
 }
