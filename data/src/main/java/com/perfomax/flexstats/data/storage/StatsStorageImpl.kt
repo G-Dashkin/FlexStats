@@ -19,7 +19,6 @@ class StatsStorageImpl @Inject constructor(
 ): StatsStorage {
 
     override suspend fun addYandexDirectData(data: YandexDirectStats) {
-        dataInformer(account = data.account?:"", dateUpdate = data.date?:"")
         statsDao.removeYandexDirectData(
             date = data.date?:"",
             projectId = data.project_id?:0,
@@ -29,7 +28,6 @@ class StatsStorageImpl @Inject constructor(
     }
 
     override suspend fun addYandexMetrikaData(data: YandexMetrikaStats) {
-        dataInformer(account = data.accoutn?:"", counter = data.counter?:"",  dateUpdate = data.date?:"")
         statsDao.removeYandexMetrikaData(
             date = data.date?:"",
             projectId = data.project_id?:0,
@@ -122,11 +120,6 @@ class StatsStorageImpl @Inject constructor(
         statsDao.clearYD(project_id)
         statsDao.clearYM(project_id)
         statsDao.clearGeneral(project_id)
-    }
-
-    private fun dataInformer(account: String, counter: String = EMPTY, dateUpdate: String) {
-        if (counter != EMPTY) Log.d("MyLog", "dateUpdate: $dateUpdate | account: $account | counter: $counter")
-        else Log.d("MyLog", "dateUpdate: $dateUpdate | account: $account")
     }
 
 }
