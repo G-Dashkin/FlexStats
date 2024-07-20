@@ -2,6 +2,7 @@ package com.perfomax.flexstats.data.storage
 
 import android.util.Log
 import com.perfomax.flexstats.core.contracts.DATE_FORMAT
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.data_api.storage.StatsStorage
@@ -9,9 +10,6 @@ import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.YandexDirectStats
 import com.perfomax.flexstats.models.YandexMetrikaStats
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
@@ -21,6 +19,7 @@ class StatsStorageImpl @Inject constructor(
 ): StatsStorage {
 
     override suspend fun addYandexDirectData(data: YandexDirectStats) {
+        dataInformer(account = data.account?:"", dateUpdate = data.date?:"")
         statsDao.removeYandexDirectData(
             date = data.date?:"",
             projectId = data.project_id?:0,
@@ -30,12 +29,13 @@ class StatsStorageImpl @Inject constructor(
     }
 
     override suspend fun addYandexMetrikaData(data: YandexMetrikaStats) {
+        dataInformer(account = data.accoutn?:"", counter = data.counter?:"",  dateUpdate = data.date?:"")
         statsDao.removeYandexMetrikaData(
             date = data.date?:"",
             projectId = data.project_id?:0,
             counter = data.counter?:""
         )
-        statsDao.insertYandexMetrikaData(data = data.toDomain() )
+        statsDao.insertYandexMetrikaData(data = data.toDomain())
     }
 
     override suspend fun addGeneralData(data: GeneralStats) {
@@ -123,4 +123,10 @@ class StatsStorageImpl @Inject constructor(
         statsDao.clearYM(project_id)
         statsDao.clearGeneral(project_id)
     }
+
+    private fun dataInformer(account: String, counter: String = EMPTY, dateUpdate: String) {
+        if (counter != EMPTY) Log.d("MyLog", "dateUpdate: $dateUpdate | account: $account | counter: $counter")
+        else Log.d("MyLog", "dateUpdate: $dateUpdate | account: $account")
+    }
+
 }

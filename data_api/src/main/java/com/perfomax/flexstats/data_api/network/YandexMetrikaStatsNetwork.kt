@@ -7,6 +7,7 @@ import com.perfomax.flexstats.models.YandexMetrikaStats
 interface YandexMetrikaStatsNetwork {
     suspend fun getStats(
         date: String,
+        account: String,
         metrikaCounter: String,
         token: String,
         projectId: Int
