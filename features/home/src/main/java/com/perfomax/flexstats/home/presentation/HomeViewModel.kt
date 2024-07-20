@@ -3,6 +3,7 @@ package com.perfomax.flexstats.home.presentation
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -59,9 +60,10 @@ class HomeViewModel(
                 )
             )
             _statsList.postValue(stats)
-            delay(100)
-            if (_statsList.value.isNullOrEmpty()) _homeScreen.value = HomeScreen.HideTitle
-            else _homeScreen.value = HomeScreen.ShowTitle
+            _statsList.observeForever( Observer { date ->
+                if (date.isEmpty()) _homeScreen.value = HomeScreen.HideTitle
+                else _homeScreen.value = HomeScreen.ShowTitle
+            })
         }
     }
 
