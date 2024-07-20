@@ -12,12 +12,21 @@ import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
 import com.perfomax.flexstats.home.domain.usecases.LoadStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.YandexDirectStats
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
+
+sealed class HomeScreen {
+    data object ShowTitle : HomeScreen()
+    data object HideTitle : HomeScreen()
+    data object ShowProgressIndicator : HomeScreen()
+    data object HideProgressIndicator : HomeScreen()
+    data object ShowDatePicker : HomeScreen()
+}
 
 class HomeViewModel(
     private val loadStatsUseCase: LoadStatsUseCase,
@@ -28,17 +37,14 @@ class HomeViewModel(
     private var _statsList = MutableLiveData<List<GeneralStats>>()
     val statsList: LiveData<List<GeneralStats>> = _statsList
 
-    private val _progressIndicator = MutableLiveData(false)
-    val progressIndicator: LiveData<Boolean> = _progressIndicator
-
     private var _selectedStatsPeriod = MutableLiveData(Pair(
             defaultStatsPeriod().get("standardDate")!!.first,
             defaultStatsPeriod().get("standardDate")!!.second
     ))
     val selectedStatsPeriod: LiveData<Pair<String, String>> = _selectedStatsPeriod
 
-    private val _homeScreen = MutableLiveData<YandexDirectStats>()
-    val homeScreen: LiveData<YandexDirectStats> = _homeScreen
+    private val _homeScreen = MutableLiveData<HomeScreen>()
+    val homeScreen: LiveData<HomeScreen> = _homeScreen
 
     init {
         loadGeneralStatsList()
@@ -53,16 +59,19 @@ class HomeViewModel(
                 )
             )
             _statsList.postValue(stats)
+            delay(100)
+            if (_statsList.value.isNullOrEmpty()) _homeScreen.value = HomeScreen.HideTitle
+            else _homeScreen.value = HomeScreen.ShowTitle
         }
     }
 
 
     fun updateStats() {
         viewModelScope.launch {
-            _progressIndicator.value = true
+            _homeScreen.value = HomeScreen.ShowProgressIndicator
             loadStatsUseCase.execute()
             loadGeneralStatsList()
-            _progressIndicator.value = false
+            _homeScreen.value = HomeScreen.HideProgressIndicator
         }
     }
 
@@ -84,6 +93,10 @@ class HomeViewModel(
             )
             _statsList.postValue(stats)
         }
+    }
+
+    fun showDatePiker() {
+        _homeScreen.value = HomeScreen.ShowDatePicker
     }
 
     private fun defaultStatsPeriod(): Map<String, Pair<String, String>>{

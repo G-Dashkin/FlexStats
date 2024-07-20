@@ -42,7 +42,9 @@ class StatsAdapter(): ListAdapter<GeneralStats, RecyclerView.ViewHolder>(StatsDi
             binding.valueRevenue.text = dec.format(stats.revenue).replace(",", " ") + "р."
 
             binding.valueCPC.text = df.format(((stats.cost?:0).div(stats.clicks?.toDouble()!!))) + "р."
+            binding.valueCTR.text = df.format(((stats.clicks?:0).div(stats.impressions?.toDouble()!!)*100)) + "%"
             binding.valueCR.text = df.format(((stats.clicks?:0).div(stats.transactions?.toDouble()!!))) + "%"
+            binding.valueCPO.text = df.format(((stats.cost?:0).div(stats.transactions?.toDouble()!!))) + "р."
             binding.valueDRR.text = df.format(((stats.cost?:0).div(stats.revenue?.toDouble()!!)*100)) + "%"
         }
     }
