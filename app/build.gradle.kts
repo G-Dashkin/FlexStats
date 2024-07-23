@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-    // room
+    // Room
     implementation(libs.androidx.room.ktx)
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
 }

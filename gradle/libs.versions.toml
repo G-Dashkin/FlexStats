@@ -25,6 +25,7 @@ dagger = "2.50"
 core-ktx = "1.12.0"
 kotlinx_immutable = "0.3.5"
 kotlinx-coroutines = "1.7.3"
+work-ktx = "2.9.0"
 
 # presentation
 lifecycle-runtime-ktx = "2.6.2"
@@ -42,6 +43,9 @@ composecompiler = "1.5.3"
 activity-compose = "1.8.2"
 compose-bom = "2023.10.01"
 navigation = "2.7.6"
+
+# WorkManager
+
 
 # tests
 junit = "4.13.2"
@@ -61,6 +65,7 @@ javax-inject = { group = "javax.inject", name = "javax.inject", version = "1" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx_immutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+androidx-work-runtime-ktx = { group = "androidx.work",  name ="work-runtime-ktx", version.ref = "work-ktx"}
 
 # data
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
@@ -70,7 +75,6 @@ gson  = { group = "com.google.code.gson", name = "gson", version = "2.10.1"}
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
-
 
 # Datastore
 datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
