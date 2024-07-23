@@ -25,6 +25,7 @@ dagger = "2.50"
 core-ktx = "1.12.0"
 kotlinx_immutable = "0.3.5"
 kotlinx-coroutines = "1.7.3"
+work-ktx = "2.9.0"
 
 # presentation
 lifecycle-runtime-ktx = "2.6.2"
@@ -107,6 +108,9 @@ material3 = { group = "androidx.compose.material3", name = "material3" }
 navigation = {group = "androidx.navigation", name = "navigation-compose"}
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigation" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+
+# WorkManager
+androidx-work-runtime-ktx = { group = "androidx.work", name ="work-runtime-ktx", version.ref = "work-ktx"}
 
 # tests
 junit = { group = "junit", name = "junit", version.ref = "junit" }
