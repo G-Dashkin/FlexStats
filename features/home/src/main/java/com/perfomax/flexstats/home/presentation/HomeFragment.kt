@@ -48,15 +48,26 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             homeViewModel.updateStats()
         }
         binding.selectPeriodButton.setOnClickListener {
-            showDatePiker()
+            homeViewModel.showDatePiker()
         }
 
         binding.clearBaseButton.setOnClickListener {
             homeViewModel.clearStats()
         }
-
         setAdapter()
-        setProgressIndicator()
+        setScreen()
+    }
+
+    private fun setScreen() {
+        homeViewModel.homeScreen.observe(viewLifecycleOwner) {
+            when(it) {
+                is HomeScreen.ShowTitle -> binding.twTitle.visibility = View.VISIBLE
+                is HomeScreen.HideTitle -> binding.twTitle.visibility = View.GONE
+                is HomeScreen.ShowProgressIndicator -> showProgressIndicator()
+                is HomeScreen.HideProgressIndicator -> hideProgressIndicator()
+                is HomeScreen.ShowDatePicker -> showDatePiker()
+            }
+        }
     }
 
     private fun setAdapter() {
@@ -92,23 +103,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun setProgressIndicator() {
-        homeViewModel.progressIndicator.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                binding.circularProgressIndicator.visibility = View.VISIBLE
-                binding.circularProgressIndicator.bringToFront()
-                binding.updateStatsButton.isEnabled = false
-                binding.selectPeriodButton.isEnabled = false
-                binding.selectAutoUpdateButton.isEnabled = false
-                binding.clearBaseButton.isEnabled = false
-            } else {
-                binding.circularProgressIndicator.visibility = View.GONE
-                binding.updateStatsButton.isEnabled = true
-                binding.selectPeriodButton.isEnabled = true
-                binding.selectAutoUpdateButton.isEnabled = true
-                binding.clearBaseButton.isEnabled = true
-            }
-        }
+    private fun showProgressIndicator() {
+        binding.circularProgressIndicator.visibility = View.VISIBLE
+        binding.circularProgressIndicator.bringToFront()
+        binding.updateStatsButton.isEnabled = false
+        binding.selectPeriodButton.isEnabled = false
+        binding.selectAutoUpdateButton.isEnabled = false
+        binding.clearBaseButton.isEnabled = false
+    }
+
+    private fun hideProgressIndicator() {
+        binding.circularProgressIndicator.visibility = View.GONE
+        binding.updateStatsButton.isEnabled = true
+        binding.selectPeriodButton.isEnabled = true
+        binding.selectAutoUpdateButton.isEnabled = true
+        binding.clearBaseButton.isEnabled = true
     }
 
     companion object {

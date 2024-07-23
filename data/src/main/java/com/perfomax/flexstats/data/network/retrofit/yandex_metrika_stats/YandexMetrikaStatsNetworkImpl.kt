@@ -18,6 +18,7 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
 
     override suspend fun getStats(
         date: String,
+        account: String,
         metrikaCounter: String,
         token: String,
         projectId: Int
@@ -48,6 +49,7 @@ class YandexMetrikaStatsNetworkImpl @Inject constructor(
 
         return YandexMetrikaStats(
             date = date,
+            accoutn = account,
             counter = metrikaCounter,
             transactions = yandexMetrikaStats.body()?.totals?.get(0)?.toInt(),
             revenue = yandexMetrikaStats.body()?.totals?.get(1)?.toLong(),

@@ -2,6 +2,7 @@ package com.perfomax.flexstats.presentation.navigation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -135,7 +136,7 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
         )
     }
 
-    private fun setActionBarSettings(){
+    private fun setActionBarSettings() {
 
         lifecycleScope.launch {
             val allProjects = getUserProjectsUseCase.execute()
@@ -160,14 +161,18 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
             binding.materialToolbar.visibility = View.GONE
             binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             var currentFragmentName = childFragmentManager.getFragmentName()
-            while (currentFragmentName in START_SCREENS) {
-                currentFragmentName = childFragmentManager.getFragmentName()
-                val userIsAuth = getAuthUseCase.execute()
-                if (currentFragmentName !in START_SCREENS && userIsAuth) {
-                    binding.materialToolbar.visibility = View.VISIBLE
-                    binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            if (currentFragmentName !in START_SCREENS){
+                binding.materialToolbar.visibility = View.VISIBLE
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            } else {
+                while (currentFragmentName in START_SCREENS) {
+                    currentFragmentName = childFragmentManager.getFragmentName()
+                    if (currentFragmentName !in START_SCREENS) {
+                        binding.materialToolbar.visibility = View.VISIBLE
+                        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                    }
+                    delay(100)
                 }
-                delay(100)
             }
         }
     }

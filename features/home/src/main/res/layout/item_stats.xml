@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:gravity="center|left"
     android:background="@color/background"
     android:orientation="horizontal" >
 
-    <!--    data column-->
     <TextView
         android:id="@+id/valueDate"
-        android:layout_width="60dp"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:textColor="@color/black"
         android:text="2023-04-04"
         android:textSize="12sp"
         android:gravity="center"
         android:background="@drawable/stats_item_border"/>
 
-    <!--    Yandex Direct-->
     <LinearLayout
         android:id="@+id/yandexDirect"
         android:layout_width="120dp"
         android:layout_height="match_parent"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:gravity="center"
         android:layout_weight="1"
         android:background="@drawable/stats_item_border"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="start"
+                android:gravity="end"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/textClicks"
                     android:layout_width="wrap_content"
@@ -44,6 +46,7 @@
                     android:text="Клики:"
                     android:textSize="12sp"
                     android:gravity="center"/>
+
                 <TextView
                     android:id="@+id/textImpressions"
                     android:layout_width="wrap_content"
@@ -52,12 +55,31 @@
                     android:text="Показы:"
                     android:textSize="12sp"
                     android:gravity="center"/>
+
                 <TextView
                     android:id="@+id/textCosts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="Расход:"
+                    android:textSize="12sp"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/textTransactions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="Заказы:"
+                    android:textSize="12sp"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:id="@+id/textRevenue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="Доход:"
                     android:textSize="12sp"
                     android:gravity="center"/>
             </LinearLayout>
@@ -90,53 +112,6 @@
                     android:text="3 655 045р."
                     android:textSize="12sp"
                     android:gravity="center"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!--    Yandex Metrika-->
-    <LinearLayout
-        android:id="@+id/yandexMetrika"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:background="@drawable/stats_item_border"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/textTransactions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="Заказы:"
-                    android:textSize="12sp"
-                    android:gravity="center"/>
-                <TextView
-                    android:id="@+id/textRevenue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="Доход:"
-                    android:textSize="12sp"
-                    android:gravity="center"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:orientation="vertical">
                 <TextView
                     android:id="@+id/valueTransactions"
                     android:layout_width="wrap_content"
@@ -153,16 +128,15 @@
                     android:text="234 343 433р."
                     android:textSize="12sp"
                     android:gravity="center"/>
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-    <!--    Measures-->
     <LinearLayout
         android:id="@+id/measures"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:gravity="center"
         android:background="@drawable/stats_item_border"
         android:orientation="vertical">
@@ -173,7 +147,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="start"
+                android:gravity="end"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/textCPC"
@@ -184,11 +158,27 @@
                     android:textSize="12sp"
                     android:gravity="center"/>
                 <TextView
+                    android:id="@+id/textCTR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="CTR:"
+                    android:textSize="12sp"
+                    android:gravity="center"/>
+                <TextView
                     android:id="@+id/textCR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="CR:"
+                    android:textSize="12sp"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/textCPO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="CPO:"
                     android:textSize="12sp"
                     android:gravity="center"/>
                 <TextView
@@ -215,11 +205,27 @@
                     android:textSize="12sp"
                     android:gravity="center"/>
                 <TextView
+                    android:id="@+id/valueCTR"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="3.4%"
+                    android:textSize="12sp"
+                    android:gravity="center"/>
+                <TextView
                     android:id="@+id/valueCR"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="2.4%"
+                    android:textSize="12sp"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/valueCPO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="1400р."
                     android:textSize="12sp"
                     android:gravity="center"/>
                 <TextView
