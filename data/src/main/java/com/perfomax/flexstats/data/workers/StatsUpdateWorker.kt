@@ -1,17 +1,13 @@
-package com.perfomax.flexstats.workers
+package com.perfomax.flexstats.data.workers
 
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.perfomax.flexstats.data_api.repository.StatsRepository
-import com.perfomax.flexstats.home.presentation.HomeViewModelFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

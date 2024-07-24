@@ -1,6 +1,8 @@
 package com.perfomax.flexstats.data.repository
 
+import android.content.Context
 import android.util.Log
+import androidx.work.WorkManager
 import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
@@ -9,6 +11,7 @@ import com.perfomax.flexstats.core.utils.getDaysDiapason
 import com.perfomax.flexstats.core.utils.isNotMaxUpdateDate
 import com.perfomax.flexstats.core.utils.toDateString
 import com.perfomax.flexstats.core.utils.toTimestamp
+import com.perfomax.flexstats.data.workers.StatsUpdateWorker
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.network.YandexMetrikaStatsNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
@@ -30,7 +33,11 @@ class StatsRepositoryImpl @Inject constructor(
     private val yandexDirectStatsNetwork: YandexDirectStatsNetwork,
     private val yandexMetrikaStatsNetwork: YandexMetrikaStatsNetwork,
     private val statsStorage: StatsStorage,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+
+    private val context: Context
+
+//    private val stata
 ): StatsRepository {
 
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -44,6 +51,12 @@ class StatsRepositoryImpl @Inject constructor(
             if (account.accountType == YANDEX_METRIKA) yandexMetrikaStatsProcessing(account = account, project_id = projectId?:0)
         }
         dataProcessing(projectId = projectId?:0)
+    }
+
+    override suspend fun updateStatsInBackground() {
+        val workManager: WorkManager = WorkManager.getInstance(context)
+        StatsUpdateWorker.enqueue(workManager)
+//        updateStats()
     }
 
     override suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats> {

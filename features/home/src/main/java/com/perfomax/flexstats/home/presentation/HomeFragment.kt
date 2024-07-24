@@ -47,6 +47,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.updateStatsButton.setOnClickListener {
             homeViewModel.updateStats()
         }
+        binding.selectAutoUpdateButton.setOnClickListener {
+            Log.d("MyLog", "Click updateStatsInBackground()")
+            homeViewModel.updateStatsInBackground()
+        }
+
         binding.selectPeriodButton.setOnClickListener {
             homeViewModel.showDatePiker()
         }

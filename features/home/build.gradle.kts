@@ -39,6 +39,9 @@ android {
 
 dependencies {
 
+//    implementation(project(":app"))
+//    implementation(libs.androidx.work.runtime.ktx)
+
     implementation(project(":core:navigation"))
     implementation(project(":core:utils"))
     implementation(project(":core:ui"))

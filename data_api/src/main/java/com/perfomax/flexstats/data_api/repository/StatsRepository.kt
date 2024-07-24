@@ -5,6 +5,7 @@ import com.perfomax.flexstats.models.YandexDirectStats
 
 interface StatsRepository {
     suspend fun updateStats()
+    suspend fun updateStatsInBackground()
     suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats>
     suspend fun clearStats()
 }

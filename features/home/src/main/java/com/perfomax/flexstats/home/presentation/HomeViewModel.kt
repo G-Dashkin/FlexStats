@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
+import com.perfomax.flexstats.home.domain.usecases.LoadStatsBackgroundUseCase
 import com.perfomax.flexstats.home.domain.usecases.LoadStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
 import com.perfomax.flexstats.models.YandexDirectStats
@@ -31,6 +32,7 @@ sealed class HomeScreen {
 
 class HomeViewModel(
     private val loadStatsUseCase: LoadStatsUseCase,
+    private val loadStatsBackgroundUseCase: LoadStatsBackgroundUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
     private val clearStatsUseCase: ClearStatsUseCase
 ): ViewModel() {
@@ -74,6 +76,12 @@ class HomeViewModel(
             loadStatsUseCase.execute()
             loadGeneralStatsList()
             _homeScreen.value = HomeScreen.HideProgressIndicator
+        }
+    }
+
+    fun updateStatsInBackground() {
+        viewModelScope.launch {
+            loadStatsBackgroundUseCase.execute()
         }
     }
 
@@ -134,6 +142,7 @@ class HomeViewModel(
 
 class HomeViewModelFactory @Inject constructor(
     private val loadStatsUseCase: LoadStatsUseCase,
+    private val loadStatsBackgroundUseCase: LoadStatsBackgroundUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
     private val clearStatsUseCase: ClearStatsUseCase
 ):  ViewModelProvider.Factory {
@@ -144,6 +153,7 @@ class HomeViewModelFactory @Inject constructor(
     ): T {
         return HomeViewModel(
             loadStatsUseCase = loadStatsUseCase,
+            loadStatsBackgroundUseCase = loadStatsBackgroundUseCase,
             getGeneralUseCase = getGeneralUseCase,
             clearStatsUseCase = clearStatsUseCase
         ) as T
