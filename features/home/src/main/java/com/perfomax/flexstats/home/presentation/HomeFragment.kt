@@ -44,19 +44,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
 
-        binding.updateStatsButton.setOnClickListener {
-            homeViewModel.updateStats()
-        }
-        binding.selectAutoUpdateButton.setOnClickListener {
-            Log.d("MyLog", "Click updateStatsInBackground()")
-            homeViewModel.updateStatsInBackground()
-        }
-
-        binding.selectPeriodButton.setOnClickListener {
+        binding.selectStatsPeriodButton.setOnClickListener {
             homeViewModel.showDatePiker()
         }
 
-        binding.clearBaseButton.setOnClickListener {
+        binding.updateStatsButton.setOnClickListener {
+            homeViewModel.updateStats()
+        }
+
+        binding.selectUpdatePeriodButton.setOnClickListener {
+
+        }
+
+        binding.clearStatsButton.setOnClickListener {
             homeViewModel.clearStats()
         }
         setAdapter()
@@ -112,17 +112,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.circularProgressIndicator.visibility = View.VISIBLE
         binding.circularProgressIndicator.bringToFront()
         binding.updateStatsButton.isEnabled = false
-        binding.selectPeriodButton.isEnabled = false
-        binding.selectAutoUpdateButton.isEnabled = false
-        binding.clearBaseButton.isEnabled = false
+        binding.selectStatsPeriodButton.isEnabled = false
+        binding.updateStatsButton.isEnabled = false
+        binding.updateStatsButton.isEnabled = false
+        binding.clearStatsButton.isEnabled = false
     }
 
     private fun hideProgressIndicator() {
         binding.circularProgressIndicator.visibility = View.GONE
         binding.updateStatsButton.isEnabled = true
-        binding.selectPeriodButton.isEnabled = true
-        binding.selectAutoUpdateButton.isEnabled = true
-        binding.clearBaseButton.isEnabled = true
+        binding.selectStatsPeriodButton.isEnabled = true
+        binding.updateStatsButton.isEnabled = true
+        binding.selectUpdatePeriodButton.isEnabled = true
+        binding.clearStatsButton.isEnabled = true
     }
 
     companion object {

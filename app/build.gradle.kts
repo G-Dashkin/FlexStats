@@ -72,6 +72,4 @@ dependencies {
     // Room
     implementation(libs.androidx.room.ktx)
 
-    // WorkManager
-    implementation(libs.androidx.work.runtime.ktx)
 }

@@ -1,11 +1,11 @@
 package com.perfomax.flexstats.data_api.repository
 
 import com.perfomax.flexstats.models.GeneralStats
-import com.perfomax.flexstats.models.YandexDirectStats
 
 interface StatsRepository {
     suspend fun updateStats()
-    suspend fun updateStatsInBackground()
+    suspend fun updateStatsInBackgroundStart()
+    suspend fun updateStatsInBackgroundStop()
     suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats>
     suspend fun clearStats()
 }

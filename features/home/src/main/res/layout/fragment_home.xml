@@ -84,7 +84,7 @@
         android:layout_height="@dimen/zeroDp"
         android:layout_marginEnd="@dimen/margin10"
         android:layout_marginStart="@dimen/margin10"
-        app:layout_constraintBottom_toTopOf="@+id/topLinearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/twTitle"
@@ -92,73 +92,56 @@
 
 
     <LinearLayout
-        android:id="@+id/topLinearLayout"
+        android:id="@+id/bottomLinearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingBottom="50dp"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/updateStatsButton"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="Обновить статистику"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:orientation="vertical">
 
         <Button
-            android:id="@+id/selectPeriodButton"
+            android:id="@+id/selectUpdatePeriodButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Период обновления" />
+
+        <Button
+            android:id="@+id/selectStatsPeriodButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Период статистики" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:text="Период статистики"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/updateStatsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Обновить статистику" />
+
+            <Button
+                android:id="@+id/clearStatsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Удалить статистику" />
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/buttomLinearLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/selectAutoUpdateButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="Обновление в фоне"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/clearBaseButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:text="Очистка                           базы"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

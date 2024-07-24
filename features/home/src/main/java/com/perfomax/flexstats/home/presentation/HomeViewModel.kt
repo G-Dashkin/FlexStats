@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.home.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -10,11 +9,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
-import com.perfomax.flexstats.home.domain.usecases.LoadStatsBackgroundUseCase
+import com.perfomax.flexstats.home.domain.usecases.LoadStatsBackgroundStartUseCase
+import com.perfomax.flexstats.home.domain.usecases.LoadStatsBackgroundStopUseCase
 import com.perfomax.flexstats.home.domain.usecases.LoadStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
-import com.perfomax.flexstats.models.YandexDirectStats
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -32,7 +30,8 @@ sealed class HomeScreen {
 
 class HomeViewModel(
     private val loadStatsUseCase: LoadStatsUseCase,
-    private val loadStatsBackgroundUseCase: LoadStatsBackgroundUseCase,
+    private val loadStatsBackgroundStartUseCase: LoadStatsBackgroundStartUseCase,
+    private val loadStatsBackgroundStopUseCase: LoadStatsBackgroundStopUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
     private val clearStatsUseCase: ClearStatsUseCase
 ): ViewModel() {
@@ -79,9 +78,14 @@ class HomeViewModel(
         }
     }
 
-    fun updateStatsInBackground() {
+    fun updateStatsInBackgroundStart() {
         viewModelScope.launch {
-            loadStatsBackgroundUseCase.execute()
+            loadStatsBackgroundStartUseCase.execute()
+        }
+    }
+    fun updateStatsInBackgroundStop() {
+        viewModelScope.launch {
+            loadStatsBackgroundStopUseCase.execute()
         }
     }
 
@@ -142,7 +146,8 @@ class HomeViewModel(
 
 class HomeViewModelFactory @Inject constructor(
     private val loadStatsUseCase: LoadStatsUseCase,
-    private val loadStatsBackgroundUseCase: LoadStatsBackgroundUseCase,
+    private val loadStatsBackgroundStartUseCase: LoadStatsBackgroundStartUseCase,
+    private val loadStatsBackgroundStopUseCase: LoadStatsBackgroundStopUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
     private val clearStatsUseCase: ClearStatsUseCase
 ):  ViewModelProvider.Factory {
@@ -153,7 +158,8 @@ class HomeViewModelFactory @Inject constructor(
     ): T {
         return HomeViewModel(
             loadStatsUseCase = loadStatsUseCase,
-            loadStatsBackgroundUseCase = loadStatsBackgroundUseCase,
+            loadStatsBackgroundStartUseCase = loadStatsBackgroundStartUseCase,
+            loadStatsBackgroundStopUseCase= loadStatsBackgroundStopUseCase,
             getGeneralUseCase = getGeneralUseCase,
             clearStatsUseCase = clearStatsUseCase
         ) as T
