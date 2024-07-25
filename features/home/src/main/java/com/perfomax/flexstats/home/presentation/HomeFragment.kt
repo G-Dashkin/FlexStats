@@ -87,7 +87,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setAdapter() {
-        val adapter = StatsAdapter()
+        val adapter = HomeAdapter()
         binding.statsRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.statsRecyclerView.adapter = adapter
         homeViewModel.statsList.observe(viewLifecycleOwner) {
