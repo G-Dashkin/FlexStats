@@ -1,7 +1,11 @@
 package com.perfomax.flexstats.home.presentation
 
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,12 +16,15 @@ import com.perfomax.flexstats.core.utils.toTimestamp
 import com.perfomax.flexstats.home.di.DaggerHomeComponent
 import com.perfomax.flexstats.home.di.HomeFeatureDepsProvider
 import com.perfomax.home.R
+import com.perfomax.home.databinding.ClearStatsDialogBinding
 import com.perfomax.home.databinding.FragmentHomeBinding
 import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
+
+    private lateinit var clearStatsDialogBinding: ClearStatsDialogBinding
 
     @Inject
     lateinit var vmFactory: HomeViewModelFactory
@@ -56,7 +63,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.clearStatsButton.setOnClickListener {
-            homeViewModel.clearStats()
+            showClearStatsDialog()
         }
         setAdapter()
         setScreen()
@@ -111,7 +118,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun showUpdateDataPiker() {
         val picker = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(com.perfomax.ui.R.style.MaterialCalendarTheme)
-            .setTitleText("Выберети период обновления статистики статистики")
+            .setTitleText("Выберети период обновления статистики")
             .setSelection(
                 Pair(
                     homeViewModel.selectedUpdateStatsPeriod.value?.first?.toTimestamp(),
@@ -130,6 +137,27 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         picker.addOnNegativeButtonClickListener {
             picker.dismiss()
         }
+    }
+
+    private fun showClearStatsDialog() {
+        val dialog = settingsDialog()
+        val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        clearStatsDialogBinding = ClearStatsDialogBinding.inflate(inflater)
+        dialog.setContentView(clearStatsDialogBinding.root)
+        dialog.show()
+
+        clearStatsDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
+        clearStatsDialogBinding.btnConfirm.setOnClickListener {
+            homeViewModel.clearStats()
+            dialog.dismiss()
+        }
+    }
+
+    private fun settingsDialog(): Dialog {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        return dialog
     }
 
     private fun showProgressIndicator() {

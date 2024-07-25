@@ -114,8 +114,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         dialog.setContentView(accountDialogBinding.root)
         dialog.show()
 
-        accountDialogBinding.accountForm.setText("imedia-kcitilink")
-
         accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
 
         accountDialogBinding.autoCompleteTxt.setOnItemClickListener { parent, view, position, id ->

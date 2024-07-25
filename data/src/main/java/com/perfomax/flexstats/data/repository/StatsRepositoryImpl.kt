@@ -42,8 +42,7 @@ class StatsRepositoryImpl @Inject constructor(
         val accountsList = accountsRepository.getAllByUser()
         val projectId = accountsList.first().projectId
         accountsList.forEach { account ->
-            if (account.accountType == YANDEX_DIRECT) yandexDirectStatsProcessing(account = account, project_id = projectId?:0)
-            if (account.accountType == YANDEX_METRIKA) yandexMetrikaStatsProcessing(account = account, project_id = projectId?:0)
+            dataUpdate(account = account, project_id = projectId?:0, updatePeriod = updatePeriod)
         }
         dataProcessing(projectId = projectId?:0)
     }
@@ -53,42 +52,45 @@ class StatsRepositoryImpl @Inject constructor(
         val projectId = accountsList.first().projectId
         return statsStorage.getGeneral(project_id = projectId?:0, stats_period = statsPeriod)
     }
+    private suspend fun dataUpdate(account: Account, project_id: Int, updatePeriod: Pair<String, String>) {
 
-    private suspend fun yandexDirectStatsProcessing(account: Account, project_id: Int) {
-        val isDataByAccountYDExists = statsStorage.checkAccountYD(account = account.name, project_id = project_id)
-        if (isDataByAccountYDExists){
-            val lastUpdateDate = statsStorage.getLastUpdateDateYD(account = account.name, project_id = project_id)
-            val daysFromYesterday = lastUpdateDate.getDaysDiapason(yesterdayDate).minus(1)
+        // Update data for YANDEX_DIRECT
+        if (account.accountType == YANDEX_DIRECT) {
+            val isDataByAccountYDExists = statsStorage.checkAccountYD(account = account.name, project_id = project_id)
+            if (isDataByAccountYDExists){
+                val lastUpdateDate = statsStorage.getLastUpdateDateYD(account = account.name, project_id = project_id)
+                val daysFromYesterday = lastUpdateDate.getDaysDiapason(yesterdayDate).minus(1)
                 for (updateDay in 1..daysFromYesterday) {
                     val updateDate = LocalDateTime.now().minusDays(updateDay.toLong()).format(formatter)
                     yandexDirectUpdate(updateDate = updateDate, account = account, project_id = project_id)
                 }
-            val firstUpdateDate = statsStorage.getFirstUpdateDateYD(account = account.name, project_id = project_id)
-            if (firstUpdateDate.isNotMaxUpdateDate(DEFAULT_MAX_UPDATE_MONTHS)){
-                yandexDirectUpdate(updateDate = firstUpdateDate.dateMinusDays(1), account = account, project_id = project_id)
+                val firstUpdateDate = statsStorage.getFirstUpdateDateYD(account = account.name, project_id = project_id)
+                if (firstUpdateDate.isNotMaxUpdateDate(DEFAULT_MAX_UPDATE_MONTHS)){
+                    yandexDirectUpdate(updateDate = firstUpdateDate.dateMinusDays(1), account = account, project_id = project_id)
+                }
+            } else {
+                val updateDate = LocalDateTime.now().minusDays(1).format(formatter)
+                yandexDirectUpdate(updateDate = updateDate, account = account, project_id = project_id)
             }
-        } else {
-            val updateDate = LocalDateTime.now().minusDays(1).format(formatter)
-            yandexDirectUpdate(updateDate = updateDate, account = account, project_id = project_id)
         }
-    }
-
-    private suspend fun yandexMetrikaStatsProcessing(account: Account, project_id: Int){
-        val isDataByCounterYMExists = statsStorage.checkCounterYM(counter = account.metrikaCounter?:"", project_id = project_id)
-        if (isDataByCounterYMExists){
-            val lastUpdateDate = statsStorage.getLastUpdateDateYM(counter = account.metrikaCounter?:"", project_id = project_id)
-            val daysFromYesterday = lastUpdateDate.getDaysDiapason(yesterdayDate).minus(1)
-            for (updateDay in 1..daysFromYesterday) {
-                val updateDate = LocalDateTime.now().minusDays(updateDay.toLong()).format(formatter)
+        // Update data for YANDEX_METRIKA
+        if (account.accountType == YANDEX_METRIKA) {
+            val isDataByCounterYMExists = statsStorage.checkCounterYM(counter = account.metrikaCounter?:"", project_id = project_id)
+            if (isDataByCounterYMExists){
+                val lastUpdateDate = statsStorage.getLastUpdateDateYM(counter = account.metrikaCounter?:"", project_id = project_id)
+                val daysFromYesterday = lastUpdateDate.getDaysDiapason(yesterdayDate).minus(1)
+                for (updateDay in 1..daysFromYesterday) {
+                    val updateDate = LocalDateTime.now().minusDays(updateDay.toLong()).format(formatter)
+                    yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
+                }
+                val firstUpdateDate = statsStorage.getFirstUpdateDateYM(counter = account.metrikaCounter?:"", project_id = project_id)
+                if (firstUpdateDate.isNotMaxUpdateDate(DEFAULT_MAX_UPDATE_MONTHS)){
+                    yandexMetrikaUpdate(updateDate = firstUpdateDate.dateMinusDays(1), account = account, project_id = project_id)
+                }
+            } else {
+                val updateDate = LocalDateTime.now().minusDays(1).format(formatter)
                 yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
             }
-            val firstUpdateDate = statsStorage.getFirstUpdateDateYM(counter = account.metrikaCounter?:"", project_id = project_id)
-            if (firstUpdateDate.isNotMaxUpdateDate(DEFAULT_MAX_UPDATE_MONTHS)){
-                yandexMetrikaUpdate(updateDate = firstUpdateDate.dateMinusDays(1), account = account, project_id = project_id)
-            }
-        } else {
-            val updateDate = LocalDateTime.now().minusDays(1).format(formatter)
-            yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
         }
     }
 
@@ -121,6 +123,7 @@ class StatsRepositoryImpl @Inject constructor(
             token = account.accountToken?:"",
             projectId = project_id
         )
+        Log.d("MyLog", "New data in yandexDirect")
         statsStorage.addYandexDirectData(data = yandexDirectStats)
     }
 

@@ -32,6 +32,7 @@
     <string name="select_account_type">Выберите тип аккаунта</string>
     <string name="account_email_yandex">Аккаунт/почта яндекса</string>
     <string name="create_new_account">Создать новый аккаунт?</string>
+    <string name="clear_data">Вы действительно хотите удалить всю статистику по проекту?</string>
     <string name="email_user_exists">Пользователя с таким email не существует</string>
     <string name="incorrect_password">Пароль неверный</string>
     <string name="empty_fields">Все поля должны быть заполнены</string>

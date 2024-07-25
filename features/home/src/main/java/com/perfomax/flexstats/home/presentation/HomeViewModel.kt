@@ -102,14 +102,6 @@ class HomeViewModel(
 
     fun selectUpdatePeriod(firstDate: String, secondDate: String) {
         _selectedUpdateStatsPeriod.postValue(Pair(firstDate, secondDate))
-//        viewModelScope.launch {
-//            selectUpdatePeriodUseCase.execute(
-//                updatePeriod = Pair(
-//                    first = firstDate,
-//                    second = secondDate
-//                )
-//            )
-//        }
     }
 
     fun showStatsDatePiker() {
