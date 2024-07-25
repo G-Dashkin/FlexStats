@@ -1,6 +1,7 @@
 package com.perfomax.flexstats.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.core.utils.dateMinusDays
@@ -33,7 +34,11 @@ class StatsRepositoryImpl @Inject constructor(
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private val yesterdayDate = LocalDateTime.now().minusDays(1).format(formatter)
 
-    override suspend fun updateStats(): Unit = withContext(dispatcher) {
+    override suspend fun updateStats(updatePeriod: Pair<String, String>): Unit = withContext(dispatcher) {
+
+        Log.d("MyLog", "start update date: ${updatePeriod.first}")
+        Log.d("MyLog", "end update date: ${updatePeriod.second}")
+
         val accountsList = accountsRepository.getAllByUser()
         val projectId = accountsList.first().projectId
         accountsList.forEach { account ->
@@ -41,14 +46,6 @@ class StatsRepositoryImpl @Inject constructor(
             if (account.accountType == YANDEX_METRIKA) yandexMetrikaStatsProcessing(account = account, project_id = projectId?:0)
         }
         dataProcessing(projectId = projectId?:0)
-    }
-
-    override suspend fun updateStatsInBackgroundStart() {
-
-    }
-
-    override suspend fun updateStatsInBackgroundStop() {
-
     }
 
     override suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats> {

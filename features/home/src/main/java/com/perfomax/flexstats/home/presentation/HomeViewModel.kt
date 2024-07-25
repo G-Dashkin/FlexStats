@@ -9,9 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
-import com.perfomax.flexstats.home.domain.usecases.LoadStatsBackgroundStartUseCase
-import com.perfomax.flexstats.home.domain.usecases.LoadStatsBackgroundStopUseCase
-import com.perfomax.flexstats.home.domain.usecases.LoadStatsUseCase
+import com.perfomax.flexstats.home.domain.usecases.UpdateStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -26,12 +24,11 @@ sealed class HomeScreen {
     data object ShowProgressIndicator : HomeScreen()
     data object HideProgressIndicator : HomeScreen()
     data object ShowDatePicker : HomeScreen()
+    data object ShowUpdatePicker : HomeScreen()
 }
 
 class HomeViewModel(
-    private val loadStatsUseCase: LoadStatsUseCase,
-    private val loadStatsBackgroundStartUseCase: LoadStatsBackgroundStartUseCase,
-    private val loadStatsBackgroundStopUseCase: LoadStatsBackgroundStopUseCase,
+    private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
     private val clearStatsUseCase: ClearStatsUseCase
 ): ViewModel() {
@@ -40,10 +37,16 @@ class HomeViewModel(
     val statsList: LiveData<List<GeneralStats>> = _statsList
 
     private var _selectedStatsPeriod = MutableLiveData(Pair(
-            defaultStatsPeriod().get("standardDate")!!.first,
-            defaultStatsPeriod().get("standardDate")!!.second
+            defaultShowStatsPeriod().get("standardDate")!!.first,
+            defaultShowStatsPeriod().get("standardDate")!!.second
     ))
     val selectedStatsPeriod: LiveData<Pair<String, String>> = _selectedStatsPeriod
+
+    private var _selectedUpdateStatsPeriod = MutableLiveData(Pair(
+        defaultUpdateStatsPeriod().get("standardDate")!!.first,
+        defaultUpdateStatsPeriod().get("standardDate")!!.second
+    ))
+    val selectedUpdateStatsPeriod: LiveData<Pair<String, String>> = _selectedUpdateStatsPeriod
 
     private val _homeScreen = MutableLiveData<HomeScreen>()
     val homeScreen: LiveData<HomeScreen> = _homeScreen
@@ -68,24 +71,12 @@ class HomeViewModel(
         }
     }
 
-
     fun updateStats() {
         viewModelScope.launch {
             _homeScreen.value = HomeScreen.ShowProgressIndicator
-            loadStatsUseCase.execute()
+            updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!)
             loadGeneralStatsList()
             _homeScreen.value = HomeScreen.HideProgressIndicator
-        }
-    }
-
-    fun updateStatsInBackgroundStart() {
-        viewModelScope.launch {
-            loadStatsBackgroundStartUseCase.execute()
-        }
-    }
-    fun updateStatsInBackgroundStop() {
-        viewModelScope.launch {
-            loadStatsBackgroundStopUseCase.execute()
         }
     }
 
@@ -109,11 +100,27 @@ class HomeViewModel(
         }
     }
 
-    fun showDatePiker() {
+    fun selectUpdatePeriod(firstDate: String, secondDate: String) {
+        _selectedUpdateStatsPeriod.postValue(Pair(firstDate, secondDate))
+//        viewModelScope.launch {
+//            selectUpdatePeriodUseCase.execute(
+//                updatePeriod = Pair(
+//                    first = firstDate,
+//                    second = secondDate
+//                )
+//            )
+//        }
+    }
+
+    fun showStatsDatePiker() {
         _homeScreen.value = HomeScreen.ShowDatePicker
     }
 
-    private fun defaultStatsPeriod(): Map<String, Pair<String, String>>{
+    fun showUpdateDataPiker() {
+        _homeScreen.value = HomeScreen.ShowUpdatePicker
+    }
+
+    private fun defaultShowStatsPeriod(): Map<String, Pair<String, String>>{
 
         val thirtyDays = Calendar.getInstance()
         val yesterday = Calendar.getInstance()
@@ -134,6 +141,27 @@ class HomeViewModel(
         return statsPeriodMap
     }
 
+    private fun defaultUpdateStatsPeriod(): Map<String, Pair<String, String>>{
+
+        val thirtyDays = Calendar.getInstance()
+        val yesterday = Calendar.getInstance()
+        thirtyDays.add(Calendar.DAY_OF_YEAR, -1)
+        yesterday.add(Calendar.DAY_OF_YEAR, -1)
+
+        val statsPeriodMap = mutableMapOf<String, Pair<String, String>>()
+        statsPeriodMap.put("millisecondsDate", Pair(
+            thirtyDays.timeInMillis.toString(),
+            yesterday.timeInMillis.toString()
+        )
+        )
+        statsPeriodMap.put("standardDate", Pair(
+            convertTimeToDate(thirtyDays.timeInMillis),
+            convertTimeToDate(yesterday.timeInMillis)
+        )
+        )
+        return statsPeriodMap
+    }
+
 
     fun convertTimeToDate(time:Long): String {
         val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -145,9 +173,7 @@ class HomeViewModel(
 }
 
 class HomeViewModelFactory @Inject constructor(
-    private val loadStatsUseCase: LoadStatsUseCase,
-    private val loadStatsBackgroundStartUseCase: LoadStatsBackgroundStartUseCase,
-    private val loadStatsBackgroundStopUseCase: LoadStatsBackgroundStopUseCase,
+    private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
     private val clearStatsUseCase: ClearStatsUseCase
 ):  ViewModelProvider.Factory {
@@ -157,9 +183,7 @@ class HomeViewModelFactory @Inject constructor(
         extras: CreationExtras,
     ): T {
         return HomeViewModel(
-            loadStatsUseCase = loadStatsUseCase,
-            loadStatsBackgroundStartUseCase = loadStatsBackgroundStartUseCase,
-            loadStatsBackgroundStopUseCase= loadStatsBackgroundStopUseCase,
+            updateStatsUseCase = updateStatsUseCase,
             getGeneralUseCase = getGeneralUseCase,
             clearStatsUseCase = clearStatsUseCase
         ) as T

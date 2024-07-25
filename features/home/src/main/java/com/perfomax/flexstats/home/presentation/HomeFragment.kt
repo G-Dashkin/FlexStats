@@ -1,7 +1,6 @@
 package com.perfomax.flexstats.home.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
@@ -45,15 +44,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding = FragmentHomeBinding.bind(view)
 
         binding.selectStatsPeriodButton.setOnClickListener {
-            homeViewModel.showDatePiker()
+            homeViewModel.showStatsDatePiker()
+        }
+
+        binding.selectUpdatePeriodButton.setOnClickListener {
+            homeViewModel.showUpdateDataPiker()
         }
 
         binding.updateStatsButton.setOnClickListener {
             homeViewModel.updateStats()
-        }
-
-        binding.selectUpdatePeriodButton.setOnClickListener {
-
         }
 
         binding.clearStatsButton.setOnClickListener {
@@ -70,7 +69,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 is HomeScreen.HideTitle -> binding.twTitle.visibility = View.GONE
                 is HomeScreen.ShowProgressIndicator -> showProgressIndicator()
                 is HomeScreen.HideProgressIndicator -> hideProgressIndicator()
-                is HomeScreen.ShowDatePicker -> showDatePiker()
+                is HomeScreen.ShowDatePicker -> showStatsDatePiker()
+                is HomeScreen.ShowUpdatePicker -> showUpdateDataPiker()
             }
         }
     }
@@ -84,7 +84,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun showDatePiker() {
+    private fun showStatsDatePiker() {
         val picker = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(com.perfomax.ui.R.style.MaterialCalendarTheme)
             .setTitleText("Выберети период отображения статистики")
@@ -108,11 +108,36 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private fun showUpdateDataPiker() {
+        val picker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTheme(com.perfomax.ui.R.style.MaterialCalendarTheme)
+            .setTitleText("Выберети период обновления статистики статистики")
+            .setSelection(
+                Pair(
+                    homeViewModel.selectedUpdateStatsPeriod.value?.first?.toTimestamp(),
+                    homeViewModel.selectedUpdateStatsPeriod.value?.second?.toTimestamp(),
+                )
+            )
+            .build()
+
+        picker.show(this.parentFragmentManager, "TAG")
+        picker.addOnPositiveButtonClickListener {
+            homeViewModel.selectUpdatePeriod(
+                firstDate = homeViewModel.convertTimeToDate(it.first),
+                secondDate = homeViewModel.convertTimeToDate(it.second)
+            )
+        }
+        picker.addOnNegativeButtonClickListener {
+            picker.dismiss()
+        }
+    }
+
     private fun showProgressIndicator() {
         binding.circularProgressIndicator.visibility = View.VISIBLE
         binding.circularProgressIndicator.bringToFront()
         binding.updateStatsButton.isEnabled = false
         binding.selectStatsPeriodButton.isEnabled = false
+        binding.selectUpdatePeriodButton.isEnabled = false
         binding.updateStatsButton.isEnabled = false
         binding.updateStatsButton.isEnabled = false
         binding.clearStatsButton.isEnabled = false
@@ -122,6 +147,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.circularProgressIndicator.visibility = View.GONE
         binding.updateStatsButton.isEnabled = true
         binding.selectStatsPeriodButton.isEnabled = true
+        binding.selectUpdatePeriodButton.isEnabled = true
         binding.updateStatsButton.isEnabled = true
         binding.selectUpdatePeriodButton.isEnabled = true
         binding.clearStatsButton.isEnabled = true

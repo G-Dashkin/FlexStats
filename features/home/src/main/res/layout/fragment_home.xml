@@ -10,17 +10,17 @@
         android:id="@+id/circularProgressIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:indicatorSize="50dp"
         android:layout_centerVertical="true"
-        android:visibility="gone"
-        android:maxHeight="150dp"
-        android:minHeight="150dp"
-        android:minWidth="150dp"
         android:maxWidth="150dp"
-        app:layout_constraintBottom_toBottomOf="@+id/topLinearLayout"
-        app:layout_constraintEnd_toEndOf="@+id/stats_recycler_view"
-        app:layout_constraintStart_toStartOf="@+id/stats_recycler_view"
-        app:layout_constraintTop_toTopOf="@+id/twTitle"/>
+        android:maxHeight="150dp"
+        android:minWidth="150dp"
+        android:minHeight="150dp"
+        android:visibility="gone"
+        app:indicatorSize="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/stats_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/twTitle"
@@ -108,28 +108,6 @@
             android:layout_marginRight="5dp"
             android:orientation="vertical">
 
-        <Button
-            android:id="@+id/selectUpdatePeriodButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Период обновления" />
-
-        <Button
-            android:id="@+id/selectStatsPeriodButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Период статистики" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dp"
-            android:orientation="vertical">
-
             <Button
                 android:id="@+id/updateStatsButton"
                 android:layout_width="match_parent"
@@ -141,6 +119,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Удалить статистику" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/selectUpdatePeriodButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Период обновления" />
+
+            <Button
+                android:id="@+id/selectStatsPeriodButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Период статистики" />
+
         </LinearLayout>
     </LinearLayout>
 
