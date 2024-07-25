@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.core.utils
 
+import android.util.Log
 import androidx.fragment.app.FragmentManager
 import com.perfomax.flexstats.core.contracts.DATE_FORMAT
 import com.perfomax.flexstats.models.Account
@@ -86,6 +87,27 @@ fun Long.toDateString (minusDays: Int = 0): String {
 fun String.daysFromYesterday() {
 
     this
+}
+
+
+fun Pair<String, String>.toDateList(): List<String> {
+    val startDate = LocalDate.of(
+        this.first.toString().split("-")[0].toInt(),
+        this.first.split("-")[1].toInt(),
+        this.first.split("-")[2].toInt(),
+    )
+    val endDate = LocalDate.of(
+        this.second.split("-")[0].toInt(),
+        this.second.split("-")[1].toInt(),
+        this.second.split("-")[2].toInt(),
+    )
+    val dates = mutableListOf<String>()
+    var currentDate = startDate
+    while (currentDate.isBefore(endDate.plusDays(1))) {
+        dates.add(currentDate.toString())
+        currentDate = currentDate.plusDays(1)
+    }
+    return dates
 }
 
 fun FragmentManager.getFragmentName():String {
