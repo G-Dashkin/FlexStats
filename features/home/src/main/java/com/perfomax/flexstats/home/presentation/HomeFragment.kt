@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import android.widget.Toast
 import androidx.core.util.Pair
+import android.view.Gravity
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,6 +81,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 is HomeScreen.HideProgressIndicator -> hideProgressIndicator()
                 is HomeScreen.ShowDatePicker -> showStatsDatePiker()
                 is HomeScreen.ShowUpdatePicker -> showUpdateDataPiker()
+                is HomeScreen.ShowToast -> showToast(it.updateDate)
             }
         }
     }
@@ -158,6 +162,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         return dialog
+    }
+
+
+    private fun showToast(date: String){
+        val inflater = layoutInflater
+        val layout: View = inflater.inflate(R.layout.toast_layout, null)
+        val text = layout.findViewById<TextView>(R.id.toast_text)
+        text.text = "Данные обновлены за период:\n $date"
+        val toast = Toast(activity)
+        toast.view = layout
+        toast.duration = Toast.LENGTH_LONG
+        toast.apply {
+            setGravity(Gravity.CENTER, 0, 400)
+            show()
+        }
     }
 
     private fun showProgressIndicator() {

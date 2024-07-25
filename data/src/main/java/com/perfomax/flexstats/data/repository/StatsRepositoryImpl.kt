@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
-import com.perfomax.flexstats.core.utils.dateMinusDays
 import com.perfomax.flexstats.core.utils.getDaysDiapason
 import com.perfomax.flexstats.core.utils.isNotMaxUpdateDate
 import com.perfomax.flexstats.core.utils.toDateList
@@ -80,7 +79,12 @@ class StatsRepositoryImpl @Inject constructor(
                     revenue = yandexMetrikaDate.map { it.revenue }.sumOf { it?:0 },
                     project_id = projectId
                 )
-                statsStorage.addGeneralData(data = generalStats)
+                val isEmptyData = generalStats.cost?.equals(0L)?:true
+                               && generalStats.impressions?.equals(0)?:true
+                               && generalStats.clicks?.equals(0)?:true
+                               && generalStats.transactions?.equals(0)?:true
+                               && generalStats.revenue?.equals(0L)?:true
+                if (!isEmptyData) statsStorage.addGeneralData(data = generalStats)
             }
         }
     }

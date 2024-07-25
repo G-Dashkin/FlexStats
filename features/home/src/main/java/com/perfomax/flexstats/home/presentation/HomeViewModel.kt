@@ -25,6 +25,7 @@ sealed class HomeScreen {
     data object HideProgressIndicator : HomeScreen()
     data object ShowDatePicker : HomeScreen()
     data object ShowUpdatePicker : HomeScreen()
+    data class ShowToast(val updateDate: String) : HomeScreen()
 }
 
 class HomeViewModel(
@@ -77,6 +78,12 @@ class HomeViewModel(
             updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!)
             loadGeneralStatsList()
             _homeScreen.value = HomeScreen.HideProgressIndicator
+
+            val firstDate = _selectedUpdateStatsPeriod.value?.first.toString()
+            val secondDate = _selectedUpdateStatsPeriod.value?.second.toString()
+            val updatePeriod = if (firstDate == secondDate) firstDate
+                               else firstDate +" - "+ secondDate
+            _homeScreen.value = HomeScreen.ShowToast(updatePeriod)
         }
     }
 

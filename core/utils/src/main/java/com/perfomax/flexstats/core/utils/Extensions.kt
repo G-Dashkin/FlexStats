@@ -11,6 +11,10 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import android.app.Activity
+import android.view.Gravity
+import android.widget.TextView
+import android.widget.Toast
 
 fun List<Account>.yandexDirectFilter(): List<Account> {
     return this.filter { it.accountType == "yandex_direct" }
@@ -18,13 +22,6 @@ fun List<Account>.yandexDirectFilter(): List<Account> {
 
 fun List<Account>.yandexMetrikaFilter(): List<Account> {
     return this.filter { it.accountType == "yandex_metrika" }
-}
-
-fun String.dateMinusDays(minusDays: Int = 0) : String{
-    val date = LocalDate.parse(this)
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val newDate = date.minusDays(minusDays.toLong())
-    return newDate.format(formatter)
 }
 
 fun String.isNotMaxUpdateDate(maxUpdateDate: Int): Boolean {
@@ -56,39 +53,11 @@ fun String.getDaysDiapason(diapasonDate: String): Int {
 }
 
 
-fun String.datePlusDays(minusDays: Int = 0) : String{
-    val date = LocalDate.parse(this)
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val newDate = date.plusDays(minusDays.toLong())
-    return newDate.format(formatter)
-}
-
 fun String.toTimestamp (minusDays: Int = 0): Long {
     val simpleDateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
     val date = simpleDateFormat.parse(this)
     return if (minusDays != 0) date.time.minus(minusDays) else date?.time?:0
 }
-
-fun Long.toDateString (minusDays: Int = 0): String {
-    val simpleDate = SimpleDateFormat("yyyy-MM-dd")
-    val calendar = Calendar.getInstance()
-    //--------------------------------------------------
-    val date = Date(this)
-    val stringDate = simpleDate.format(date)
-    //--------------------------------------------------
-    calendar.time = Date(this)
-    calendar.add(Calendar.DAY_OF_YEAR, -minusDays) // Subtract 5 days
-    val newTimestamp = calendar.time.time
-    val simpleDateMinusDays = Date(newTimestamp)
-    val stringDateMinusDays = simpleDate.format(simpleDateMinusDays)
-    return if (minusDays != 0) stringDateMinusDays else stringDate
-}
-
-fun String.daysFromYesterday() {
-
-    this
-}
-
 
 fun Pair<String, String>.toDateList(): List<String> {
     val startDate = LocalDate.of(
@@ -113,4 +82,3 @@ fun Pair<String, String>.toDateList(): List<String> {
 fun FragmentManager.getFragmentName():String {
     return this.fragments.get(0).toString().split("{")[0]
 }
-
