@@ -16,6 +16,8 @@ import com.perfomax.flexstats.models.Account
 import com.perfomax.flexstats.models.GeneralStats
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -116,4 +118,19 @@ class StatsRepositoryImpl @Inject constructor(
         statsStorage.clearStats(project_id = projectId?:0)
     }
 
+    override suspend fun testFlow(): Flow<String> {
+        val flow = flow {
+            emit("a")
+            kotlinx.coroutines.delay(1000)
+            emit("b")
+            kotlinx.coroutines.delay(1000)
+            emit("c")
+            kotlinx.coroutines.delay(1000)
+            emit("e")
+            kotlinx.coroutines.delay(1000)
+            emit("d")
+        }
+
+        return flow
+    }
 }

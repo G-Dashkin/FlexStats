@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
+import com.perfomax.flexstats.home.domain.usecases.TestFlowUseCase
 import com.perfomax.flexstats.home.domain.usecases.UpdateStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
 import kotlinx.coroutines.launch
@@ -33,7 +34,8 @@ sealed class HomeScreen {
 class HomeViewModel(
     private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
-    private val clearStatsUseCase: ClearStatsUseCase
+    private val clearStatsUseCase: ClearStatsUseCase,
+    private val testFlow: TestFlowUseCase
 ): ViewModel() {
 
     private var _statsList = MutableLiveData<List<GeneralStats>>()
@@ -77,6 +79,10 @@ class HomeViewModel(
     fun updateStats() {
         viewModelScope.launch {
             _homeScreen.value = HomeScreen.ShowProgressIndicator
+            testFlow.execute().collect{
+                Log.d("MyLog", "TestFlow: $it")
+            }
+
             var updateMessage: String
             try {
                 updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!)
@@ -181,7 +187,8 @@ class HomeViewModel(
 class HomeViewModelFactory @Inject constructor(
     private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
-    private val clearStatsUseCase: ClearStatsUseCase
+    private val clearStatsUseCase: ClearStatsUseCase,
+    private val testFlow: TestFlowUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -191,7 +198,8 @@ class HomeViewModelFactory @Inject constructor(
         return HomeViewModel(
             updateStatsUseCase = updateStatsUseCase,
             getGeneralUseCase = getGeneralUseCase,
-            clearStatsUseCase = clearStatsUseCase
+            clearStatsUseCase = clearStatsUseCase,
+            testFlow = testFlow
         ) as T
     }
 }
