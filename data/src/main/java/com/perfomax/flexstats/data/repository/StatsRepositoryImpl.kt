@@ -2,6 +2,7 @@ package com.perfomax.flexstats.data.repository
 
 import android.content.Context
 import android.util.Log
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.core.utils.getDaysDiapason
@@ -16,6 +17,7 @@ import com.perfomax.flexstats.models.Account
 import com.perfomax.flexstats.models.GeneralStats
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -52,13 +54,19 @@ class StatsRepositoryImpl @Inject constructor(
         return statsStorage.getGeneral(project_id = projectId?:0, stats_period = statsPeriod)
     }
     private suspend fun dataUpdate(account: Account, project_id: Int, updatePeriod: Pair<String, String>) {
+
+
         if (account.accountType == YANDEX_DIRECT) {
             for (updateDate in updatePeriod.toDateList()) {
+                val someDate = "account: ${account.name} | update date: $updateDate"
+//                testFlow(someDate)
                 yandexDirectUpdate(updateDate = updateDate, account = account, project_id = project_id)
             }
         }
         if (account.accountType == YANDEX_METRIKA) {
             for (updateDate in updatePeriod.toDateList()) {
+                val someDate = "account: ${account.name} | update date: $updateDate"
+//                testFlow(someDate)
                 yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
             }
         }
@@ -119,18 +127,16 @@ class StatsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun testFlow(): Flow<String> {
-        val flow = flow {
-            emit("a")
-            kotlinx.coroutines.delay(1000)
-            emit("b")
-            kotlinx.coroutines.delay(1000)
-            emit("c")
-            kotlinx.coroutines.delay(1000)
-            emit("e")
-            kotlinx.coroutines.delay(1000)
-            emit("d")
+        return flow {
+            emit("A")
+            delay(1000)
+            emit("B")
+            delay(1000)
+            emit("C")
+            delay(1000)
+            emit("D")
+            delay(1000)
+            emit("E")
         }
-
-        return flow
     }
 }
