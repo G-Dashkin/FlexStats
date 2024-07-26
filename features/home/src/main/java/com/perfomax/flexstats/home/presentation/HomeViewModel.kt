@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.home.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
 import com.perfomax.flexstats.home.domain.usecases.UpdateStatsUseCase
@@ -75,15 +77,20 @@ class HomeViewModel(
     fun updateStats() {
         viewModelScope.launch {
             _homeScreen.value = HomeScreen.ShowProgressIndicator
-            updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!)
+            var updateMessage: String
+            try {
+                updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!)
+                val firstDate = _selectedUpdateStatsPeriod.value?.first.toString()
+                val secondDate = _selectedUpdateStatsPeriod.value?.second.toString()
+                updateMessage = if (firstDate == secondDate) "Данные обновлены за $firstDate"
+                else "Данные обновлены за период:\n ${" c " + firstDate + " по " + secondDate }"
+            } catch (e:Exception) {
+                updateMessage = "Выбран слишком длинный период для обновления статистики. Укажите меньший период"
+            }
+
             loadGeneralStatsList()
             _homeScreen.value = HomeScreen.HideProgressIndicator
-
-            val firstDate = _selectedUpdateStatsPeriod.value?.first.toString()
-            val secondDate = _selectedUpdateStatsPeriod.value?.second.toString()
-            val updatePeriod = if (firstDate == secondDate) firstDate
-                               else firstDate +" - "+ secondDate
-            _homeScreen.value = HomeScreen.ShowToast(updatePeriod)
+            _homeScreen.value = HomeScreen.ShowToast(updateMessage)
         }
     }
 

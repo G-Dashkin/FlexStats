@@ -165,16 +165,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
 
-    private fun showToast(date: String){
+    private fun showToast(message: String){
         val inflater = layoutInflater
         val layout: View = inflater.inflate(R.layout.toast_layout, null)
         val text = layout.findViewById<TextView>(R.id.toast_text)
-        text.text = "Данные обновлены за период:\n $date"
+        text.text = message
         val toast = Toast(activity)
         toast.view = layout
         toast.duration = Toast.LENGTH_LONG
         toast.apply {
-            setGravity(Gravity.CENTER, 0, 400)
+            setGravity(Gravity.BOTTOM, 0, 350)
             show()
         }
     }
