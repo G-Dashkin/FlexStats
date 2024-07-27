@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_dialog_border"
+    android:minWidth="@dimen/width400"
+    android:minHeight="400dp"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin10"
+        android:gravity="center"
+        android:text="Обновление аккаунтов"
+        android:textColor="@color/onBackground"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black"/>
+
+<!--    <ListView-->
+<!--        android:id="@+id/updateMessageListView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_margin="@dimen/margin16"-->
+<!--        tools:listitem="@layout/message_list_item" />-->
+
+    <TextView
+        android:id="@+id/messageText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin24"
+        android:layout_marginTop="@dimen/margin24"
+        android:gravity="start"
+        android:textColor="@color/onBackground"
+        android:textSize="14sp"/>
+</LinearLayout>

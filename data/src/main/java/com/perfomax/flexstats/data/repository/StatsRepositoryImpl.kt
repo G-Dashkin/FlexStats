@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -38,14 +39,17 @@ class StatsRepositoryImpl @Inject constructor(
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private val yesterdayDate = LocalDateTime.now().minusDays(1).format(formatter)
 
-    override suspend fun updateStats(updatePeriod: Pair<String, String>): Unit = withContext(dispatcher) {
-
-        val accountsList = accountsRepository.getAllByUser()
-        val projectId = accountsList.first().projectId
-        accountsList.forEach { account ->
-            dataUpdate(account = account, project_id = projectId?:0, updatePeriod = updatePeriod)
-        }
-        dataProcessing(projectId = projectId?:0)
+    override suspend fun updateStats(updatePeriod: Pair<String, String>): Flow<String> = withContext(dispatcher)  {
+        flow {
+            val accountsList = accountsRepository.getAllByUser()
+            val projectId = accountsList.first().projectId
+            accountsList.forEach { account ->
+                dataUpdate(account = account, project_id = projectId?:0, updatePeriod = updatePeriod).collect{
+                    emit(it)
+                }
+            }
+            dataProcessing(projectId = projectId?:0)
+        }.flowOn(dispatcher)
     }
 
     override suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats> {
@@ -53,23 +57,22 @@ class StatsRepositoryImpl @Inject constructor(
         val projectId = accountsList.first().projectId
         return statsStorage.getGeneral(project_id = projectId?:0, stats_period = statsPeriod)
     }
-    private suspend fun dataUpdate(account: Account, project_id: Int, updatePeriod: Pair<String, String>) {
 
-
-        if (account.accountType == YANDEX_DIRECT) {
-            for (updateDate in updatePeriod.toDateList()) {
-                val someDate = "account: ${account.name} | update date: $updateDate"
-//                testFlow(someDate)
-                yandexDirectUpdate(updateDate = updateDate, account = account, project_id = project_id)
-            }
-        }
-        if (account.accountType == YANDEX_METRIKA) {
-            for (updateDate in updatePeriod.toDateList()) {
-                val someDate = "account: ${account.name} | update date: $updateDate"
-//                testFlow(someDate)
-                yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
-            }
-        }
+    private suspend fun dataUpdate(account: Account, project_id: Int, updatePeriod: Pair<String, String>): Flow<String>  {
+            return flow {
+                if (account.accountType == YANDEX_DIRECT) {
+                    for (updateDate in updatePeriod.toDateList()) {
+                        emit("$updateDate | ${account.name}")
+                        yandexDirectUpdate(updateDate = updateDate, account = account, project_id = project_id)
+                    }
+                }
+                if (account.accountType == YANDEX_METRIKA) {
+                    for (updateDate in updatePeriod.toDateList()) {
+                        emit("$updateDate | ${account.name} | Счетчик: ${account.metrikaCounter}")
+                        yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
+                    }
+                }
+        }.flowOn(dispatcher)
     }
 
     private suspend fun dataProcessing(projectId: Int) {

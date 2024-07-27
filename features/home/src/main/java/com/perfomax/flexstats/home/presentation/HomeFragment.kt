@@ -21,13 +21,17 @@ import com.perfomax.flexstats.home.di.HomeFeatureDepsProvider
 import com.perfomax.home.R
 import com.perfomax.home.databinding.ClearStatsDialogBinding
 import com.perfomax.home.databinding.FragmentHomeBinding
+import com.perfomax.home.databinding.UpdateMessageDialogBinding
 import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
-
     private lateinit var clearStatsDialogBinding: ClearStatsDialogBinding
+    private lateinit var updateMessageDialogBinding: UpdateMessageDialogBinding
+
+//    private lateinit var listUpdateMassage: MutableList<String>
+    private lateinit var updateMessageDialogView: Dialog
 
     @Inject
     lateinit var vmFactory: HomeViewModelFactory
@@ -68,6 +72,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.clearStatsButton.setOnClickListener {
             showClearStatsDialog()
         }
+
         setAdapter()
         setScreen()
     }
@@ -77,11 +82,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             when(it) {
                 is HomeScreen.ShowTitle -> binding.twTitle.visibility = View.VISIBLE
                 is HomeScreen.HideTitle -> binding.twTitle.visibility = View.GONE
-                is HomeScreen.ShowProgressIndicator -> showProgressIndicator()
-                is HomeScreen.HideProgressIndicator -> hideProgressIndicator()
+                is HomeScreen.StartLoadingProcess -> {
+                    showProgressIndicator()
+                    showUpdateMessageDialog()
+                }
+                is HomeScreen.EndLoadingProcess -> {
+                    hideProgressIndicator()
+                    hideUpdateMessageDialog()
+                }
                 is HomeScreen.ShowDatePicker -> showStatsDatePiker()
                 is HomeScreen.ShowUpdatePicker -> showUpdateDataPiker()
                 is HomeScreen.ShowToast -> showToast(it.updateDate)
+                is HomeScreen.SendUpdatedMessage -> sendUpdateMessage(it.message)
             }
         }
     }
@@ -149,21 +161,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         clearStatsDialogBinding = ClearStatsDialogBinding.inflate(inflater)
         dialog.setContentView(clearStatsDialogBinding.root)
         dialog.show()
-
         clearStatsDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         clearStatsDialogBinding.btnConfirm.setOnClickListener {
             homeViewModel.clearStats()
             dialog.dismiss()
         }
     }
-
-    private fun settingsDialog(): Dialog {
-        val dialog = Dialog(requireContext())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        return dialog
-    }
-
 
     private fun showToast(message: String){
         val inflater = layoutInflater
@@ -179,25 +182,47 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
+    private fun showUpdateMessageDialog(){
+        updateMessageDialogView = settingsDialog()
+        val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        updateMessageDialogBinding = UpdateMessageDialogBinding.inflate(inflater)
+        updateMessageDialogView.setContentView(updateMessageDialogBinding.root)
+        updateMessageDialogView.show()
+        updateMessageDialogView.window?.setGravity(Gravity.BOTTOM)
+
+        val xxx = updateMessageDialogView.window?.attributes
+//        xxx?.flags = updateMessageDialogView.window.attributes.flags.and(WindowManager.LayoutParams.FLAG_DIM_BEHIND.inv())
+//        updateMessageDialogView.window?.attributes
+
+    }
+
+    private fun hideUpdateMessageDialog(){
+        updateMessageDialogView.dismiss()
+    }
+
+    private fun sendUpdateMessage(message: String){
+        updateMessageDialogBinding.messageText.text = message
+//        listUpdateMassage.add(message)
+//        for (i in listUpdateMassage){
+//            val adapter = ArrayAdapter(requireContext(), R.layout.message_list_item, listUpdateMassage)
+//            updateMessageDialogBinding.updateMessageListView.adapter = adapter
+//        }
+    }
+
+    private fun settingsDialog(): Dialog {
+        val dialog = Dialog(requireContext(), com.perfomax.ui.R.style.UpdateMessageDialogTheme)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        return dialog
+    }
+
     private fun showProgressIndicator() {
         binding.circularProgressIndicator.visibility = View.VISIBLE
         binding.circularProgressIndicator.bringToFront()
-        binding.updateStatsButton.isEnabled = false
-        binding.selectStatsPeriodButton.isEnabled = false
-        binding.selectUpdatePeriodButton.isEnabled = false
-        binding.updateStatsButton.isEnabled = false
-        binding.updateStatsButton.isEnabled = false
-        binding.clearStatsButton.isEnabled = false
     }
 
     private fun hideProgressIndicator() {
         binding.circularProgressIndicator.visibility = View.GONE
-        binding.updateStatsButton.isEnabled = true
-        binding.selectStatsPeriodButton.isEnabled = true
-        binding.selectUpdatePeriodButton.isEnabled = true
-        binding.updateStatsButton.isEnabled = true
-        binding.selectUpdatePeriodButton.isEnabled = true
-        binding.clearStatsButton.isEnabled = true
     }
 
     companion object {

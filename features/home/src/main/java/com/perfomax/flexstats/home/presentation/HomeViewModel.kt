@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.home.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -8,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
 import com.perfomax.flexstats.home.domain.usecases.TestFlowUseCase
@@ -24,11 +22,12 @@ import javax.inject.Inject
 sealed class HomeScreen {
     data object ShowTitle : HomeScreen()
     data object HideTitle : HomeScreen()
-    data object ShowProgressIndicator : HomeScreen()
-    data object HideProgressIndicator : HomeScreen()
+    data object StartLoadingProcess : HomeScreen()
+    data object EndLoadingProcess : HomeScreen()
     data object ShowDatePicker : HomeScreen()
     data object ShowUpdatePicker : HomeScreen()
     data class ShowToast(val updateDate: String) : HomeScreen()
+    data class SendUpdatedMessage(val message: String) : HomeScreen()
 }
 
 class HomeViewModel(
@@ -78,14 +77,12 @@ class HomeViewModel(
 
     fun updateStats() {
         viewModelScope.launch {
-            _homeScreen.value = HomeScreen.ShowProgressIndicator
-            testFlow.execute().collect{
-                Log.d("MyLog", "TestFlow: $it")
-            }
-
+            _homeScreen.value = HomeScreen.StartLoadingProcess
             var updateMessage: String
             try {
-                updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!)
+                updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!).collect { message ->
+                    _homeScreen.value = HomeScreen.SendUpdatedMessage(message)
+                }
                 val firstDate = _selectedUpdateStatsPeriod.value?.first.toString()
                 val secondDate = _selectedUpdateStatsPeriod.value?.second.toString()
                 updateMessage = if (firstDate == secondDate) "Данные обновлены за $firstDate"
@@ -93,9 +90,8 @@ class HomeViewModel(
             } catch (e:Exception) {
                 updateMessage = "Выбран слишком длинный период для обновления статистики. Укажите меньший период"
             }
-
             loadGeneralStatsList()
-            _homeScreen.value = HomeScreen.HideProgressIndicator
+            _homeScreen.value = HomeScreen.EndLoadingProcess
             _homeScreen.value = HomeScreen.ShowToast(updateMessage)
         }
     }
