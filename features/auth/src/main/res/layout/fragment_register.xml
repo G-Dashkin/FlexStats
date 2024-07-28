@@ -101,6 +101,7 @@
             android:id="@+id/toLoginText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
             android:text="@string/login_here"
             android:paddingTop="@dimen/padding10"
             android:textSize="@dimen/size14"

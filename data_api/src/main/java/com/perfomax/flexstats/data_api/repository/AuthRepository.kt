@@ -10,4 +10,5 @@ interface AuthRepository {
     suspend fun logout()
     suspend fun setAuthUser(authUser: User)
     suspend fun getAuthUser(): User
+    suspend fun reset(email: String): Boolean
 }

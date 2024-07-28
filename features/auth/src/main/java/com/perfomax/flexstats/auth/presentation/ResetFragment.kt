@@ -2,6 +2,7 @@ package com.perfomax.flexstats.auth.presentation
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.perfomax.auth.R
@@ -46,14 +47,13 @@ class ResetFragment: Fragment(R.layout.fragment_reset) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentResetBinding.bind(view)
-        binding.apply {
-            resetButton.setOnClickListener {
-
-            }
-            toLoginText.setOnClickListener {
-                resetViewModel.showLoginScreen()
-            }
+        binding.resetButton.setOnClickListener {
+            resetViewModel.resetPassword(binding.email.text.toString())
         }
+        binding.toLoginText.setOnClickListener {
+            resetViewModel.showLoginScreen()
+        }
+
         setScreen()
     }
 
@@ -63,6 +63,8 @@ class ResetFragment: Fragment(R.layout.fragment_reset) {
             when(it) {
                 is ResetScreen.Login -> showLoginScreen()
                 is ResetScreen.Back -> toBackFragment()
+                is ResetScreen.ResetPasswordSuccess -> passwordSendToEmail()
+                is ResetScreen.ResetPasswordFailed -> emailNotExists()
             }
         }
     }
@@ -74,7 +76,15 @@ class ResetFragment: Fragment(R.layout.fragment_reset) {
         )
     }
 
-    private fun toBackFragment(){
+    // Toast space-----------------------------------------------------------------------------
+    private fun emailNotExists() {
+        Toast.makeText(activity, com.perfomax.ui.R.string.email_user_exists, Toast.LENGTH_LONG).show()
+    }
+    private fun passwordSendToEmail() {
+        Toast.makeText(activity, com.perfomax.ui.R.string.password_send_to_email, Toast.LENGTH_LONG).show()
+    }
+
+    private fun toBackFragment() {
         router.back()
     }
 }

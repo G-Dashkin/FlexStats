@@ -89,8 +89,9 @@ class AppModule(private val application: Application) {
     @Singleton
     @Provides
     fun provideAuthRepository(
-        authStorage: AuthStorage
-    ): AuthRepository = AuthRepositoryImpl(authStorage)
+        authStorage: AuthStorage,
+        context: Context
+    ): AuthRepository = AuthRepositoryImpl(authStorage, context)
 
     // Projects provides----------------------------------------------------------------------------
     @Provides

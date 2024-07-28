@@ -34,6 +34,7 @@
     <string name="create_new_account">Создать новый аккаунт?</string>
     <string name="clear_data">Вы действительно хотите удалить всю статистику по проекту?</string>
     <string name="email_user_exists">Пользователя с таким email не существует</string>
+    <string name="password_send_to_email">Пароль отправлн на email пользователя</string>
     <string name="incorrect_password">Пароль неверный</string>
     <string name="empty_fields">Все поля должны быть заполнены</string>
     <string name="project_empty_field">Поле \"Проект\" должно быть заполнено</string>
@@ -44,7 +45,12 @@
     <string name="counter_exists">Счетчик метрики с таким названием уже имеется в данный проект</string>
     <string name="project_must_be_created">Для добавления аккаунта необходимо создать проект</string>
     <string name="incorrect_email">Email неверный</string>
-    <string name="start_slogan">Анилитика контекстной рекламы доступная \nв любом месте</string>
+    <string name="start_slogan">Анилитика контекстной рекламы, доступная \nв любом месте</string>
+    <string name="reset_password_mail_title">Восстановление пароля пользователя "FlexStats"</string>
+    <string name="reset_password_mail_body_1">Добрый день!</string>
+    <string name="reset_password_mail_body_2">\nВы отправили запрос на восстановление пароля.</string>
+    <string name="reset_password_mail_body_3">\nДля пользователя:</string>
+    <string name="reset_password_mail_body_4">\nВаш пароль:</string>
     <string name="select_another_account">Укажите другой аккаунт.</string>
     <string name="account_not_register">Аккаунт не зарегистрирован в системе яндекс директ.</string>
 </resources>
