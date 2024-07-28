@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.perfomax.accounts.R
-import com.perfomax.accounts.databinding.AccountsDialogBinding
+import com.perfomax.accounts.databinding.DeleteAccountDialogBinding
 import com.perfomax.accounts.databinding.FragmentYandexDirectListBinding
 import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
 import com.perfomax.flexstats.accounts.di.DaggerAccountsComponent
@@ -24,7 +24,7 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
     }
 
     private lateinit var binding: FragmentYandexDirectListBinding
-    private lateinit var bindingCustomDialog: AccountsDialogBinding
+    private lateinit var bindingCustomDialog: DeleteAccountDialogBinding
 
     @Inject
     lateinit var vmFactory: AccountsViewModelFactory
@@ -81,7 +81,7 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-        bindingCustomDialog = AccountsDialogBinding.inflate(inflater)
+        bindingCustomDialog = DeleteAccountDialogBinding.inflate(inflater)
         dialog.setContentView(bindingCustomDialog.root)
         dialog.show()
 

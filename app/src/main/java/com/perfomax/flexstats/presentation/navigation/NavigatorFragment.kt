@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.perfomax.flexstats.R
 import com.perfomax.flexstats.api.AccountsFeatureApi
@@ -37,12 +38,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private val START_SCREENS = listOf("StartFragment", "LoginFragment", "RegisterFragment", "ResetFragment")
-//private val START_SCREENS_TEST = mutableListOf("StartFragment", "LoginFragment", "RegisterFragment", "ResetFragment")
-private val START_SCREENS_TEST = MutableLiveData(listOf("StartFragment", "LoginFragment", "RegisterFragment", "ResetFragment"))
 
 class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder {
-
-
 
     @Inject
     lateinit var navigatorLifecycle: NavigatorLifecycle
@@ -171,7 +168,6 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
                 binding.materialToolbar.visibility = View.VISIBLE
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
-//                START_SCREENS_TEST.observeForever(this, ob)
                 while (currentFragmentName in START_SCREENS) {
                     currentFragmentName = childFragmentManager.getFragmentName()
                     if (currentFragmentName !in START_SCREENS) {

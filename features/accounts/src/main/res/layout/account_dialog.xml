@@ -112,7 +112,7 @@
             android:clickable="true"
             android:layout_marginLeft="@dimen/margin10"
             android:layout_weight="1"
-            android:text="@string/confirm"
+            android:text="@string/create"
             android:textStyle="bold"
             android:textColor="@color/onBackground"/>
     </LinearLayout>

@@ -28,6 +28,7 @@
     <string name="delete_account">Удалить аккаунт?</string>
     <string name="delete">Удалить</string>
     <string name="confirm">Подтвердить</string>
+    <string name="create">Создать</string>
     <string name="project">Проект:</string>
     <string name="select_account_type">Выберите тип аккаунта</string>
     <string name="account_email_yandex">Аккаунт/почта яндекса</string>

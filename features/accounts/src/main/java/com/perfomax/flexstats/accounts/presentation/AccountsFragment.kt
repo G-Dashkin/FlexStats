@@ -3,6 +3,7 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -152,16 +154,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH +login)
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
 
-        webViewDialogBinding.webView.webViewClient = object : WebViewClient() {
-//            override fun onPageFinished(view: WebView, url: String) {
-//                Log.d("MyLog", view.title.toString())
-//                if (view.title.toString() == OUTPUT_ACCESS) {
-//                    Log.d("MyLog", view.title.toString())
-//                    webViewDialogBinding.webView.visibility = View.GONE
-//                }
-//                webViewDialogBinding.closeWebViewButton.visibility = View.VISIBLE
-//            }
-        }
+        webViewDialogBinding.webView.webViewClient = object : WebViewClient() {}
 
         var webViewUrl = EMPTY
         lifecycleScope.launch {
@@ -177,7 +170,9 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 accountType = accountType,
                 metrikaCounter = metrikaCounter?: EMPTY
             )
-            delay(200)
+            while (accountsViewModel.accountsList.value?.find { it.name == login } == null) {
+                delay(100)
+            }
             if (accountType == YANDEX_METRIKA)
             router.navigateTo(fragment = accountsFeatureApi.openMetrikaList(), addToBackStack = false)
             else router.navigateTo(fragment = accountsFeatureApi.openDirectList(), addToBackStack = false)
