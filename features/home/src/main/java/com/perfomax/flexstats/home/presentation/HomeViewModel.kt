@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
+import com.perfomax.flexstats.home.domain.usecases.GetAccountsByProjectUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
 import com.perfomax.flexstats.home.domain.usecases.UpdateStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
@@ -33,7 +34,8 @@ sealed class HomeScreen {
 class HomeViewModel(
     private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
-    private val clearStatsUseCase: ClearStatsUseCase
+    private val clearStatsUseCase: ClearStatsUseCase,
+    private val getAccountsByProjectUseCase: GetAccountsByProjectUseCase
 ): ViewModel() {
 
     private var _statsList = MutableLiveData<List<GeneralStats>>()
@@ -76,22 +78,28 @@ class HomeViewModel(
 
     fun updateStats() {
         viewModelScope.launch {
-            _homeScreen.value = HomeScreen.StartLoadingProcess
             var updateMessage: String
-            try {
-                updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!).collect { message ->
-                    _homeScreen.value = HomeScreen.SendUpdatedMessage(message)
+            val accounts = getAccountsByProjectUseCase.execute()
+            if (accounts.isNotEmpty()) {
+                _homeScreen.value = HomeScreen.StartLoadingProcess
+                try {
+                    updateStatsUseCase.execute(selectedUpdateStatsPeriod.value!!).collect { message ->
+                        _homeScreen.value = HomeScreen.SendUpdatedMessage(message)
+                    }
+                    val firstDate = _selectedUpdateStatsPeriod.value?.first.toString()
+                    val secondDate = _selectedUpdateStatsPeriod.value?.second.toString()
+                    updateMessage = if (firstDate == secondDate) "Данные обновлены за $firstDate"
+                    else "Данные обновлены за период:\n ${" c " + firstDate + " по " + secondDate }"
+                } catch (e:Exception) {
+                    updateMessage = "Выбран слишком длинный период для обновления статистики. Укажите меньший период"
                 }
-                val firstDate = _selectedUpdateStatsPeriod.value?.first.toString()
-                val secondDate = _selectedUpdateStatsPeriod.value?.second.toString()
-                updateMessage = if (firstDate == secondDate) "Данные обновлены за $firstDate"
-                else "Данные обновлены за период:\n ${" c " + firstDate + " по " + secondDate }"
-            } catch (e:Exception) {
-                updateMessage = "Выбран слишком длинный период для обновления статистики. Укажите меньший период"
+                loadGeneralStatsList()
+                _homeScreen.value = HomeScreen.EndLoadingProcess
+                _homeScreen.value = HomeScreen.ShowToast(updateMessage)
+            } else {
+                updateMessage = "В проекте отсутствуют аккаунты для обновления"
+                _homeScreen.value = HomeScreen.ShowToast(updateMessage)
             }
-            loadGeneralStatsList()
-            _homeScreen.value = HomeScreen.EndLoadingProcess
-            _homeScreen.value = HomeScreen.ShowToast(updateMessage)
         }
     }
 
@@ -182,7 +190,8 @@ class HomeViewModel(
 class HomeViewModelFactory @Inject constructor(
     private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
-    private val clearStatsUseCase: ClearStatsUseCase
+    private val clearStatsUseCase: ClearStatsUseCase,
+    private val getAccountsByProjectUseCase: GetAccountsByProjectUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -192,7 +201,8 @@ class HomeViewModelFactory @Inject constructor(
         return HomeViewModel(
             updateStatsUseCase = updateStatsUseCase,
             getGeneralUseCase = getGeneralUseCase,
-            clearStatsUseCase = clearStatsUseCase
+            clearStatsUseCase = clearStatsUseCase,
+            getAccountsByProjectUseCase = getAccountsByProjectUseCase
         ) as T
     }
 }
