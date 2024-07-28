@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.perfomax.flexstats.R
 import com.perfomax.flexstats.api.AccountsFeatureApi
@@ -27,6 +28,7 @@ import com.perfomax.flexstats.databinding.FragmentNavigatorBinding
 import com.perfomax.flexstats.di.DaggerProvider
 import com.perfomax.flexstats.domain.usecases.GetAuthUserUseCase
 import com.perfomax.flexstats.domain.usecases.LogoutUseCase
+import com.perfomax.flexstats.models.Project
 import com.perfomax.flexstats.projects.domain.usecases.GetUserProjectsUseCase
 import com.perfomax.flexstats.projects.domain.usecases.GetSelectedProjectUseCase
 import com.perfomax.flexstats.start.domain.usecases.GetAuthUseCase
@@ -35,8 +37,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private val START_SCREENS = listOf("StartFragment", "LoginFragment", "RegisterFragment", "ResetFragment")
+//private val START_SCREENS_TEST = mutableListOf("StartFragment", "LoginFragment", "RegisterFragment", "ResetFragment")
+private val START_SCREENS_TEST = MutableLiveData(listOf("StartFragment", "LoginFragment", "RegisterFragment", "ResetFragment"))
 
 class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder {
+
+
 
     @Inject
     lateinit var navigatorLifecycle: NavigatorLifecycle
@@ -165,6 +171,7 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
                 binding.materialToolbar.visibility = View.VISIBLE
                 binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             } else {
+//                START_SCREENS_TEST.observeForever(this, ob)
                 while (currentFragmentName in START_SCREENS) {
                     currentFragmentName = childFragmentManager.getFragmentName()
                     if (currentFragmentName !in START_SCREENS) {

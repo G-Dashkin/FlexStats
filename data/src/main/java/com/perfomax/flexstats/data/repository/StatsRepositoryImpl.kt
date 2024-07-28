@@ -1,8 +1,6 @@
 package com.perfomax.flexstats.data.repository
 
-import android.content.Context
 import android.util.Log
-import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.core.utils.getDaysDiapason
@@ -17,7 +15,6 @@ import com.perfomax.flexstats.models.Account
 import com.perfomax.flexstats.models.GeneralStats
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -41,7 +38,7 @@ class StatsRepositoryImpl @Inject constructor(
 
     override suspend fun updateStats(updatePeriod: Pair<String, String>): Flow<String> = withContext(dispatcher)  {
         flow {
-            val accountsList = accountsRepository.getAllByUser()
+            val accountsList = accountsRepository.getAllAccountsByUser()
             val projectId = accountsList.first().projectId
             accountsList.forEach { account ->
                 dataUpdate(account = account, project_id = projectId?:0, updatePeriod = updatePeriod).collect{
@@ -53,9 +50,11 @@ class StatsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats> {
-        val accountsList = accountsRepository.getAllByUser()
-        val projectId = accountsList.first().projectId
-        return statsStorage.getGeneral(project_id = projectId?:0, stats_period = statsPeriod)
+        val accountsList = accountsRepository.getAllAccountsByUser()
+        return if (accountsList.isNotEmpty()){
+            val projectId = accountsList.first().projectId
+            statsStorage.getGeneral(project_id = projectId?:0, stats_period = statsPeriod)
+        } else listOf()
     }
 
     private suspend fun dataUpdate(account: Account, project_id: Int, updatePeriod: Pair<String, String>): Flow<String>  {
@@ -124,22 +123,9 @@ class StatsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun clearStats() {
-        val accountsList = accountsRepository.getAllByUser()
+        val accountsList = accountsRepository.getAllAccountsByUser()
         val projectId = accountsList.first().projectId
         statsStorage.clearStats(project_id = projectId?:0)
     }
 
-    override suspend fun testFlow(): Flow<String> {
-        return flow {
-            emit("A")
-            delay(1000)
-            emit("B")
-            delay(1000)
-            emit("C")
-            delay(1000)
-            emit("D")
-            delay(1000)
-            emit("E")
-        }
-    }
 }

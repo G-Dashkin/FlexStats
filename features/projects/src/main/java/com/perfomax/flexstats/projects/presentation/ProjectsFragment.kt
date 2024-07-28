@@ -3,6 +3,7 @@ package com.perfomax.flexstats.projects.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
@@ -67,9 +68,9 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     private fun setAdapter() {
         val adapter = ProjectsAdapter(
             itemProjectClick = {
+
                 lifecycleScope.launch {
                     projectsViewModel.selectProject(it)
-                    delay(200)
                     parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                 }
             },
@@ -99,7 +100,6 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                 is ProjectsScreen.EditProject -> {
                     lifecycleScope.launch {
                         showProjectDialog(projectId = it.projectId, currentName = it.currentName)
-                        delay(200)
                         parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                     }
                 }
@@ -120,15 +120,16 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         if (projectId != null) projectDialogBinding.projectNameForm.hint = currentName
         projectDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         projectDialogBinding.btnConfirm.setOnClickListener {
-            val projectName = projectDialogBinding.projectNameForm.text
+            val projectName = projectDialogBinding.projectNameForm.text.toString()
             if (projectName.isEmpty()) projectsViewModel.projectEmpty()
-            else if (projectsViewModel.projectsList.value?.any { it.name == projectName.toString() } == true) projectsViewModel.projectExists()
+            else if (projectsViewModel.projectsList.value?.any { it.name == projectName } == true) {
+                projectsViewModel.projectExists()
+            }
             else {
                 lifecycleScope.launch {
-                    val projectName = projectDialogBinding.projectNameForm.text
-                    if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName.toString())
-                    else projectsViewModel.addNewProject(projectName = projectName.toString())
-                    delay(200)
+                    val projectName = projectDialogBinding.projectNameForm.text.toString()
+                    if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName)
+                    else projectsViewModel.addNewProject(projectName = projectName)
                     parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                     dialog.dismiss()
                 }
@@ -147,7 +148,6 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         bindingCustomDialog.btnConfirm.setOnClickListener {
             lifecycleScope.launch {
                 projectsViewModel.deleteProjectClicked(projectId)
-                delay(200)
                 parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                 dialog.dismiss()
             }

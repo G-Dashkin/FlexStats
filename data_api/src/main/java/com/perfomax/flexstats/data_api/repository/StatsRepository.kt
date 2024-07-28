@@ -7,5 +7,4 @@ interface StatsRepository {
     suspend fun updateStats(updatePeriod: Pair<String, String>): Flow<String>
     suspend fun getGeneralStats(statsPeriod: Pair<String, String>): List<GeneralStats>
     suspend fun clearStats()
-    suspend fun testFlow(): Flow<String>
 }

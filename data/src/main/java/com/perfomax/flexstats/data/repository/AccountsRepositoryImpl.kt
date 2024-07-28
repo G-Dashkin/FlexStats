@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.data.repository
 
+import android.util.Log
 import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.data_api.storage.AccountsStorage
@@ -36,9 +37,12 @@ class AccountsRepositoryImpl @Inject constructor(
         accountsStorage.delete(accountId = accountId)
     }
 
-    override suspend fun getAllByUser(): List<Account> {
+    override suspend fun getAllAccountsByUser(): List<Account> {
         val authedUserId = authStorage.getAuthUser().id
+//        Log.d("MyLog", "authedUserId: $authedUserId")
         val selectedProject = projectsStorage.getSelectedProject(userId = authedUserId?:0)
+//        Log.d("MyLog", "selectedProject: $selectedProject")
+//        Log.d("MyLog", "accountsStorage.getAllAccountsOfUser: ${accountsStorage.getAllAccountsOfUser(projectId = selectedProject.id?:0)}")
         return accountsStorage.getAllAccountsOfUser(projectId = selectedProject.id?:0)
     }
 }

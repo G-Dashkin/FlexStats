@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.home.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -9,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
-import com.perfomax.flexstats.home.domain.usecases.TestFlowUseCase
 import com.perfomax.flexstats.home.domain.usecases.UpdateStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
 import kotlinx.coroutines.launch
@@ -33,8 +33,7 @@ sealed class HomeScreen {
 class HomeViewModel(
     private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
-    private val clearStatsUseCase: ClearStatsUseCase,
-    private val testFlow: TestFlowUseCase
+    private val clearStatsUseCase: ClearStatsUseCase
 ): ViewModel() {
 
     private var _statsList = MutableLiveData<List<GeneralStats>>()
@@ -183,8 +182,7 @@ class HomeViewModel(
 class HomeViewModelFactory @Inject constructor(
     private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
-    private val clearStatsUseCase: ClearStatsUseCase,
-    private val testFlow: TestFlowUseCase
+    private val clearStatsUseCase: ClearStatsUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -194,8 +192,7 @@ class HomeViewModelFactory @Inject constructor(
         return HomeViewModel(
             updateStatsUseCase = updateStatsUseCase,
             getGeneralUseCase = getGeneralUseCase,
-            clearStatsUseCase = clearStatsUseCase,
-            testFlow = testFlow
+            clearStatsUseCase = clearStatsUseCase
         ) as T
     }
 }
