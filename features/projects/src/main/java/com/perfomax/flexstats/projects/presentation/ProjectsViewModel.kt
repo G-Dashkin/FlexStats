@@ -44,8 +44,8 @@ class ProjectsViewModel(
 
     private fun load() {
         viewModelScope.launch {
-            val student = getUserProjectsUseCase.execute()
-            _projectsList.postValue(student)
+            val projects = getUserProjectsUseCase.execute()
+            _projectsList.postValue(projects)
         }
     }
 
