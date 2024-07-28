@@ -9,6 +9,7 @@ import android.view.Window
 import android.widget.Toast
 import androidx.core.util.Pair
 import android.view.Gravity
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,8 +31,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var clearStatsDialogBinding: ClearStatsDialogBinding
     private lateinit var updateMessageDialogBinding: UpdateMessageDialogBinding
 
-//    private lateinit var listUpdateMassage: MutableList<String>
     private lateinit var updateMessageDialogView: Dialog
+    private lateinit var messageUpdateArrayList: ArrayList<String>
+    private lateinit var messageUpdateArrayAdapter: ArrayAdapter<String>
 
     @Inject
     lateinit var vmFactory: HomeViewModelFactory
@@ -182,18 +184,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun showUpdateMessageDialog(){
+    private fun showUpdateMessageDialog() {
         updateMessageDialogView = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         updateMessageDialogBinding = UpdateMessageDialogBinding.inflate(inflater)
         updateMessageDialogView.setContentView(updateMessageDialogBinding.root)
         updateMessageDialogView.show()
         updateMessageDialogView.window?.setGravity(Gravity.BOTTOM)
-
-        val xxx = updateMessageDialogView.window?.attributes
-//        xxx?.flags = updateMessageDialogView.window.attributes.flags.and(WindowManager.LayoutParams.FLAG_DIM_BEHIND.inv())
-//        updateMessageDialogView.window?.attributes
-
+        messageUpdateArrayList = arrayListOf()
     }
 
     private fun hideUpdateMessageDialog(){
@@ -201,12 +199,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun sendUpdateMessage(message: String){
-        updateMessageDialogBinding.messageText.text = message
-//        listUpdateMassage.add(message)
-//        for (i in listUpdateMassage){
-//            val adapter = ArrayAdapter(requireContext(), R.layout.message_list_item, listUpdateMassage)
-//            updateMessageDialogBinding.updateMessageListView.adapter = adapter
-//        }
+        messageUpdateArrayList.add(message)
+        messageUpdateArrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, messageUpdateArrayList)
+        updateMessageDialogBinding.updateMessageListView.adapter = messageUpdateArrayAdapter
+        updateMessageDialogBinding.updateMessageListView.setSelection(messageUpdateArrayAdapter.getCount() - 1)
     }
 
     private fun settingsDialog(): Dialog {
