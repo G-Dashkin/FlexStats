@@ -8,11 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.perfomax.flexstats.accounts.domain.CheckMetrikaCounterUseCase
 import com.perfomax.flexstats.accounts.domain.CreateAccountUseCase
 import com.perfomax.flexstats.accounts.domain.CreateTokenUseCase
 import com.perfomax.flexstats.accounts.domain.DeleteAccountUseCase
 import com.perfomax.flexstats.accounts.domain.GetAccountsByProjectUseCase
 import com.perfomax.flexstats.accounts.domain.GetSelectedProjectUseCase
+import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.models.Account
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,13 +23,15 @@ sealed class AccountsScreen {
     data object AddNewAccount : AccountsScreen()
     data class DeleteAccount(val accountId: Int, val accountName: String) : AccountsScreen()
     data object ProjectNotExists : AccountsScreen()
+    data object MetrikaCounterNotExists : AccountsScreen()
 }
 class AccountsViewModel(
     private val createAccountUseCase: CreateAccountUseCase,
     private val createTokenUseCase: CreateTokenUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
     private val getAccountsByProjectUseCase: GetAccountsByProjectUseCase,
-    private val getSelectedProjectUseCase: GetSelectedProjectUseCase
+    private val getSelectedProjectUseCase: GetSelectedProjectUseCase,
+    private val checkMetrikaCounterUseCase: CheckMetrikaCounterUseCase
 ): ViewModel()  {
 
     private val _accountsList = MutableLiveData<List<Account>>()
@@ -59,14 +63,19 @@ class AccountsViewModel(
     fun addNewAccount(accountName: String, metrikaCounter: String, tokenCode: String, accountType: String){
         viewModelScope.launch {
             val accountToken = createTokenUseCase.execute(tokenCode)
-            createAccountUseCase.execute(
-                Account(
-                    name = accountName,
-                    accountToken = accountToken,
-                    accountType = accountType,
-                    metrikaCounter = metrikaCounter
-                )
+            val newAccount = Account(
+                name = accountName,
+                accountToken = accountToken,
+                accountType = accountType,
+                metrikaCounter = metrikaCounter
             )
+            if (accountType == YANDEX_METRIKA) {
+                val isMetrikaCounterExists = checkMetrikaCounterUseCase.execute(newAccount)
+                Log.d("MyLog", "isMetrikaCounterExists: $isMetrikaCounterExists")
+                if (isMetrikaCounterExists) createAccountUseCase.execute(newAccount)
+                else _accountsScreen.value = AccountsScreen.MetrikaCounterNotExists
+            }
+            else createAccountUseCase.execute(newAccount)
             load()
         }
     }
@@ -91,8 +100,8 @@ class AccountsViewModelFactory @Inject constructor(
     private val createTokenUseCase: CreateTokenUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
     private val getAccountsByProjectUseCase: GetAccountsByProjectUseCase,
-    private val getSelectedProjectUseCase: GetSelectedProjectUseCase
-
+    private val getSelectedProjectUseCase: GetSelectedProjectUseCase,
+    private val checkMetrikaCounterUseCase: CheckMetrikaCounterUseCase
 ):  ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -104,7 +113,8 @@ class AccountsViewModelFactory @Inject constructor(
             createTokenUseCase = createTokenUseCase,
             deleteAccountUseCase = deleteAccountUseCase,
             getAccountsByProjectUseCase = getAccountsByProjectUseCase,
-            getSelectedProjectUseCase = getSelectedProjectUseCase
+            getSelectedProjectUseCase = getSelectedProjectUseCase,
+            checkMetrikaCounterUseCase = checkMetrikaCounterUseCase
         ) as T
     }
 }

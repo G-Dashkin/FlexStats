@@ -103,6 +103,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 is AccountsScreen.AddNewAccount -> showAccountDialog()
                 is AccountsScreen.ProjectNotExists -> projectNotExists()
                 is AccountsScreen.DeleteAccount -> {}
+                is AccountsScreen.MetrikaCounterNotExists -> metrikaCounterNotExists()
             }
         }
     }
@@ -136,14 +137,19 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                      it.metrikaCounter == accountDialogBinding.metrikaCounterForm.text.toString() } == true) counterExists()
             else {
                 val login = accountDialogBinding.accountForm.text.toString()
+                val metrikaCounter = accountDialogBinding.metrikaCounterForm.text.toString()
                 dialog.dismiss()
-                showWebViewDialog(login, accountType = accountList[position])
+                showWebViewDialog(
+                    login = login,
+                    accountType = accountList[position],
+                    metrikaCounter = metrikaCounter
+                    )
                 }
             }
         }
     }
 
-    private fun showWebViewDialog(login: String, accountType: String, metrikaCounter: String?= EMPTY) {
+    private fun showWebViewDialog(login: String, accountType: String, metrikaCounter: String? = EMPTY) {
         val dialog = settingsDialog()
         val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         webViewDialogBinding = WebViewDialogBinding.inflate(inflater)
@@ -164,6 +170,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
             }
             val tokenCode = webViewUrl.split("=")[1].split("&")[0]
             dialog.dismiss()
+            Log.d("MyLog", "metrikaCounter in AccountsFragment: $metrikaCounter")
             accountsViewModel.addNewAccount(
                 accountName = login,
                 tokenCode = tokenCode,
@@ -198,11 +205,16 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         Toast.makeText(activity, getString(com.perfomax.ui.R.string.account_exists), Toast.LENGTH_LONG).show()
     }
     private fun counterExists(){
-        Toast.makeText(activity, getString(com.perfomax.ui.R.string.account_exists), Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(com.perfomax.ui.R.string.counter_exists), Toast.LENGTH_LONG).show()
     }
     private fun projectNotExists(){
         val toast = Toast.makeText(activity, getString(com.perfomax.ui.R.string.project_must_be_created), Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.setGravity(Gravity.BOTTOM, 0, 200)
+        toast.show()
+    }
+    private fun metrikaCounterNotExists(){
+        val toast = Toast.makeText(activity, getString(com.perfomax.ui.R.string.metrika_counter_not_exists), Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.BOTTOM, 0, 200)
         toast.show()
     }
 

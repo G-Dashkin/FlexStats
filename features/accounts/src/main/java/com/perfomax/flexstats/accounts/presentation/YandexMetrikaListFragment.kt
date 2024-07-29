@@ -73,6 +73,7 @@ class YandexMetrikaListFragment: Fragment(R.layout.fragment_yandex_metrika_list)
                     showDeleteAccountDialog(accountId = it.accountId, accountName = it.accountName)
                 }
                 is AccountsScreen.ProjectNotExists -> {}
+                is AccountsScreen.MetrikaCounterNotExists -> {}
             }
         }
     }

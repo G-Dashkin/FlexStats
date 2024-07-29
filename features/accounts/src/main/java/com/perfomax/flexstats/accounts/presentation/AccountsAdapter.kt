@@ -29,7 +29,7 @@ class AccountsAdapter(
     inner class AccountHolder(private val binding: ItemAccountBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(account: Account) {
             binding.accountName.text = account.name
-            binding.metrikaCounter.text = "${context.getString(com.perfomax.ui.R.string.metrika_counter)} " +
+            binding.metrikaCounter.text = "${context.getString(com.perfomax.ui.R.string.metrika_counter_1)} " +
                                           "${account.metrikaCounter}"
             if (account.accountType == YANDEX_METRIKA) binding.metrikaCounter.visibility = View.VISIBLE
             binding.btnDelete.setOnClickListener { deleteAccountClick.invoke(account.id!!, account.name) }

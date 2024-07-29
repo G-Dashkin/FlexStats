@@ -61,7 +61,7 @@ fun String.toTimestamp (minusDays: Int = 0): Long {
 
 fun Pair<String, String>.toDateList(): List<String> {
     val startDate = LocalDate.of(
-        this.first.toString().split("-")[0].toInt(),
+        this.first.split("-")[0].toInt(),
         this.first.split("-")[1].toInt(),
         this.first.split("-")[2].toInt(),
     )

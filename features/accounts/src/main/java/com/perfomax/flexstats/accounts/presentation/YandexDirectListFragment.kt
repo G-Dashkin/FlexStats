@@ -73,6 +73,7 @@ class YandexDirectListFragment: Fragment(R.layout.fragment_yandex_direct_list) {
                     showDeleteAccountDialog(accountId = it.accountId, accountName = it.accountName)
                 }
                 is AccountsScreen.ProjectNotExists -> {}
+                is AccountsScreen.MetrikaCounterNotExists -> {}
             }
         }
     }

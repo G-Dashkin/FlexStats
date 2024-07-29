@@ -5,10 +5,10 @@ import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.models.Account
 import javax.inject.Inject
 
-class CreateAccountUseCase @Inject constructor(
+class CheckMetrikaCounterUseCase  @Inject constructor(
     private val repository: AccountsRepository
-): UseCaseWithParams<Unit, Account> {
-    override suspend fun execute(newAccount: Account) {
-        repository.createAccount(account = newAccount)
+): UseCaseWithParams<Boolean, Account> {
+    override suspend fun execute(newAccount: Account): Boolean {
+        return repository.checkMetrikaCounter(account = newAccount)
     }
 }

@@ -80,7 +80,7 @@
             android:layout_marginTop="@dimen/margin10"
             android:layout_marginBottom="@dimen/margin10"
             android:padding="@dimen/padding10"
-            android:hint="@string/account_email_yandex"
+            android:hint="@string/metrika_counter_2"
             android:gravity="start|center_vertical"
             android:textColor="@color/onBackground" />
     </LinearLayout>
