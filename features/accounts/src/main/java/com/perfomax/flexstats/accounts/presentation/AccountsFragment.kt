@@ -95,7 +95,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
             binding.viewPager2.post { binding.viewPager2.setCurrentItem(1, true) }
     }
 
-
     // AlertDialogs---------------------------------------------------------------------------------
     private fun setScreen() {
         accountsViewModel.accountsScreen.observe(viewLifecycleOwner) {
@@ -119,24 +118,11 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
 
-        Log.d("MyLog", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        accountsViewModel.accountsList.observe(viewLifecycleOwner, Observer {
-            Log.d("MyLog", it.toString())
-        })
-        Log.d("MyLog", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-
         accountDialogBinding.autoCompleteTxt.setOnItemClickListener { parent, view, position, id ->
             if (position == 1) accountDialogBinding.metrikaCounter.visibility = View.VISIBLE
             else accountDialogBinding.metrikaCounter.visibility = View.GONE
 
         accountDialogBinding.btnConfirm.setOnClickListener {
-
-            Log.d("MyLog", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-            accountsViewModel.accountsList.observe(viewLifecycleOwner, Observer {
-                Log.d("MyLog", it.toString())
-            })
-            Log.d("MyLog", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-
             val directAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == YANDEX_DIRECT }
             val metrikaAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == YANDEX_METRIKA }
 
@@ -151,11 +137,7 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
                 val login = accountDialogBinding.accountForm.text.toString()
                 val metrikaCounter = accountDialogBinding.metrikaCounterForm.text.toString()
                 dialog.dismiss()
-                showWebViewDialog(
-                    login = login,
-                    accountType = accountList[position],
-                    metrikaCounter = metrikaCounter
-                    )
+                showWebViewDialog(login = login, accountType = accountList[position], metrikaCounter = metrikaCounter)
                 }
             }
         }
@@ -171,7 +153,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
         webViewDialogBinding.webView.visibility = View.VISIBLE
         webViewDialogBinding.webView.loadUrl(TOKEN_URL_OAUTH +login)
         webViewDialogBinding.webView.settings.javaScriptEnabled = true
-
         webViewDialogBinding.webView.webViewClient = object : WebViewClient() {}
 
         var webViewUrl = EMPTY

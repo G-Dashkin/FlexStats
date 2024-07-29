@@ -59,15 +59,6 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
-    // Email work
-//    implementation("com.sun.mail:android-mail:1.6.2")
-//    implementation("com.sun.mail:android-activation:1.6.2")
-
-//    implementation("com.sun.mail:javax.mail:1.6.2") {
-//        exclude("java.awt")
-//    }
-
     implementation("com.sun.mail:android-mail:1.6.2")
-//    implementation("com.sun.activation:jakarta.activation:2.0.1")
 
 }
