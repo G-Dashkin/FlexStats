@@ -170,7 +170,6 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
             }
             val tokenCode = webViewUrl.split("=")[1].split("&")[0]
             dialog.dismiss()
-            Log.d("MyLog", "metrikaCounter in AccountsFragment: $metrikaCounter")
             accountsViewModel.addNewAccount(
                 accountName = login,
                 tokenCode = tokenCode,

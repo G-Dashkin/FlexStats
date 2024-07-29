@@ -68,7 +68,6 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
     private fun setAdapter() {
         val adapter = ProjectsAdapter(
             itemProjectClick = {
-
                 lifecycleScope.launch {
                     projectsViewModel.selectProject(it)
                     parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
@@ -130,6 +129,9 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                     val projectName = projectDialogBinding.projectNameForm.text.toString()
                     if (projectId != null) projectsViewModel.editProject(projectId = projectId, editName = projectName)
                     else projectsViewModel.addNewProject(projectName = projectName)
+                    while (projectsViewModel.projectsList.value?.find { it.name == projectName } == null){
+                        delay(100)
+                    }
                     parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                     dialog.dismiss()
                 }
@@ -148,6 +150,9 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         bindingCustomDialog.btnConfirm.setOnClickListener {
             lifecycleScope.launch {
                 projectsViewModel.deleteProjectClicked(projectId)
+                while (projectsViewModel.projectsList.value?.find { it.id == projectId } != null){
+                    delay(100)
+                }
                 parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
                 dialog.dismiss()
             }

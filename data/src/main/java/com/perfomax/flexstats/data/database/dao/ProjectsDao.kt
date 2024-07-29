@@ -24,11 +24,14 @@ interface ProjectsDao {
            "WHERE ${ProjectEntity.ID} = :projectId")
     suspend fun edit(projectId: String, editName: String)
 
+    @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} " +
+            "WHERE ${ProjectEntity.USER_ID} = :userId " +
+            "ORDER BY ${ProjectEntity.ID} ASC LIMIT 1")
+    suspend fun getLastProjectId(userId: String): ProjectEntity
 
     @Query("UPDATE ${ProjectEntity.TABLE_NAME} SET ${ProjectEntity.SELECTED_PROJECT} = " +
            "CASE WHEN ${ProjectEntity.ID} = :projectId THEN 1 ELSE 0 END")
     suspend fun selectProject(projectId: String)
-
 
     @Query("SELECT * FROM ${ProjectEntity.TABLE_NAME} " +
             "WHERE ${ProjectEntity.USER_ID} = :userId " +

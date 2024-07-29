@@ -71,7 +71,6 @@ class AccountsViewModel(
             )
             if (accountType == YANDEX_METRIKA) {
                 val isMetrikaCounterExists = checkMetrikaCounterUseCase.execute(newAccount)
-                Log.d("MyLog", "isMetrikaCounterExists: $isMetrikaCounterExists")
                 if (isMetrikaCounterExists) createAccountUseCase.execute(newAccount)
                 else _accountsScreen.value = AccountsScreen.MetrikaCounterNotExists
             }

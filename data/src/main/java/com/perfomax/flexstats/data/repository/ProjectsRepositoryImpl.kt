@@ -21,7 +21,8 @@ class ProjectsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun delete(projectId: Int) {
-        projectsStorage.delete(projectId = projectId)
+        val authedUserId = authStorage.getAuthUser().id
+        projectsStorage.delete(projectId = projectId, userId = authedUserId?:0)
     }
 
     override suspend fun select(projectId: Int) {

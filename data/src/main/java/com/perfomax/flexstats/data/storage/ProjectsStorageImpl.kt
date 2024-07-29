@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.data.storage
 
+import android.util.Log
 import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.mappers.toDomain
@@ -18,9 +19,17 @@ class ProjectsStorageImpl @Inject constructor(
     override suspend fun edit(projectId: Int, editName: String) {
         projectsDao.edit(projectId = projectId.toString(), editName = editName)
     }
-    override suspend fun delete(projectId: Int) {
+    override suspend fun delete(projectId: Int, userId: Int) {
+        val selectedProjectId = projectsDao.getSelectedProject(userId = userId.toString()).id.toString()
         projectsDao.delete(projectId = projectId.toString())
-        projectsDao.selectProject(projectId = (projectId-1).toString())
+        if (selectedProjectId == projectId.toString()) {
+            try {
+                val lastProjectId = projectsDao.getLastProjectId(userId = userId.toString()).id.toString()
+                projectsDao.selectProject(projectId = lastProjectId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     override suspend fun selectProject(projectId: Int) {
