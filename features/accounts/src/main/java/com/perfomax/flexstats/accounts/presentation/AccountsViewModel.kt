@@ -16,6 +16,7 @@ import com.perfomax.flexstats.accounts.domain.GetAccountsByProjectUseCase
 import com.perfomax.flexstats.accounts.domain.GetSelectedProjectUseCase
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.models.Account
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,10 +35,10 @@ class AccountsViewModel(
     private val checkMetrikaCounterUseCase: CheckMetrikaCounterUseCase
 ): ViewModel()  {
 
-    private val _accountsList = MutableLiveData<List<Account>>()
+    private var _accountsList = MutableLiveData<List<Account>>()
     val accountsList: LiveData<List<Account>> = _accountsList
 
-    private val _accountsScreen = MutableLiveData<AccountsScreen>()
+    private var _accountsScreen = MutableLiveData<AccountsScreen>()
     val accountsScreen: LiveData<AccountsScreen> = _accountsScreen
 
     init {
@@ -47,7 +48,7 @@ class AccountsViewModel(
     private fun load() {
         viewModelScope.launch {
             val accounts = getAccountsByProjectUseCase.execute()
-            _accountsList.postValue(accounts)
+            _accountsList.value = accounts
         }
     }
 

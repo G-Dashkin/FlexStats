@@ -119,11 +119,23 @@ class AccountsFragment : Fragment(R.layout.fragment_accounts) {
 
         accountDialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
 
+        Log.d("MyLog", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        accountsViewModel.accountsList.observe(viewLifecycleOwner, Observer {
+            Log.d("MyLog", it.toString())
+        })
+        Log.d("MyLog", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
         accountDialogBinding.autoCompleteTxt.setOnItemClickListener { parent, view, position, id ->
             if (position == 1) accountDialogBinding.metrikaCounter.visibility = View.VISIBLE
             else accountDialogBinding.metrikaCounter.visibility = View.GONE
 
         accountDialogBinding.btnConfirm.setOnClickListener {
+
+            Log.d("MyLog", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            accountsViewModel.accountsList.observe(viewLifecycleOwner, Observer {
+                Log.d("MyLog", it.toString())
+            })
+            Log.d("MyLog", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 
             val directAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == YANDEX_DIRECT }
             val metrikaAccounts = accountsViewModel.accountsList.value?.filter { it.accountType == YANDEX_METRIKA }
