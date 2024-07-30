@@ -11,7 +11,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
-class HomeAdapter(): ListAdapter<GeneralStats, RecyclerView.ViewHolder>(StatsDiffCallback()){
+class HomeAdapter: ListAdapter<GeneralStats, RecyclerView.ViewHolder>(StatsDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return  StatsHolder(binding = ItemStatsBinding.inflate(LayoutInflater.from(parent.context), parent, false))

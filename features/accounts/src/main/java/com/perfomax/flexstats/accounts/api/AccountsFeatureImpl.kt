@@ -7,6 +7,5 @@ import javax.inject.Inject
 
 class AccountsFeatureImpl @Inject constructor() : AccountsFeatureApi {
     override fun openDirectList(): Fragment = AccountsFragment.getInstance()
-
     override fun openMetrikaList(): Fragment = AccountsFragment.getInstanceMetrikaList()
 }
