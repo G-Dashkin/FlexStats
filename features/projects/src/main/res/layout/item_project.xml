@@ -11,15 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/item_border"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingLeft="@dimen/padding10"
+        android:paddingRight="@dimen/padding10"
+        android:paddingTop="@dimen/padding5"
+        android:paddingBottom="@dimen/padding5">
 
     <TextView
         android:id="@+id/project_name"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/zeroDp"
+        android:layout_height="@dimen/height40"
         android:layout_weight="1"
         android:ellipsize="end"
         android:gravity="left|center"
@@ -31,24 +31,24 @@
 
     <Button
         android:id="@+id/btn_edit"
-        android:layout_width="110dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
+        android:layout_width="@dimen/width110"
+        android:layout_height="@dimen/height40"
+        android:layout_marginLeft="@dimen/margin10"
         android:clickable="true"
-        android:text="Изменить"
-        android:textSize="12sp"
+        android:text="@string/edit"
+        android:textSize="@dimen/textSize12"
         android:textColor="@color/onBackground"
         android:background="@drawable/button_border"/>
 
     <Button
         android:id="@+id/btn_delete"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/width100"
+        android:layout_height="@dimen/height40"
         android:background="@drawable/button_border"
         android:clickable="true"
-        android:layout_marginLeft="10dp"
-        android:text="Удалить"
-        android:textSize="12sp"
+        android:layout_marginLeft="@dimen/margin10"
+        android:text="@string/delete"
+        android:textSize="@dimen/textSize12"
         android:textColor="@color/onBackground" />
 
     </LinearLayout>

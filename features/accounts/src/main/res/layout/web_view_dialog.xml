@@ -46,15 +46,14 @@
 
     </LinearLayout>
 
-
     <Button
         android:id="@+id/closeWebViewButton"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/zeroDp"
         android:layout_height="wrap_content"
         android:background="@color/primary"
         android:text="Закрыть"
         android:visibility="gone"
-        android:textSize="34sp"
+        android:textSize="@dimen/textSize36"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

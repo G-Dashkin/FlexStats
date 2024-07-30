@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/custom_dialog_border"
     android:minWidth="@dimen/width400"
-    android:minHeight="400dp"
+    android:minHeight="@dimen/height400"
     android:orientation="vertical" >
 
     <TextView
@@ -14,19 +14,19 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/margin10"
         android:gravity="center"
-        android:text="Обновление аккаунтов"
+        android:text="@string/accounts_update"
         android:textColor="@color/onBackground"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize14"
         android:textStyle="bold"/>
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="@dimen/height2"
         android:background="@color/black"/>
 
     <ListView
         android:id="@+id/updateMessageListView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="@dimen/height300"
         android:layout_margin="@dimen/margin16"
         tools:listitem="@layout/message_list_item" />
 

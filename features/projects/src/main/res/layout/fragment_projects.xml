@@ -27,7 +27,7 @@
         android:backgroundTint="@color/primary"
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/onPrimary"
-        app:maxImageSize="46dp"
+        app:maxImageSize="@dimen/size45"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

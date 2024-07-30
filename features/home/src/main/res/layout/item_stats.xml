@@ -8,20 +8,20 @@
 
     <TextView
         android:id="@+id/valueDate"
-        android:layout_width="80dp"
+        android:layout_width="@dimen/width80"
         android:layout_height="match_parent"
         android:textColor="@color/black"
         android:text="2023-04-04"
-        android:textSize="12sp"
+        android:textSize="@dimen/textSize12"
         android:gravity="center"
         android:background="@drawable/stats_item_border"/>
 
     <LinearLayout
         android:id="@+id/yandexDirect"
-        android:layout_width="120dp"
+        android:layout_width="@dimen/width120"
         android:layout_height="match_parent"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="@dimen/padding5"
+        android:paddingBottom="@dimen/padding5"
         android:gravity="center"
         android:layout_weight="1"
         android:background="@drawable/stats_item_border"
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="Клики:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
                 <TextView
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="Показы:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
                 <TextView
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="Расход:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
                 <TextView
@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="Заказы:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
                 <TextView
@@ -80,13 +80,13 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="Доход:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="5dp"
+                android:paddingStart="@dimen/padding5"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/valueClicks"
@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="325 546"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/valueImpressions"
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="45 542 346"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/valueCosts"
@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="3 655 045р."
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/valueTransactions"
@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="10 435"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/valueRevenue"
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="234 343 433р."
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
             </LinearLayout>
@@ -135,7 +135,7 @@
 
     <LinearLayout
         android:id="@+id/measures"
-        android:layout_width="120dp"
+        android:layout_width="@dimen/width120"
         android:layout_height="match_parent"
         android:gravity="center"
         android:background="@drawable/stats_item_border"
@@ -155,7 +155,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="CPC:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/textCTR"
@@ -163,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="CTR:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/textCR"
@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="CR:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/textCPO"
@@ -179,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="CPO:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/textDRR"
@@ -187,14 +187,14 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="ДРР:"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="5dp"
+                android:paddingStart="@dimen/padding5"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/valueCPC"
@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="14.43р."
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/valueCTR"
@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="3.4%"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/valueCR"
@@ -218,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="2.4%"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/valueCPO"
@@ -226,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="1400р."
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
                     android:id="@+id/valueDRR"
@@ -234,7 +234,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:text="3.50%"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
             </LinearLayout>
         </LinearLayout>

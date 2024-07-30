@@ -66,5 +66,17 @@
     <string name="from">c</string>
     <string name="to">по</string>
     <string name="counter">Счетчик:</string>
+    <string name="is_delete_project">Удалить проект?</string>
+    <string name="indicators">Показатели</string>
+    <string name="measures">Меры</string>
+    <string name="update_stats">Обновить статистику</string>
+    <string name="delete_stats">Удалить статистику</string>
+    <string name="period_update">Период обновления</string>
+    <string name="period_stats">Период статистики</string>
+    <string name="date">Дата</string>
+    <string name="accounts_update">Обновление аккаунтов</string>
+    <string name="edit">Изменить</string>
+    <string name="is_create_new_project">Создать новый проект?</string>
+    <string name="project_name">Название проекта</string>
 
 </resources>

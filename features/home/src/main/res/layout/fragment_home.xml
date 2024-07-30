@@ -11,13 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/margin30"
         android:visibility="gone"
-        android:maxWidth="150dp"
-        android:maxHeight="150dp"
-        android:minWidth="150dp"
-        android:minHeight="150dp"
-        app:indicatorSize="50dp"
+        android:maxWidth="@dimen/width150"
+        android:maxHeight="@dimen/height150"
+        android:minWidth="@dimen/width150"
+        android:minHeight="@dimen/height150"
+        app:indicatorSize="@dimen/size50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,9 +25,9 @@
     <LinearLayout
         android:id="@+id/twTitle"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="@dimen/height30"
+        android:layout_marginStart="@dimen/margin10"
+        android:layout_marginEnd="@dimen/margin10"
         android:gravity="center"
         android:visibility="gone"
         android:background="@color/background"
@@ -38,41 +38,41 @@
 
         <TextView
             android:id="@+id/Date"
-            android:layout_width="80dp"
+            android:layout_width="@dimen/width80"
             android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="1dp"
+            android:layout_marginTop="@dimen/margin2"
+            android:layout_marginBottom="@dimen/margin2"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="14sp"
-            android:text="Дата"
+            android:textSize="@dimen/textSize14"
+            android:text="@string/date"
             android:gravity="center"
             android:background="@drawable/stats_item_border"/>
 
         <TextView
             android:id="@+id/Transactions"
-            android:layout_width="90dp"
+            android:layout_width="@dimen/width90"
             android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="1dp"
+            android:layout_marginTop="@dimen/margin2"
+            android:layout_marginBottom="@dimen/margin2"
             android:layout_weight="1"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="14sp"
-            android:text="Показатели"
+            android:textSize="@dimen/textSize14"
+            android:text="@string/indicators"
             android:gravity="center"
             android:background="@drawable/stats_item_border"/>
 
         <TextView
             android:id="@+id/Revenue"
-            android:layout_width="120dp"
+            android:layout_width="@dimen/width120"
             android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="1dp"
+            android:layout_marginTop="@dimen/margin2"
+            android:layout_marginBottom="@dimen/margin2"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="14sp"
-            android:text="Меры"
+            android:textSize="@dimen/textSize14"
+            android:text="@string/measures"
             android:gravity="center"
             android:background="@drawable/stats_item_border"/>
 
@@ -90,13 +90,12 @@
         app:layout_constraintTop_toBottomOf="@+id/twTitle"
         tools:context=".presentation.main.MainActivity" />
 
-
     <LinearLayout
         android:id="@+id/bottomLinearLayout"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/zeroDp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/margin10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -105,40 +104,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="@dimen/margin5"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/updateStatsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Обновить статистику" />
+                android:text="@string/update_stats" />
 
             <Button
                 android:id="@+id/clearStatsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Удалить статистику" />
+                android:text="@string/delete_stats" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/margin5"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/selectUpdatePeriodButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Период обновления" />
+                android:text="@string/period_update" />
 
             <Button
                 android:id="@+id/selectStatsPeriodButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Период статистики" />
+                android:text="@string/period_stats" />
 
         </LinearLayout>
     </LinearLayout>

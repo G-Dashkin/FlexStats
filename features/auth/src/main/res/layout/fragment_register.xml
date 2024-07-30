@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/register"
                 android:id="@+id/loginText"
-                android:textSize="@dimen/size36"
+                android:textSize="@dimen/textSize36"
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textColor="@color/primary"/>
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:text="@string/already_member"
             android:paddingTop="@dimen/padding10"
-            android:textSize="@dimen/size14"
+            android:textSize="@dimen/textSize14"
             android:textAlignment="center"
             android:textColor="@color/primary"/>
 
@@ -101,10 +101,10 @@
             android:id="@+id/toLoginText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="@dimen/margin2"
             android:text="@string/login_here"
             android:paddingTop="@dimen/padding10"
-            android:textSize="@dimen/size14"
+            android:textSize="@dimen/textSize14"
             android:textAlignment="center"
             android:textStyle="bold"
             android:textColor="@color/primary"/>
