@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 sealed class ProjectsScreen {
     data object AddNewProject : ProjectsScreen()
-    data class SelectProject(val projectId: Int) : ProjectsScreen()
+    data object SelectProject : ProjectsScreen()
     data class DeleteProject(val projectId: Int, val projectName: String) : ProjectsScreen()
     data class EditProject(val projectId: Int, val currentName: String) : ProjectsScreen()
     data object EmptyProject : ProjectsScreen()
@@ -77,6 +77,7 @@ class ProjectsViewModel(
         viewModelScope.launch {
             selectProjectUseCase.execute(projectId)
             load()
+            _projectsScreen.value = ProjectsScreen.SelectProject
         }
     }
 

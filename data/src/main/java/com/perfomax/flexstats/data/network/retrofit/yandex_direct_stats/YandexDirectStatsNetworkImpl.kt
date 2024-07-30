@@ -11,10 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class YandexDirectStatsNetworkImpl @Inject constructor(
-    private val statsDao: StatsDao,
-    private val authStorage: AuthStorage
-): YandexDirectStatsNetwork {
+class YandexDirectStatsNetworkImpl: YandexDirectStatsNetwork {
 
     override suspend fun getStats(
         date: String,

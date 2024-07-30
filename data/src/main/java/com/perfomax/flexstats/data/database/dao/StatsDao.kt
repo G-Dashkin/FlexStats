@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.perfomax.flexstats.data.database.entities.GeneralStatsEntity
-import com.perfomax.flexstats.data.database.entities.StatsEntity
 import com.perfomax.flexstats.data.database.entities.YandexDirectStatsEntity
 import com.perfomax.flexstats.data.database.entities.YandexMetrikaStatsEntity
 
@@ -22,68 +21,93 @@ interface StatsDao {
     suspend fun insertGeneralData(data: GeneralStatsEntity)
 
     @Query("DELETE FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
-           "WHERE date = :date AND project_id = :projectId AND account = :account")
+           "WHERE ${YandexDirectStatsEntity.DATE} = :date " +
+           "AND ${YandexDirectStatsEntity.PROJECT_ID} = :projectId " +
+           "AND ${YandexDirectStatsEntity.ACCOUNT} = :account")
     suspend fun removeYandexDirectData(date: String, projectId: Int, account: String)
 
     @Query("DELETE FROM ${YandexMetrikaStatsEntity.TABLE_NAME} " +
-           "WHERE date = :date AND project_id = :projectId AND counter = :counter")
+           "WHERE ${YandexMetrikaStatsEntity.DATE} = :date " +
+           "AND ${YandexMetrikaStatsEntity.PROJECT_ID} = :projectId " +
+           "AND ${YandexMetrikaStatsEntity.COUNTER} = :counter")
     suspend fun removeYandexMetrikaData(date: String, projectId: Int, counter: String)
 
     @Query("DELETE FROM ${GeneralStatsEntity.TABLE_NAME} " +
-            "WHERE date = :date AND project_id = :projectId")
+           "WHERE ${GeneralStatsEntity.DATE} = :date " +
+           "AND ${GeneralStatsEntity.PROJECT_ID} = :projectId")
     suspend fun removeGeneralData(date: String, projectId: Int)
 
-    @Query("SELECT * FROM yandex_direct WHERE account = :account AND project_id = :projectId " +
-           "ORDER BY date DESC")
-    suspend fun getLastDateYDByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
-    @Query("SELECT * FROM yandex_direct WHERE project_id = :projectId " +
-            "ORDER BY date DESC")
-    suspend fun getLastDateYDByAccount(projectId: Int): List<YandexDirectStatsEntity>
+    @Query("SELECT * FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexDirectStatsEntity.ACCOUNT} = :account " +
+           "AND ${YandexDirectStatsEntity.PROJECT_ID} = :projectId " +
+           "ORDER BY ${YandexDirectStatsEntity.DATE} DESC")
+    suspend fun getLastDateYandexDirectByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
 
-    @Query("SELECT * FROM yandex_direct WHERE account = :account AND project_id = :projectId " +
-            "ORDER BY date ASC")
-    suspend fun getFirstDateYDByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
+    @Query("SELECT * FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexDirectStatsEntity.PROJECT_ID} = :projectId " +
+           "ORDER BY ${YandexDirectStatsEntity.DATE} DESC")
+    suspend fun getLastDateYandexDirectByAccount(projectId: Int): List<YandexDirectStatsEntity>
 
-    @Query("SELECT * FROM yandex_direct WHERE project_id = :projectId " +
-            "ORDER BY date ASC")
-    suspend fun getFirstDateYDByAccount(projectId: Int): List<YandexDirectStatsEntity>
+    @Query("SELECT * FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexDirectStatsEntity.ACCOUNT} = :account " +
+           "AND ${YandexDirectStatsEntity.PROJECT_ID} = :projectId " +
+           "ORDER BY ${YandexDirectStatsEntity.DATE} ASC")
+    suspend fun getFirstDateYandexDirectByAccount(account: String, projectId: Int): List<YandexDirectStatsEntity>
 
-    @Query("SELECT * FROM yandex_metrika WHERE counter = :counter AND project_id = :projectId " +
-            "ORDER BY date DESC")
-    suspend fun getLastDateYMByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
+    @Query("SELECT * FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexDirectStatsEntity.PROJECT_ID} = :projectId " +
+           "ORDER BY ${YandexDirectStatsEntity.DATE} ASC")
+    suspend fun getFirstDateYandexDirectByAccount(projectId: Int): List<YandexDirectStatsEntity>
 
-    @Query("SELECT * FROM yandex_metrika WHERE project_id = :projectId " +
-            "ORDER BY date DESC")
-    suspend fun getLastDateYMByCounter(projectId: Int): List<YandexMetrikaStatsEntity>
+    @Query("SELECT * FROM ${YandexMetrikaStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexMetrikaStatsEntity.COUNTER} = :counter " +
+           "AND ${YandexMetrikaStatsEntity.PROJECT_ID} = :projectId " +
+           "ORDER BY ${YandexMetrikaStatsEntity.DATE} DESC")
+    suspend fun getLastDateYandexMetrikaByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
 
-    @Query("SELECT * FROM yandex_metrika WHERE counter = :counter AND project_id = :projectId " +
-            "ORDER BY date ASC")
-    suspend fun getFirstDateYMByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
+    @Query("SELECT * FROM ${YandexMetrikaStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexMetrikaStatsEntity.PROJECT_ID} = :projectId " +
+           "ORDER BY ${YandexMetrikaStatsEntity.DATE} DESC")
+    suspend fun getLastDateYandexMetrikaByCounter(projectId: Int): List<YandexMetrikaStatsEntity>
 
-    @Query("SELECT * FROM yandex_metrika WHERE project_id = :projectId " +
-            "ORDER BY date ASC")
-    suspend fun getFirstDateYMByCounter(projectId: Int): List<YandexMetrikaStatsEntity>
+    @Query("SELECT * FROM ${YandexMetrikaStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexMetrikaStatsEntity.COUNTER} = :counter " +
+           "AND ${YandexMetrikaStatsEntity.PROJECT_ID} = :projectId " +
+           "ORDER BY ${YandexMetrikaStatsEntity.DATE} ASC")
+    suspend fun getFirstDateYandexMetrikaByCounter(counter: String, projectId: Int): List<YandexMetrikaStatsEntity>
 
-    @Query("SELECT * FROM yandex_direct WHERE date = :date AND project_id = :projectId")
+    @Query("SELECT * FROM ${YandexMetrikaStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexMetrikaStatsEntity.PROJECT_ID} = :projectId " +
+           "ORDER BY ${YandexMetrikaStatsEntity.DATE} ASC")
+    suspend fun getFirstDateYandexMetrikaByCounter(projectId: Int): List<YandexMetrikaStatsEntity>
+
+    @Query("SELECT * FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexDirectStatsEntity.DATE} = :date " +
+           "AND ${YandexDirectStatsEntity.PROJECT_ID} = :projectId")
     suspend fun getYandexDirectData(date: String, projectId: Int): List<YandexDirectStatsEntity>
 
-    @Query("SELECT * FROM yandex_metrika WHERE date = :date AND project_id = :projectId")
+    @Query("SELECT * FROM ${YandexMetrikaStatsEntity.TABLE_NAME} " +
+           "WHERE ${YandexMetrikaStatsEntity.DATE} = :date " +
+           "AND ${YandexMetrikaStatsEntity.PROJECT_ID} = :projectId")
     suspend fun getYandexMetrikaData(date: String, projectId: Int): List<YandexMetrikaStatsEntity>
 
-    @Query("SELECT * FROM general_stats " +
-           "WHERE project_id = :projectId AND date >= :firstDate AND date <= :secondDate " +
-           "ORDER BY date DESC")
+    @Query("SELECT * FROM ${GeneralStatsEntity.TABLE_NAME} " +
+           "WHERE ${GeneralStatsEntity.PROJECT_ID} = :projectId " +
+           "AND ${GeneralStatsEntity.DATE} >= :firstDate " +
+           "AND ${GeneralStatsEntity.DATE} <= :secondDate " +
+           "ORDER BY ${GeneralStatsEntity.DATE} DESC")
     suspend fun getGeneralData(projectId: Int, firstDate: String, secondDate: String): List<GeneralStatsEntity>
 
-
     @Query("DELETE FROM ${YandexDirectStatsEntity.TABLE_NAME} " +
-            "WHERE project_id = :projectId")
-    suspend fun clearYD(projectId: Int)
+            "WHERE ${YandexDirectStatsEntity.PROJECT_ID} = :projectId")
+    suspend fun clearYandexDirect(projectId: Int)
+
     @Query("DELETE FROM ${YandexMetrikaStatsEntity.TABLE_NAME} " +
-            "WHERE project_id = :projectId")
-    suspend fun clearYM(projectId: Int)
+            "WHERE ${YandexMetrikaStatsEntity.PROJECT_ID} = :projectId")
+    suspend fun clearYandexMetrika(projectId: Int)
+
     @Query("DELETE FROM ${GeneralStatsEntity.TABLE_NAME} " +
-            "WHERE project_id = :projectId")
+            "WHERE ${GeneralStatsEntity.PROJECT_ID} = :projectId")
     suspend fun clearGeneral(projectId: Int)
 
 }

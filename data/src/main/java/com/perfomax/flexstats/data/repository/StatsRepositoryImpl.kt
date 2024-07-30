@@ -57,6 +57,12 @@ class StatsRepositoryImpl @Inject constructor(
         } else listOf()
     }
 
+    override suspend fun clearStats() {
+        val accountsList = accountsRepository.getAllAccountsByUser()
+        val projectId = accountsList.first().projectId
+        statsStorage.clearStats(project_id = projectId?:0)
+    }
+
     private suspend fun dataUpdate(account: Account, project_id: Int, updatePeriod: Pair<String, String>): Flow<String>  {
             return flow {
                 if (account.accountType == YANDEX_DIRECT) {
@@ -120,12 +126,6 @@ class StatsRepositoryImpl @Inject constructor(
             projectId = project_id
         )
         statsStorage.addYandexMetrikaData(data = yandexMetrikaStats)
-    }
-
-    override suspend fun clearStats() {
-        val accountsList = accountsRepository.getAllAccountsByUser()
-        val projectId = accountsList.first().projectId
-        statsStorage.clearStats(project_id = projectId?:0)
     }
 
 }

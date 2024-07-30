@@ -56,6 +56,4 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-//    implementation("com.sun.mail:javax.mail:1.6.2")
-
 }

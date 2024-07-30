@@ -9,7 +9,6 @@ import com.perfomax.flexstats.data.database.dao.AuthDao
 import com.perfomax.flexstats.data.database.dao.ProjectsDao
 import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data.database.factory.AppDatabase
-import com.perfomax.flexstats.data.datastore.SettingsDataStoreImpl
 import com.perfomax.flexstats.data.network.retrofit.yandex_access_token.YandexAccessTokenNetworkImpl
 import com.perfomax.flexstats.data.network.retrofit.yandex_direct_stats.YandexDirectStatsNetworkImpl
 import com.perfomax.flexstats.data.network.retrofit.yandex_metrika_stats.YandexMetrikaStatsNetworkImpl
@@ -21,7 +20,6 @@ import com.perfomax.flexstats.data.storage.AccountsStorageImpl
 import com.perfomax.flexstats.data.storage.AuthStorageImpl
 import com.perfomax.flexstats.data.storage.ProjectsStorageImpl
 import com.perfomax.flexstats.data.storage.StatsStorageImpl
-import com.perfomax.flexstats.data_api.datastore.SettingsDataStore
 import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.network.YandexMetrikaStatsNetwork
@@ -42,7 +40,7 @@ import javax.inject.Singleton
 @Module
 class AppModule(private val application: Application) {
 
-
+    // Main provides--------------------------------------------------------------------------------
     @Singleton
     @Provides
     fun provideRouterImpl(): RouterImpl {
@@ -75,10 +73,6 @@ class AppModule(private val application: Application) {
     @Provides
     @Singleton
     fun provideAuthDao(db: AppDatabase): AuthDao = db.authDao()
-
-    @Provides
-    @Singleton
-    fun provideSettingsDataStore(): SettingsDataStore = SettingsDataStoreImpl(context = App.instance)
 
     @Singleton
     @Provides
@@ -137,29 +131,14 @@ class AppModule(private val application: Application) {
     )
 
     // Network provides----------------------------------------------------------------------------
-    @Singleton
     @Provides
     fun provideYandexAccessTokenNetwork(): YandexAccessTokenNetwork = YandexAccessTokenNetworkImpl()
 
-    @Singleton
     @Provides
-    fun provideYandexDirectStatsNetwork(
-        statsDao: StatsDao,
-        authStorage: AuthStorage
-    ): YandexDirectStatsNetwork = YandexDirectStatsNetworkImpl(
-        statsDao = statsDao,
-        authStorage = authStorage
-    )
+    fun provideYandexDirectStatsNetwork(): YandexDirectStatsNetwork = YandexDirectStatsNetworkImpl()
 
-    @Singleton
     @Provides
-    fun provideYandexMetrikaStatsNetwork(
-        statsDao: StatsDao,
-        authStorage: AuthStorage
-    ): YandexMetrikaStatsNetwork = YandexMetrikaStatsNetworkImpl(
-        statsDao = statsDao,
-        authStorage = authStorage
-    )
+    fun provideYandexMetrikaStatsNetwork(): YandexMetrikaStatsNetwork = YandexMetrikaStatsNetworkImpl()
 
     // Stats provides-----------------------------------------------------------------------------
     @Provides

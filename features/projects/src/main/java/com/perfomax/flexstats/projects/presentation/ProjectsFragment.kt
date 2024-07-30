@@ -67,11 +67,8 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
 
     private fun setAdapter() {
         val adapter = ProjectsAdapter(
-            itemProjectClick = {
-                lifecycleScope.launch {
-                    projectsViewModel.selectProject(it)
-                    parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
-                }
+            itemProjectClick = { itemProject ->
+                    projectsViewModel.selectProject(itemProject)
             },
             editProjectClick = { projectId, currentName ->
                 projectsViewModel.showEditProjectDialog(projectId = projectId, currentName = currentName)
@@ -93,14 +90,11 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         projectsViewModel.projectsScreen.observe(viewLifecycleOwner) {
             when(it) {
                 is ProjectsScreen.AddNewProject -> showProjectDialog()
-                is ProjectsScreen.SelectProject -> {}
+                is ProjectsScreen.SelectProject -> updateMenuTitle()
                 is ProjectsScreen.ProjectExists -> projectExists()
                 is ProjectsScreen.EmptyProject -> emptyProject()
                 is ProjectsScreen.EditProject -> {
-                    lifecycleScope.launch {
-                        showProjectDialog(projectId = it.projectId, currentName = it.currentName)
-                        parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
-                    }
+                    showProjectDialog(projectId = it.projectId, currentName = it.currentName)
                 }
                 is ProjectsScreen.DeleteProject -> {
                     showDeleteProjectDialog(projectId = it.projectId, projectName = it.projectName)
@@ -137,6 +131,7 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
                 }
             }
         }
+        updateMenuTitle()
     }
 
     private fun showDeleteProjectDialog(projectId: Int, projectName: String) {
@@ -164,6 +159,10 @@ class ProjectsFragment: Fragment(R.layout.fragment_projects) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         return dialog
+    }
+
+    private fun updateMenuTitle() {
+        parentFragmentManager.setFragmentResult(CALL_MENU_LISTENER, bundleOf())
     }
 
     // Toast space-----------------------------------------------------------------------------

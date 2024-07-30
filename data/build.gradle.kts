@@ -43,9 +43,6 @@ dependencies {
     implementation(project(":domain_models"))
     implementation(project(":core:ui"))
 
-    // datastore
-    implementation(libs.datastore.preferences)
-
     // di
     implementation(libs.javax.inject)
 
@@ -55,10 +52,11 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     // Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.json)
+    implementation(libs.okhttp3.interceptor)
 
-    implementation("com.sun.mail:android-mail:1.6.2")
+    // Email
+    implementation(libs.android.mail)
 
 }
