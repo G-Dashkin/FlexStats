@@ -1,4 +1,4 @@
-# DataViewer
+# FlexStats
 Application for tracking statistics in the Yandex Direct contextual advertising system and the Yandex Metrika analytics system.
 
 The following functionality has been implemented:
