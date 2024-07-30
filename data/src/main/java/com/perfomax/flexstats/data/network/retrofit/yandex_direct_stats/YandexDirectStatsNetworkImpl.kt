@@ -1,15 +1,12 @@
 package com.perfomax.flexstats.data.network.retrofit.yandex_direct_stats
 
 import com.perfomax.flexstats.core.contracts.DIRECT_API_BASE_URL
-import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
-import com.perfomax.flexstats.data_api.storage.AuthStorage
 import com.perfomax.flexstats.models.YandexDirectStats
 import kotlinx.coroutines.delay
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
 
 class YandexDirectStatsNetworkImpl: YandexDirectStatsNetwork {
 

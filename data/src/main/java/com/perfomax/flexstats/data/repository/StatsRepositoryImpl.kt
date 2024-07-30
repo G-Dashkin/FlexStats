@@ -1,7 +1,8 @@
 package com.perfomax.flexstats.data.repository
 
 import android.content.Context
-import com.perfomax.data.R
+import com.perfomax.flexstats.core.contracts.DATE_FORMAT
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.core.utils.getDaysDiapason
@@ -14,8 +15,6 @@ import com.perfomax.flexstats.data_api.repository.StatsRepository
 import com.perfomax.flexstats.data_api.storage.StatsStorage
 import com.perfomax.flexstats.models.Account
 import com.perfomax.flexstats.models.GeneralStats
-import com.perfomax.flexstats.core.contracts.DATE_FORMAT
-import com.perfomax.flexstats.core.contracts.EMPTY
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

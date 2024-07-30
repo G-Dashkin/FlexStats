@@ -1,8 +1,13 @@
 package com.perfomax.flexstats.data.repository
 
 import android.content.Context
-import android.util.Log
-import com.perfomax.data.R
+import com.perfomax.flexstats.data_api.repository.AuthRepository
+import com.perfomax.flexstats.data_api.storage.AuthStorage
+import com.perfomax.flexstats.models.User
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import javax.mail.Authenticator
 import javax.mail.Message
 import javax.mail.MessagingException
@@ -13,14 +18,6 @@ import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeBodyPart
 import javax.mail.internet.MimeMessage
 import javax.mail.internet.MimeMultipart
-
-import com.perfomax.flexstats.models.User
-import com.perfomax.flexstats.data_api.repository.AuthRepository
-import com.perfomax.flexstats.data_api.storage.AuthStorage
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 private const val EMAIL_SENDER = "support@flexstats.ru"
 private const val EMAIL_PASSWORD = "745189aB!"

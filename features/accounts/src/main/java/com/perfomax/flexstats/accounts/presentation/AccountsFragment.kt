@@ -3,7 +3,6 @@ package com.perfomax.flexstats.accounts.presentation
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,12 +22,12 @@ import com.perfomax.accounts.databinding.WebViewDialogBinding
 import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
 import com.perfomax.flexstats.accounts.di.DaggerAccountsComponent
 import com.perfomax.flexstats.api.AccountsFeatureApi
-import com.perfomax.flexstats.core.navigation.Router
 import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.core.contracts.METRIKA_LIST_SELECTED
 import com.perfomax.flexstats.core.contracts.TOKEN_URL_OAUTH
 import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
+import com.perfomax.flexstats.core.navigation.Router
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject

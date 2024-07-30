@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.perfomax.accounts.R
 import com.perfomax.accounts.databinding.DeleteAccountDialogBinding
-import com.perfomax.accounts.databinding.FragmentYandexDirectListBinding
 import com.perfomax.accounts.databinding.FragmentYandexMetrikaListBinding
 import com.perfomax.flexstats.accounts.di.AccountsFeatureDepsProvider
 import com.perfomax.flexstats.accounts.di.DaggerAccountsComponent

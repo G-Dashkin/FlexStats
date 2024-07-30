@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.data.repository
 
-import android.util.Log
 import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
 import com.perfomax.flexstats.data_api.storage.AccountsStorage

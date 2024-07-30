@@ -1,14 +1,10 @@
 package com.perfomax.flexstats.data.network.retrofit.yandex_access_token
 
-import android.util.Log
 import com.perfomax.flexstats.core.contracts.BASE_OAUTH_TOKEN_URL
 import com.perfomax.flexstats.core.contracts.CLIENT_ID
 import com.perfomax.flexstats.core.contracts.CLIENT_SECRET
-import com.perfomax.flexstats.core.contracts.DATE_FORMAT
 import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.core.contracts.METRIKA_API_BASE_URL
-import com.perfomax.flexstats.core.utils.isNotMaxUpdateDate
-import com.perfomax.flexstats.core.utils.toTimestamp
 import com.perfomax.flexstats.data.network.retrofit.yandex_metrika_stats.YandexMetrikaStatsApi
 import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
 import com.perfomax.flexstats.models.Account
@@ -16,9 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Locale
 
 class YandexAccessTokenNetworkImpl: YandexAccessTokenNetwork {
 

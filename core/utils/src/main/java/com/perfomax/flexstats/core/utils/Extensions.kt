@@ -1,20 +1,12 @@
 package com.perfomax.flexstats.core.utils
 
-import android.util.Log
 import androidx.fragment.app.FragmentManager
 import com.perfomax.flexstats.core.contracts.DATE_FORMAT
 import com.perfomax.flexstats.models.Account
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Date
 import java.util.Locale
-import android.app.Activity
-import android.view.Gravity
-import android.widget.TextView
-import android.widget.Toast
 
 fun List<Account>.yandexDirectFilter(): List<Account> {
     return this.filter { it.accountType == "yandex_direct" }

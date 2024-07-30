@@ -1,6 +1,5 @@
 package com.perfomax.flexstats.accounts.presentation
 
-import android.util.Log
 import android.webkit.CookieManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +15,6 @@ import com.perfomax.flexstats.accounts.domain.GetAccountsByProjectUseCase
 import com.perfomax.flexstats.accounts.domain.GetSelectedProjectUseCase
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.models.Account
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

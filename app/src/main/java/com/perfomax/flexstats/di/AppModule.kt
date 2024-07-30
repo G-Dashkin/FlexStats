@@ -24,8 +24,6 @@ import com.perfomax.flexstats.data_api.network.YandexAccessTokenNetwork
 import com.perfomax.flexstats.data_api.network.YandexDirectStatsNetwork
 import com.perfomax.flexstats.data_api.network.YandexMetrikaStatsNetwork
 import com.perfomax.flexstats.data_api.repository.AccountsRepository
-import com.perfomax.flexstats.presentation.navigation.NavigatorLifecycle
-import com.perfomax.flexstats.presentation.navigation.RouterImpl
 import com.perfomax.flexstats.data_api.repository.AuthRepository
 import com.perfomax.flexstats.data_api.repository.ProjectsRepository
 import com.perfomax.flexstats.data_api.repository.StatsRepository
@@ -33,6 +31,8 @@ import com.perfomax.flexstats.data_api.storage.AccountsStorage
 import com.perfomax.flexstats.data_api.storage.AuthStorage
 import com.perfomax.flexstats.data_api.storage.ProjectsStorage
 import com.perfomax.flexstats.data_api.storage.StatsStorage
+import com.perfomax.flexstats.presentation.navigation.NavigatorLifecycle
+import com.perfomax.flexstats.presentation.navigation.RouterImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

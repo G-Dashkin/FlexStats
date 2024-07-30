@@ -2,11 +2,9 @@ package com.perfomax.flexstats.data.mappers
 
 import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.data.database.entities.GeneralStatsEntity
-import com.perfomax.flexstats.data.database.entities.ProjectEntity
 import com.perfomax.flexstats.data.database.entities.YandexDirectStatsEntity
 import com.perfomax.flexstats.data.database.entities.YandexMetrikaStatsEntity
 import com.perfomax.flexstats.models.GeneralStats
-import com.perfomax.flexstats.models.Project
 import com.perfomax.flexstats.models.YandexDirectStats
 import com.perfomax.flexstats.models.YandexMetrikaStats
 

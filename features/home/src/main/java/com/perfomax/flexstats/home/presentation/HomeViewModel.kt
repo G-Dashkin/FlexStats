@@ -1,7 +1,6 @@
 package com.perfomax.flexstats.home.presentation
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -9,13 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.perfomax.flexstats.core.contracts.DATE_FORMAT
 import com.perfomax.flexstats.home.domain.usecases.ClearStatsUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetAccountsByProjectUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
 import com.perfomax.flexstats.home.domain.usecases.UpdateStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
-import com.perfomax.flexstats.core.contracts.DATE_FORMAT
-import com.perfomax.home.R
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
