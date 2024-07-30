@@ -1,6 +1,7 @@
 package com.perfomax.flexstats.data.storage
 
 import com.perfomax.flexstats.core.contracts.DATE_FORMAT
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.data.database.dao.StatsDao
 import com.perfomax.flexstats.data.mappers.toDomain
 import com.perfomax.flexstats.data_api.storage.StatsStorage
@@ -17,42 +18,42 @@ class StatsStorageImpl @Inject constructor(
 
     override suspend fun addYandexDirectData(data: YandexDirectStats) {
         statsDao.removeYandexDirectData(
-            date = data.date?:"",
+            date = data.date?:EMPTY,
             projectId = data.project_id?:0,
-            account = data.account?:""
+            account = data.account?:EMPTY
         )
         statsDao.insertYandexDirectData(data = data.toDomain() )
     }
 
     override suspend fun addYandexMetrikaData(data: YandexMetrikaStats) {
         statsDao.removeYandexMetrikaData(
-            date = data.date?:"",
+            date = data.date?: EMPTY,
             projectId = data.project_id?:0,
-            counter = data.counter?:""
+            counter = data.counter?: EMPTY
         )
         statsDao.insertYandexMetrikaData(data = data.toDomain())
     }
 
     override suspend fun addGeneralData(data: GeneralStats) {
         statsDao.removeGeneralData(
-            date = data.date?:"",
+            date = data.date?: EMPTY,
             projectId = data.project_id?:0
         )
         statsDao.insertGeneralData(data = data.toDomain())
     }
 
 
-    override suspend fun getYD(date: String, project_id: Int): List<YandexDirectStats> {
+    override suspend fun getYandexDirectData(date: String, project_id: Int): List<YandexDirectStats> {
         val yandexDirectData = statsDao.getYandexDirectData(date = date, projectId = project_id)
         return yandexDirectData.map { it.toDomain() }
     }
 
-    override suspend fun getYM(date: String, project_id: Int): List<YandexMetrikaStats> {
+    override suspend fun getYandexMetrikaData(date: String, project_id: Int): List<YandexMetrikaStats> {
         val yandexMetrikaData = statsDao.getYandexMetrikaData(date = date, projectId = project_id)
         return yandexMetrikaData.map { it.toDomain() }
     }
 
-    override suspend fun getGeneral(project_id: Int, statsPeriod: Pair<String, String>): List<GeneralStats> {
+    override suspend fun getGeneralData(project_id: Int, statsPeriod: Pair<String, String>): List<GeneralStats> {
         return statsDao.getGeneralData(
             projectId = project_id,
             firstDate = statsPeriod.first,
@@ -60,22 +61,22 @@ class StatsStorageImpl @Inject constructor(
         ).map { it.toDomain() }
     }
 
-    override suspend fun checkAccountYD(account: String, project_id: Int): Boolean {
+    override suspend fun checkAccountYandexDirect(account: String, project_id: Int): Boolean {
         val checkedDate = statsDao.getLastDateYandexDirectByAccount(account = account, projectId = project_id)
         return checkedDate.isNotEmpty()
     }
 
-    override suspend fun checkCounterYM(counter: String, project_id: Int): Boolean {
+    override suspend fun checkCounterYandexMetrika(counter: String, project_id: Int): Boolean {
         val checkedDate = statsDao.getLastDateYandexMetrikaByCounter(counter = counter, projectId = project_id)
         return checkedDate.isNotEmpty()
     }
 
-    override suspend fun getFirstUpdateDateYD(account: String, project_id: Int): String {
+    override suspend fun getFirstUpdateDateYandexDirect(account: String, project_id: Int): String {
         val yandexDirectDateByAccount = statsDao.getFirstDateYandexDirectByAccount(account = account, projectId = project_id)
         return yandexDirectDateByAccount.first().date
     }
 
-    override suspend fun getFirstUpdateDateYM(counter: String, project_id: Int): String {
+    override suspend fun getFirstUpdateDateYandexMetrika(counter: String, project_id: Int): String {
         val yandexMetrikaDateByCounter = statsDao.getFirstDateYandexMetrikaByCounter(counter = counter, projectId = project_id)
         return yandexMetrikaDateByCounter.first().date
     }
@@ -92,12 +93,12 @@ class StatsStorageImpl @Inject constructor(
     }
 
 
-    override suspend fun getLastUpdateDateYD(account: String, project_id: Int): String {
+    override suspend fun getLastUpdateDateYandexDirect(account: String, project_id: Int): String {
         val yandexDirectDateByAccount = statsDao.getLastDateYandexDirectByAccount(account = account, projectId = project_id)
         return yandexDirectDateByAccount.first().date
     }
 
-    override suspend fun getLastUpdateDateYM(counter: String, project_id: Int): String {
+    override suspend fun getLastUpdateDateYandexMetrika(counter: String, project_id: Int): String {
         val yandexMetrikaDateByCounter = statsDao.getLastDateYandexMetrikaByCounter(counter = counter, projectId = project_id)
         return yandexMetrikaDateByCounter.first().date
     }

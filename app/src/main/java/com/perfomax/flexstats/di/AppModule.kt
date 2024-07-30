@@ -157,12 +157,14 @@ class AppModule(private val application: Application) {
         yandexDirectStatsNetwork: YandexDirectStatsNetwork,
         yandexMetrikaStatsNetwork: YandexMetrikaStatsNetwork,
         accountsRepository: AccountsRepository,
-        statsStorage: StatsStorage
+        statsStorage: StatsStorage,
+        context: Context
     ): StatsRepository = StatsRepositoryImpl(
         yandexDirectStatsNetwork = yandexDirectStatsNetwork,
         yandexMetrikaStatsNetwork = yandexMetrikaStatsNetwork,
         accountsRepository = accountsRepository,
-        statsStorage = statsStorage
+        statsStorage = statsStorage,
+        context = context
     )
 
 }

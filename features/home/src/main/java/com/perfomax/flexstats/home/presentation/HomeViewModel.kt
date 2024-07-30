@@ -1,5 +1,6 @@
 package com.perfomax.flexstats.home.presentation
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,12 +14,17 @@ import com.perfomax.flexstats.home.domain.usecases.GetAccountsByProjectUseCase
 import com.perfomax.flexstats.home.domain.usecases.GetGeneralUseCase
 import com.perfomax.flexstats.home.domain.usecases.UpdateStatsUseCase
 import com.perfomax.flexstats.models.GeneralStats
+import com.perfomax.flexstats.core.contracts.DATE_FORMAT
+import com.perfomax.home.R
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 import javax.inject.Inject
+
+private const val STANDARD_DATE = "standardDate"
+private const val MILLISECONDS_DATE = "millisecondsDate"
 
 sealed class HomeScreen {
     data object ShowTitle : HomeScreen()
@@ -32,6 +38,7 @@ sealed class HomeScreen {
 }
 
 class HomeViewModel(
+    private val context: Context,
     private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
     private val clearStatsUseCase: ClearStatsUseCase,
@@ -42,14 +49,14 @@ class HomeViewModel(
     val statsList: LiveData<List<GeneralStats>> = _statsList
 
     private var _selectedStatsPeriod = MutableLiveData(Pair(
-            defaultShowStatsPeriod().get("standardDate")!!.first,
-            defaultShowStatsPeriod().get("standardDate")!!.second
+            first = defaultShowStatsPeriod().get(STANDARD_DATE)!!.first,
+            second = defaultShowStatsPeriod().get(STANDARD_DATE)!!.second
     ))
     val selectedStatsPeriod: LiveData<Pair<String, String>> = _selectedStatsPeriod
 
     private var _selectedUpdateStatsPeriod = MutableLiveData(Pair(
-        defaultUpdateStatsPeriod().get("standardDate")!!.first,
-        defaultUpdateStatsPeriod().get("standardDate")!!.second
+        first = defaultUpdateStatsPeriod().get(STANDARD_DATE)!!.first,
+        second = defaultUpdateStatsPeriod().get(STANDARD_DATE)!!.second
     ))
     val selectedUpdateStatsPeriod: LiveData<Pair<String, String>> = _selectedUpdateStatsPeriod
 
@@ -88,16 +95,18 @@ class HomeViewModel(
                     }
                     val firstDate = _selectedUpdateStatsPeriod.value?.first.toString()
                     val secondDate = _selectedUpdateStatsPeriod.value?.second.toString()
-                    updateMessage = if (firstDate == secondDate) "Данные обновлены за $firstDate"
-                    else "Данные обновлены за период:\n ${" c " + firstDate + " по " + secondDate }"
+                    updateMessage = if (firstDate == secondDate) "${context.resources.getString(com.perfomax.ui.R.string.data_update_for)} $firstDate"
+                    else "${context.resources.getString(com.perfomax.ui.R.string.data_update_for_period)}\n " +
+                         "${context.resources.getString(com.perfomax.ui.R.string.from)} $firstDate " +
+                         "${context.resources.getString(com.perfomax.ui.R.string.to)} $secondDate"
                 } catch (e:Exception) {
-                    updateMessage = "Выбран слишком длинный период для обновления статистики. Укажите меньший период"
+                    updateMessage = context.resources.getString(com.perfomax.ui.R.string.too_long_period)
                 }
                 loadGeneralStatsList()
                 _homeScreen.value = HomeScreen.EndLoadingProcess
                 _homeScreen.value = HomeScreen.ShowToast(updateMessage)
             } else {
-                updateMessage = "В проекте отсутствуют аккаунты для обновления"
+                updateMessage = context.resources.getString(com.perfomax.ui.R.string.accounts_not_exists)
                 _homeScreen.value = HomeScreen.ShowToast(updateMessage)
             }
         }
@@ -143,12 +152,12 @@ class HomeViewModel(
         yesterday.add(Calendar.DAY_OF_YEAR, -1)
 
         val statsPeriodMap = mutableMapOf<String, Pair<String, String>>()
-        statsPeriodMap.put("millisecondsDate", Pair(
+        statsPeriodMap.put(MILLISECONDS_DATE, Pair(
             thirtyDays.timeInMillis.toString(),
             yesterday.timeInMillis.toString()
             )
         )
-        statsPeriodMap.put("standardDate", Pair(
+        statsPeriodMap.put(STANDARD_DATE, Pair(
             convertTimeToDate(thirtyDays.timeInMillis),
             convertTimeToDate(yesterday.timeInMillis)
             )
@@ -164,30 +173,30 @@ class HomeViewModel(
         yesterday.add(Calendar.DAY_OF_YEAR, -1)
 
         val statsPeriodMap = mutableMapOf<String, Pair<String, String>>()
-        statsPeriodMap.put("millisecondsDate", Pair(
+        statsPeriodMap.put(MILLISECONDS_DATE, Pair(
             thirtyDays.timeInMillis.toString(),
             yesterday.timeInMillis.toString()
+            )
         )
-        )
-        statsPeriodMap.put("standardDate", Pair(
+        statsPeriodMap.put(STANDARD_DATE, Pair(
             convertTimeToDate(thirtyDays.timeInMillis),
             convertTimeToDate(yesterday.timeInMillis)
-        )
+            )
         )
         return statsPeriodMap
     }
 
-
     fun convertTimeToDate(time:Long): String {
         val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         utc.timeInMillis = time
-        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val format = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
         return format.format(utc.time)
     }
 
 }
 
 class HomeViewModelFactory @Inject constructor(
+    private val context: Context,
     private val updateStatsUseCase: UpdateStatsUseCase,
     private val getGeneralUseCase: GetGeneralUseCase,
     private val clearStatsUseCase: ClearStatsUseCase,
@@ -199,6 +208,7 @@ class HomeViewModelFactory @Inject constructor(
         extras: CreationExtras,
     ): T {
         return HomeViewModel(
+            context = context,
             updateStatsUseCase = updateStatsUseCase,
             getGeneralUseCase = getGeneralUseCase,
             clearStatsUseCase = clearStatsUseCase,

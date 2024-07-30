@@ -14,7 +14,6 @@ class AuthStorageImpl @Inject constructor(
     override suspend fun getAllUsers(): List<User> = authDao.getAllUsers().map { it.toDomain() }
     override suspend fun setAuth() { authDao.getAuthUserBase() }
     override suspend fun getAuth(): Boolean = authDao.getAuthUserBase() != null
-
     override suspend fun logout() = authDao.logout()
     override suspend fun setAuthUser(authUser: User) {
         authDao.setAuthUserBase(authUser.id.toString())

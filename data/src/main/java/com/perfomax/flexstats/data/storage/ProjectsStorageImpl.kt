@@ -12,6 +12,7 @@ import javax.inject.Inject
 class ProjectsStorageImpl @Inject constructor(
     private val projectsDao: ProjectsDao
 ): ProjectsStorage {
+
     override suspend fun add(project: Project) {
         projectsDao.resectSelectedProjects(userId = project.userId.toString())
         projectsDao.insert(project.toDomain())

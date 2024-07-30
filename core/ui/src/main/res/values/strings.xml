@@ -57,4 +57,14 @@
     <string name="reset_password_mail_body_4">\nВаш пароль:</string>
     <string name="select_another_account">Укажите другой аккаунт.</string>
     <string name="account_not_register">Аккаунт не зарегистрирован в системе яндекс директ.</string>
+    <string name="select_show_stats_period">Выберети период отображения статистики</string>
+    <string name="select_update_stats_period">Выберети период обновления статистики</string>
+    <string name="data_update_for">Данные обновлены за</string>
+    <string name="data_update_for_period">Данные обновлены за период</string>
+    <string name="too_long_period">Выбран слишком длинный период для обновления статистики. Укажите меньший период</string>
+    <string name="accounts_not_exists">В проекте отсутствуют аккаунты для обновления</string>
+    <string name="from">c</string>
+    <string name="to">по</string>
+    <string name="counter">Счетчик:</string>
+
 </resources>

@@ -112,7 +112,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun showStatsDatePiker() {
         val picker = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(com.perfomax.ui.R.style.MaterialCalendarTheme)
-            .setTitleText("Выберети период отображения статистики")
+            .setTitleText(com.perfomax.ui.R.string.select_show_stats_period)
             .setSelection(
                 Pair(
                     homeViewModel.selectedStatsPeriod.value?.first?.toTimestamp(),
@@ -136,7 +136,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun showUpdateDataPiker() {
         val picker = MaterialDatePicker.Builder.dateRangePicker()
             .setTheme(com.perfomax.ui.R.style.MaterialCalendarTheme)
-            .setTitleText("Выберети период обновления статистики")
+            .setTitleText(com.perfomax.ui.R.string.select_update_stats_period)
             .setSelection(
                 Pair(
                     homeViewModel.selectedUpdateStatsPeriod.value?.first?.toTimestamp(),

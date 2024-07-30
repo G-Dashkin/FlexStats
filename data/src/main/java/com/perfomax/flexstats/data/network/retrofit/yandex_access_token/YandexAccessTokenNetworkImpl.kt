@@ -5,6 +5,7 @@ import com.perfomax.flexstats.core.contracts.BASE_OAUTH_TOKEN_URL
 import com.perfomax.flexstats.core.contracts.CLIENT_ID
 import com.perfomax.flexstats.core.contracts.CLIENT_SECRET
 import com.perfomax.flexstats.core.contracts.DATE_FORMAT
+import com.perfomax.flexstats.core.contracts.EMPTY
 import com.perfomax.flexstats.core.contracts.METRIKA_API_BASE_URL
 import com.perfomax.flexstats.core.utils.isNotMaxUpdateDate
 import com.perfomax.flexstats.core.utils.toTimestamp
@@ -54,7 +55,7 @@ class YandexAccessTokenNetworkImpl: YandexAccessTokenNetwork {
 
         val yandexMetrikaCheckCall = yandexMetrikaStatsApi.getData(
             token = "OAuth ${account.accountToken}",
-            id = account.metrikaCounter?:"",
+            id = account.metrikaCounter?: EMPTY,
             date1 = LocalDate.now().minusDays(1).toString(),
             date2 = LocalDate.now().minusDays(1).toString(),
             metrics = "ym:s:visits",

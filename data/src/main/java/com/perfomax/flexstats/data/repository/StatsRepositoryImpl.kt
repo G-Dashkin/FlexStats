@@ -1,6 +1,7 @@
 package com.perfomax.flexstats.data.repository
 
-import android.util.Log
+import android.content.Context
+import com.perfomax.data.R
 import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
 import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.core.utils.getDaysDiapason
@@ -13,6 +14,8 @@ import com.perfomax.flexstats.data_api.repository.StatsRepository
 import com.perfomax.flexstats.data_api.storage.StatsStorage
 import com.perfomax.flexstats.models.Account
 import com.perfomax.flexstats.models.GeneralStats
+import com.perfomax.flexstats.core.contracts.DATE_FORMAT
+import com.perfomax.flexstats.core.contracts.EMPTY
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -30,10 +33,11 @@ class StatsRepositoryImpl @Inject constructor(
     private val yandexDirectStatsNetwork: YandexDirectStatsNetwork,
     private val yandexMetrikaStatsNetwork: YandexMetrikaStatsNetwork,
     private val statsStorage: StatsStorage,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val context: Context
 ): StatsRepository {
 
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val formatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
     private val yesterdayDate = LocalDateTime.now().minusDays(1).format(formatter)
 
     override suspend fun updateStats(updatePeriod: Pair<String, String>): Flow<String> = withContext(dispatcher)  {
@@ -53,7 +57,7 @@ class StatsRepositoryImpl @Inject constructor(
         val accountsList = accountsRepository.getAllAccountsByUser()
         return if (accountsList.isNotEmpty()){
             val projectId = accountsList.first().projectId
-            statsStorage.getGeneral(project_id = projectId?:0, stats_period = statsPeriod)
+            statsStorage.getGeneralData(project_id = projectId?:0, stats_period = statsPeriod)
         } else listOf()
     }
 
@@ -73,7 +77,10 @@ class StatsRepositoryImpl @Inject constructor(
                 }
                 if (account.accountType == YANDEX_METRIKA) {
                     for (updateDate in updatePeriod.toDateList()) {
-                        emit("$updateDate | ${account.name} | Счетчик: ${account.metrikaCounter}")
+
+                        emit("$updateDate | ${account.name} | " +
+                                "${context.resources.getString(com.perfomax.ui.R.string.counter)} " +
+                                "${account.metrikaCounter}")
                         yandexMetrikaUpdate(updateDate = updateDate, account = account, project_id = project_id)
                     }
                 }
@@ -85,8 +92,8 @@ class StatsRepositoryImpl @Inject constructor(
         val daysDiapason = firstUpdateDate.getDaysDiapason(yesterdayDate)
         for(date in 1..daysDiapason) {
             val updateDate = LocalDateTime.now().minusDays(date.toLong()).format(formatter)
-            val yandexDidectDate = statsStorage.getYD(date = updateDate, project_id = projectId)
-            val yandexMetrikaDate = statsStorage.getYM(date = updateDate, project_id = projectId)
+            val yandexDidectDate = statsStorage.getYandexDirectData(date = updateDate, project_id = projectId)
+            val yandexMetrikaDate = statsStorage.getYandexMetrikaData(date = updateDate, project_id = projectId)
             if (updateDate.isNotMaxUpdateDate(DEFAULT_MAX_UPDATE_MONTHS)){
                 val generalStats = GeneralStats(
                     date = updateDate,
@@ -111,7 +118,7 @@ class StatsRepositoryImpl @Inject constructor(
         val yandexDirectStats = yandexDirectStatsNetwork.getStats(
             date = updateDate,
             account = account.name,
-            token = account.accountToken?:"",
+            token = account.accountToken?:EMPTY,
             projectId = project_id
         )
         statsStorage.addYandexDirectData(data = yandexDirectStats)
@@ -121,8 +128,8 @@ class StatsRepositoryImpl @Inject constructor(
         val yandexMetrikaStats = yandexMetrikaStatsNetwork.getStats(
             date = updateDate,
             account = account.name,
-            metrikaCounter = account.metrikaCounter?:"",
-            token = account.accountToken?:"",
+            metrikaCounter = account.metrikaCounter?: EMPTY,
+            token = account.accountToken?: EMPTY,
             projectId = project_id
         )
         statsStorage.addYandexMetrikaData(data = yandexMetrikaStats)
