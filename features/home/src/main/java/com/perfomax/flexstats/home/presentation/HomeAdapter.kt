@@ -40,7 +40,7 @@ class HomeAdapter: ListAdapter<GeneralStats, RecyclerView.ViewHolder>(StatsDiffC
 
             binding.valueCPC.text = df.format(((stats.cost?:0).div(stats.clicks?.toDouble()!!))) + "р."
             binding.valueCTR.text = df.format(((stats.clicks?:0).div(stats.impressions?.toDouble()!!)*100)) + "%"
-            binding.valueCR.text = df.format(((stats.clicks?:0).div(stats.transactions?.toDouble()!!))) + "%"
+            binding.valueCR.text = df.format(((stats.transactions?:0).div(stats.clicks?.toDouble()!!)*100)) + "%"
             binding.valueCPO.text = df.format(((stats.cost?:0).div(stats.transactions?.toDouble()!!))) + "р."
             binding.valueDRR.text = df.format(((stats.cost?:0).div(stats.revenue?.toDouble()!!)*100)) + "%"
         }

@@ -110,7 +110,8 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
                     router.navigateTo(fragment = authFeatureApi.openLogin())
                     lifecycleScope.launch {
                         logoutUseCase.execute()
-                        setActionBarSettings()
+                        binding.materialToolbar.visibility = View.GONE
+                        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                     }
                 }
             }
@@ -142,7 +143,6 @@ class NavigatorFragment : Fragment(R.layout.fragment_navigator), NavigatorHolder
             val authUser = getAuthUserUseCase.execute()
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.user_name).text = authUser.user
             binding.navView.getHeaderView(0).findViewById<TextView>(R.id.user_email).text = authUser.email
-
             toolbarSettings()
 
             if (allProjects.isNotEmpty()) {
