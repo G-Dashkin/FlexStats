@@ -43,7 +43,7 @@
                 android:hint="@string/email"
                 android:padding="@dimen/padding10"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/black"
+                android:textColor="@color/onBackground"
                 android:textColorHighlight="@color/cardview_dark_background"
                 android:layout_marginTop="@dimen/margin16"/>
             <EditText
@@ -55,7 +55,7 @@
                 android:drawablePadding="@dimen/padding10"
                 android:hint="@string/user"
                 android:padding="@dimen/padding10"
-                android:textColor="@color/black"
+                android:textColor="@color/onBackground"
                 android:textColorHighlight="@color/cardview_dark_background"
                 android:layout_marginTop="@dimen/margin16"/>
             <EditText
@@ -68,7 +68,7 @@
                 android:hint="@string/password"
                 android:padding="@dimen/padding10"
                 android:inputType="textPassword"
-                android:textColor="@color/black"
+                android:textColor="@color/onBackground"
                 android:textColorHighlight="@color/cardview_dark_background"
                 android:layout_marginTop="@dimen/margin16"/>
             <Button

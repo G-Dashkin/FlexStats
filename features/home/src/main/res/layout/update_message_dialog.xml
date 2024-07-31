@@ -21,7 +21,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/height2"
-        android:background="@color/black"/>
+        android:background="@color/onBackground"/>
 
     <ListView
         android:id="@+id/updateMessageListView"
