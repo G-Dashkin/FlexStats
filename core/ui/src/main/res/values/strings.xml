@@ -78,5 +78,21 @@
     <string name="edit">Изменить</string>
     <string name="is_create_new_project">Создать новый проект?</string>
     <string name="project_name">Название проекта</string>
+    <string name="impressions">Показы:</string>
+    <string name="clicks">Клики:</string>
+    <string name="cost">Расход:</string>
+    <string name="orders">Заказы:</string>
+    <string name="revenue">Доход:</string>
+
+    <string name="cpc">CPC:</string>
+    <string name="ctr">CTR:</string>
+    <string name="cr">CR:</string>
+    <string name="cpo">CPO:</string>
+    <string name="drr">ДРР:</string>
+
+    <string name="main">Главня</string>
+    <string name="projects">Проекты</string>
+    <string name="accounts_rus">Аккаунты</string>
+    <string name="exit">Выход</string>
 
 </resources>

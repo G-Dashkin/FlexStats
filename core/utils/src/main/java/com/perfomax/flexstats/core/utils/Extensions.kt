@@ -2,6 +2,8 @@ package com.perfomax.flexstats.core.utils
 
 import androidx.fragment.app.FragmentManager
 import com.perfomax.flexstats.core.contracts.DATE_FORMAT
+import com.perfomax.flexstats.core.contracts.YANDEX_DIRECT
+import com.perfomax.flexstats.core.contracts.YANDEX_METRIKA
 import com.perfomax.flexstats.models.Account
 import java.text.SimpleDateFormat
 import java.time.Duration
@@ -9,11 +11,11 @@ import java.time.LocalDate
 import java.util.Locale
 
 fun List<Account>.yandexDirectFilter(): List<Account> {
-    return this.filter { it.accountType == "yandex_direct" }
+    return this.filter { it.accountType == YANDEX_DIRECT }
 }
 
 fun List<Account>.yandexMetrikaFilter(): List<Account> {
-    return this.filter { it.accountType == "yandex_metrika" }
+    return this.filter { it.accountType == YANDEX_METRIKA }
 }
 
 fun String.isNotMaxUpdateDate(maxUpdateDate: Int): Boolean {

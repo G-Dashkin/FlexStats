@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="Клики:"
+                    android:text="@string/clicks"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="Показы:"
+                    android:text="@string/impressions"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="Расход:"
+                    android:text="@string/cost"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
@@ -70,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="Заказы:"
+                    android:text="@string/orders"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
 
@@ -79,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="Доход:"
+                    android:text="@string/revenue"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
             </LinearLayout>
@@ -154,7 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="CPC:"
+                    android:text="@string/cpc"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
@@ -162,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="CTR:"
+                    android:text="@string/ctr"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
@@ -170,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="CR:"
+                    android:text="@string/cr"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
@@ -178,7 +178,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="CPO:"
+                    android:text="@string/cpo"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
                 <TextView
@@ -186,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="ДРР:"
+                    android:text="@string/drr"
                     android:textSize="@dimen/textSize12"
                     android:gravity="center"/>
             </LinearLayout>

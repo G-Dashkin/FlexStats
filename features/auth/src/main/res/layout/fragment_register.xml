@@ -34,9 +34,9 @@
                 android:textColor="@color/primary"/>
 
             <EditText
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height50"
-                android:id="@+id/email"
                 android:background="@drawable/custom_edittext"
                 android:drawableLeft="@drawable/ic_email"
                 android:drawablePadding="@dimen/padding10"

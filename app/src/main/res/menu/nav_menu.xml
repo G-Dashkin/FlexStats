@@ -6,24 +6,24 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
-        android:title="Главная"/>
+        android:title="@string/main"/>
 
     <item
         android:id="@+id/nav_projects"
         android:icon="@drawable/ic_projects"
-        android:title="Проекты"/>
+        android:title="@string/projects"/>
 
     <item
         android:id="@+id/nav_accounts"
         android:icon="@drawable/ic_accounts"
-        android:title="Аккаунты"/>
+        android:title="@string/accounts"/>
 
     <group android:id="@+id/group_settings">
 
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
-            android:title="Выход"/>
+            android:title="@string/exit"/>
     </group>
 
 </menu>
