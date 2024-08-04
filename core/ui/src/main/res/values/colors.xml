@@ -13,15 +13,15 @@
     <color name="onSurfaceVariant">#6C6C6C</color>
     <color name="outline">#CFD4D3</color>
 
-    <color name="primaryDark">#2D378E</color>
-    <color name="onPrimaryDark">#E8FFFC</color>
+    <color name="primaryDark">#8692f7</color>
+    <color name="onPrimaryDark">#FFFFFF</color>
     <color name="secondaryDark">#015698</color>
     <color name="onSecondaryDark">#FFFFFF</color>
-    <color name="backgroundDark">#0E1513</color>
-    <color name="onBackgroundDark">#DDE4E1</color>
-    <color name="surfaceDark">#0E1514</color>
-    <color name="onSurfaceDark">#DDE4E1</color>
-    <color name="surfaceVariantDark">#192221</color>
-    <color name="onSurfaceVariantDark">#BEC9C8</color>
-    <color name="outlineDark">#505555</color>
+    <color name="backgroundDark">#F4FBF8</color>
+    <color name="onBackgroundDark">#161D1B</color>
+    <color name="surfaceDark">#E4F6F5</color>
+    <color name="onSurfaceDark">#161D1B</color>
+    <color name="surfaceVariantDark">#DAE5E1</color>
+    <color name="onSurfaceVariantDark">#6C6C6C</color>
+    <color name="outlineDark">#CFD4D3</color>
 </resources>

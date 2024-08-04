@@ -1,13 +1,30 @@
 <resources>
-    <style name="Theme.FlexStats" parent="Theme.MaterialComponents.Light">
-        <item name="colorPrimary">@color/primaryDark</item>
-        <item name="colorOnPrimary">@color/onPrimaryDark</item>
-        <item name="backgroundColor">@color/backgroundDark</item>
-        <item name="colorOnBackground">@color/onBackgroundDark</item>
-        <item name="colorSurface">@color/surfaceDark</item>
-        <item name="colorOnSurface">@color/onSurfaceDark</item>
-        <item name="colorSurfaceVariant">@color/surfaceVariantDark</item>
-        <item name="colorOnSurfaceVariant">@color/onSurfaceVariantDark</item>
-        <item name="colorOutline">@color/outlineDark</item>
-    </style>
+<style name="Theme.FlexStats" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <item name="colorPrimary">@color/primaryDark</item>
+    <item name="colorOnPrimary">@color/onPrimaryDark</item>
+    <item name="backgroundColor">@color/backgroundDark</item>
+    <item name="colorOnBackground">@color/onBackgroundDark</item>
+    <item name="colorSurface">@color/surfaceDark</item>
+    <item name="colorOnSurface">@color/onSurfaceDark</item>
+    <item name="colorSurfaceVariant">@color/surfaceVariantDark</item>
+    <item name="colorOnSurfaceVariant">@color/onSurfaceVariantDark</item>
+    <item name="colorOutline">@color/outlineDark</item>
+</style>
+
+<style name="MaterialCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+    <item name="materialCalendarHeaderTitle">@style/MyDatePickerHeaderTitle</item>
+    <item name="android:windowFullscreen">false</item>
+    <item name="android:textSize">18sp</item>
+</style>
+
+<style name="MyDatePickerHeaderTitle" parent="@style/TextAppearance.MaterialComponents.Headline6">
+    <item name="android:textSize">22sp</item>
+    <item name="android:textColor">#FFFFFF</item>
+</style>
+
+<style name="UpdateMessageDialogTheme" parent="@android:style/Theme.Dialog">
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:layout_marginStart">10dp</item>
+    <item name="android:layout_marginEnd">10dp</item>
+</style>
 </resources>
